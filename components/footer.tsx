@@ -217,22 +217,6 @@ export function Footer() {
                   Beri Kami Semangat
                 </a>
               </li>
-              <li>
-                <Link
-                  href="/tentang-kami"
-                  className="text-zinc-400 hover:text-white transition-colors duration-150"
-                >
-                  Syarat & Ketentuan
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/tentang-kami"
-                  className="text-zinc-400 hover:text-white transition-colors duration-150"
-                >
-                  Kebijakan Privasi
-                </Link>
-              </li>
             </ul>
           </div>
         </div>
