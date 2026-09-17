@@ -287,9 +287,9 @@ export function AuthCard({ districts }: AuthCardProps) {
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-zinc-200 dark:border-zinc-800" />
               </div>
-              <div className="relative flex justify-center text-xs uppercase">
+              <div className="relative flex justify-center text-xs">
                 <span className="bg-white px-3 text-zinc-400 dark:bg-zinc-950 dark:text-zinc-500 font-medium">
-                  atau
+                  Atau
                 </span>
               </div>
             </div>
@@ -541,9 +541,9 @@ export function AuthCard({ districts }: AuthCardProps) {
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-zinc-200 dark:border-zinc-800" />
               </div>
-              <div className="relative flex justify-center text-xs uppercase">
+              <div className="relative flex justify-center text-xs">
                 <span className="bg-white px-3 text-zinc-400 dark:bg-zinc-950 dark:text-zinc-500 font-medium">
-                  atau
+                  Atau
                 </span>
               </div>
             </div>
