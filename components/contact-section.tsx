@@ -64,34 +64,34 @@ export function ContactSection() {
                 sizes="(max-width: 1024px) 100vw, 42vw"
               />
 
-              {/* Balon Percakapan (Speech Bubble) */}
-              <div className="absolute top-4 left-4 right-4 sm:top-6 sm:left-6 sm:right-6 z-10">
-                <div className="relative rounded-2xl bg-white/95 backdrop-blur-md p-4 shadow-xl border border-white/90 text-zinc-900">
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-[11px] font-bold text-zinc-900 uppercase tracking-wider">
-                      Tim Support BaranginAja
-                    </span>
-                  </div>
+              {/* Balon Percakapan Ringkas (Speech Bubble) */}
+              <div className="absolute top-4 left-4 right-4 sm:top-5 sm:left-5 sm:right-5 z-10 max-w-sm">
+                <div className="relative rounded-2xl bg-white/95 backdrop-blur-md px-4 py-3 shadow-lg border border-white/90 text-zinc-900">
+                  <div className="flex items-center justify-between gap-2 mb-1">
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                      <span className="text-[11px] font-bold text-zinc-800 uppercase tracking-wider">
+                        Support
+                      </span>
+                    </div>
 
-                  <p className="text-[13px] sm:text-[14px] text-zinc-700 leading-snug font-normal">
-                    &ldquo;Hai! Sebelum mengisi formulir, sebaiknya cek halaman <span className="font-semibold text-zinc-950">FAQ</span> terlebih dahulu ya untuk mendapatkan jawaban lebih cepat.&rdquo;
-                  </p>
-
-                  <div className="mt-2.5 pt-2 border-t border-zinc-200/80">
                     <Link
                       href="/bantuan"
-                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-700 hover:text-amber-800 transition-colors"
+                      className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-700 hover:text-amber-800 transition-colors"
                     >
-                      <span>Lihat Pusat Bantuan & FAQ</span>
-                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                      <span>Buka FAQ</span>
+                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                       </svg>
                     </Link>
                   </div>
 
+                  <p className="text-[13px] text-zinc-700 leading-snug">
+                    &ldquo;Cek halaman <span className="font-semibold text-zinc-950">FAQ</span> dulu untuk jawaban lebih cepat ya!&rdquo;
+                  </p>
+
                   {/* Ekor Balon Percakapan (Speech Bubble Tail) */}
-                  <div className="absolute -bottom-2 left-8 w-4 h-4 bg-white/95 rotate-45 border-r border-b border-white/90" />
+                  <div className="absolute -bottom-1.5 left-7 w-3.5 h-3.5 bg-white/95 rotate-45 border-r border-b border-white/90" />
                 </div>
               </div>
             </div>
