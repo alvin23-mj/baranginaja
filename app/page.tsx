@@ -92,7 +92,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           </Link>
         </div>
 
-        {/* Product Cards Grid / Empty State */}
+        {/* Product Cards Grid / Simple Empty State */}
         {displayProducts.length > 0 ? (
           <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 lg:gap-6">
             {displayProducts.map((product) => (
@@ -100,33 +100,15 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             ))}
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-zinc-300 py-16 text-center dark:border-zinc-800 bg-white/60 dark:bg-zinc-900/60 px-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
-              <svg
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={1.5}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                />
-              </svg>
-            </div>
-            <p className="text-base font-semibold text-zinc-950 dark:text-zinc-50">
-              Belum ada produk yang dijual saat ini
-            </p>
-            <p className="text-sm text-zinc-500 max-w-sm">
-              Semua produk dummy telah dibersihkan. Jadilah yang pertama menjual barang bekas berkualitasmu di Surabaya!
+          <div className="py-14 text-center">
+            <p className="text-base text-zinc-500 font-normal">
+              Belum ada barang yang tersedia saat ini.
             </p>
             <Link
               href="/jual"
-              className="mt-2 inline-flex items-center rounded-lg bg-zinc-950 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200 transition-colors"
+              className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-zinc-950 hover:underline transition-colors dark:text-white"
             >
-              Mulai Jual Barang
+              Mulai jual barang &rarr;
             </Link>
           </div>
         )}
