@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 import { ProductCard } from "@/components/product-card";
 import { getDistricts } from "@/lib/districts";
@@ -77,13 +78,33 @@ export default async function ProdukPage({ searchParams }: PageProps<"/produk">)
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-10">
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-zinc-950 dark:text-zinc-50">
-          Cari Produk
-        </h1>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400">
-          Barang bekas layak pakai dari warga & mahasiswa se-Surabaya.
-        </p>
+      {/* Hero Banner Katalog Kompak dengan Gambar AI */}
+      <div className="relative overflow-hidden rounded-2xl border border-zinc-200/80 dark:border-zinc-800 bg-[#161616] text-white mb-8 shadow-xs">
+        <div className="grid grid-cols-1 md:grid-cols-12 items-center">
+          <div className="p-6 sm:p-8 md:col-span-7 lg:col-span-8 z-10">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30 mb-3">
+              🛍️ Katalog Warga &amp; Mahasiswa
+            </span>
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
+              Cari &amp; Beli Barang Bekas di Surabaya
+            </h1>
+            <p className="mt-2 text-xs sm:text-sm text-zinc-300 max-w-xl leading-relaxed">
+              Temukan kebutuhan kos, kuliah, elektronik, hingga perabot layak pakai dari warga di 31 kecamatan Surabaya dengan harga hemat tanpa komisi.
+            </p>
+          </div>
+
+          <div className="relative h-44 sm:h-52 md:h-full min-h-[170px] md:col-span-5 lg:col-span-4 overflow-hidden">
+            <Image
+              src="/images/catalog-hero.jpg"
+              alt="Katalog BaranginAja Surabaya"
+              fill
+              className="object-cover object-center"
+              sizes="(max-width: 768px) 100vw, 33vw"
+              priority
+            />
+            <div className="absolute inset-0 bg-linear-to-t md:bg-linear-to-r from-[#161616] via-[#161616]/40 to-transparent pointer-events-none" />
+          </div>
+        </div>
       </div>
 
       <ProductFilters
