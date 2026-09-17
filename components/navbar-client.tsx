@@ -43,6 +43,12 @@ export function NavbarClient({
   const [helpModalOpen, setHelpModalOpen] = useState(false);
   const [shippingModalOpen, setShippingModalOpen] = useState(false);
   const [sellerPromptOpen, setSellerPromptOpen] = useState(false);
+  const [ratingModalOpen, setRatingModalOpen] = useState(false);
+  const [ratingScore, setRatingScore] = useState(5);
+  const [ratingHover, setRatingHover] = useState(0);
+  const [ratingFeedback, setRatingFeedback] = useState("");
+  const [ratingTags, setRatingTags] = useState<string[]>([]);
+  const [ratingSubmitted, setRatingSubmitted] = useState(false);
   const [logoutLoading, setLogoutLoading] = useState(false);
 
   const userDropdownRef = useRef<HTMLDivElement>(null);
@@ -535,92 +541,163 @@ export function NavbarClient({
                 </div>
               </div>
 
-              {/* Kolom 2: Tarif & Pengiriman */}
+              {/* Kolom 2: Pengiriman & Keamanan */}
               <div className="py-2 px-4 sm:px-6 flex flex-col items-start gap-2.5">
                 <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">
-                  Tarif & Pengiriman
+                  Pengiriman & Keamanan
                 </span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShippingModalOpen(true);
-                    closeDropdowns();
-                  }}
-                  className="group inline-flex items-center gap-2.5 py-1 text-[14px] sm:text-[15px] font-semibold text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
-                >
-                  <svg
-                    className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={1.8}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                <div className="flex flex-col items-start gap-2 w-full">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShippingModalOpen(true);
+                      closeDropdowns();
+                    }}
+                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] sm:text-[15px] font-semibold text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
                   >
-                    <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" />
-                    <path d="M15 18H9" />
-                    <path d="M19 18h2a1 1 0 0 0 1-1v-5l-3-4h-5v10Z" />
-                    <circle cx="7" cy="18" r="2" />
-                    <circle cx="17" cy="18" r="2" />
-                  </svg>
-                  <span>Tarif & Ongkir</span>
-                </button>
+                    <svg
+                      className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={1.8}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" />
+                      <path d="M15 18H9" />
+                      <path d="M19 18h2a1 1 0 0 0 1-1v-5l-3-4h-5v10Z" />
+                      <circle cx="7" cy="18" r="2" />
+                      <circle cx="17" cy="18" r="2" />
+                    </svg>
+                    <span>Tarif & Ongkir</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setHelpModalOpen(true);
+                      closeDropdowns();
+                    }}
+                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] sm:text-[15px] font-semibold text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
+                  >
+                    <svg
+                      className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={1.8}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+                      <path d="m9 12 2 2 4-4" />
+                    </svg>
+                    <span>Keamanan & COD</span>
+                  </button>
+                </div>
               </div>
 
-              {/* Kolom 3: Keamanan & COD */}
+              {/* Kolom 3: Layanan Bantuan */}
               <div className="py-2 px-4 sm:px-6 flex flex-col items-start gap-2.5">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">
-                  Keamanan & COD
-                </span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setHelpModalOpen(true);
-                    closeDropdowns();
-                  }}
-                  className="group inline-flex items-center gap-2.5 py-1 text-[14px] sm:text-[15px] font-semibold text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
-                >
-                  <svg
-                    className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={1.8}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
-                    <path d="m9 12 2 2 4-4" />
-                  </svg>
-                  <span>Keamanan & COD</span>
-                </button>
-              </div>
-
-              {/* Kolom 4: Layanan Bantuan */}
-              <div className="py-2 pl-4 sm:pl-6 flex flex-col items-start gap-2.5">
                 <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">
                   Layanan Bantuan
                 </span>
-                <Link
-                  href="/bantuan"
-                  onClick={closeDropdowns}
-                  className="group inline-flex items-center gap-2.5 py-1 text-[14px] sm:text-[15px] font-semibold text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer"
-                >
-                  <svg
-                    className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={1.8}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                <div className="flex flex-col items-start gap-2 w-full">
+                  <Link
+                    href="/bantuan"
+                    onClick={closeDropdowns}
+                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] sm:text-[15px] font-semibold text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer"
                   >
-                    <circle cx="12" cy="12" r="10" />
-                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-                    <line x1="12" y1="17" x2="12.01" y2="17" strokeWidth={2.5} />
-                  </svg>
-                  <span>Pusat Bantuan</span>
-                </Link>
+                    <svg
+                      className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={1.8}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                      <line x1="12" y1="17" x2="12.01" y2="17" strokeWidth={2.5} />
+                    </svg>
+                    <span>Pusat Bantuan</span>
+                  </Link>
+
+                  <Link
+                    href="/faq"
+                    onClick={closeDropdowns}
+                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] sm:text-[15px] font-semibold text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer"
+                  >
+                    <svg
+                      className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={1.8}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                      <path d="M9 10h.01" />
+                      <path d="M12 10h.01" />
+                      <path d="M15 10h.01" />
+                    </svg>
+                    <span>Pertanyaan Umum (FAQ)</span>
+                  </Link>
+                </div>
+              </div>
+
+              {/* Kolom 4: Dukungan & Ulasan */}
+              <div className="py-2 pl-4 sm:pl-6 flex flex-col items-start gap-2.5">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">
+                  Dukungan & Ulasan
+                </span>
+                <div className="flex flex-col items-start gap-2 w-full">
+                  <a
+                    href="https://saweria.co"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={closeDropdowns}
+                    className="group inline-flex items-center gap-2 py-1 text-[14px] sm:text-[15px] font-semibold text-amber-400 hover:text-amber-300 transition-colors duration-150 cursor-pointer"
+                    title="Donasi via Saweria / Tako"
+                  >
+                    <svg
+                      className="h-4 w-4 text-amber-400 group-hover:text-amber-300 transition-colors shrink-0"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={1.8}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+                    </svg>
+                    <span>Beri Kami Semangat</span>
+                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                      Saweria
+                    </span>
+                  </a>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setRatingModalOpen(true);
+                      closeDropdowns();
+                    }}
+                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] sm:text-[15px] font-semibold text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
+                  >
+                    <svg
+                      className="h-4 w-4 text-yellow-400 group-hover:text-yellow-300 transition-colors shrink-0"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    </svg>
+                    <span>Rating Kepuasan Website</span>
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -690,6 +767,36 @@ export function NavbarClient({
               className="text-left block w-full px-3 py-2.5 rounded-lg text-[15px] font-medium text-zinc-300 hover:bg-zinc-800 hover:text-white cursor-pointer"
             >
               Tarif & Ongkir
+            </button>
+            <Link
+              href="/faq"
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-left block w-full px-3 py-2.5 rounded-lg text-[15px] font-medium text-zinc-300 hover:bg-zinc-800 hover:text-white cursor-pointer"
+            >
+              Pertanyaan Umum (FAQ)
+            </Link>
+            <a
+              href="https://saweria.co"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-left flex items-center justify-between w-full px-3 py-2.5 rounded-lg text-[15px] font-medium text-amber-400 hover:bg-zinc-800 cursor-pointer"
+            >
+              <span>☕ Beri Kami Semangat</span>
+              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                Saweria
+              </span>
+            </a>
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                setRatingModalOpen(true);
+              }}
+              className="text-left flex items-center gap-2 w-full px-3 py-2.5 rounded-lg text-[15px] font-medium text-zinc-300 hover:bg-zinc-800 hover:text-white cursor-pointer"
+            >
+              <span className="text-yellow-400">⭐</span>
+              <span>Rating Kepuasan Website</span>
             </button>
             <button
               type="button"
@@ -1057,6 +1164,182 @@ export function NavbarClient({
                 Daftar Sebagai Penjual &rarr;
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* MODAL RATING KEPUASAN WEBSITE                                             */}
+      {/* ========================================================================= */}
+      {ratingModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
+          <div className="w-full max-w-md rounded-2xl border border-zinc-800 bg-[#161616] p-6 shadow-2xl text-white">
+            <div className="flex items-center justify-between pb-4 border-b border-zinc-800">
+              <div className="flex items-center gap-2.5">
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-yellow-500/20 text-yellow-400 font-bold text-base border border-yellow-500/30">
+                  ⭐
+                </span>
+                <div>
+                  <h3 className="text-base font-bold text-white">
+                    Rating Kepuasan Website
+                  </h3>
+                  <p className="text-xs text-zinc-400">
+                    Bantu kami meningkatkan kualitas BaranginAja
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setRatingModalOpen(false);
+                  setRatingSubmitted(false);
+                }}
+                className="rounded-lg p-1.5 text-zinc-400 hover:bg-zinc-800 hover:text-white cursor-pointer"
+                aria-label="Tutup modal rating"
+              >
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {ratingSubmitted ? (
+              <div className="py-8 text-center space-y-3 animate-in fade-in zoom-in-95 duration-200">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 text-2xl border border-emerald-500/30">
+                  🎉
+                </div>
+                <h4 className="text-lg font-bold text-white">
+                  Terima Kasih Banyak!
+                </h4>
+                <p className="text-xs sm:text-sm text-zinc-400 max-w-xs mx-auto leading-relaxed">
+                  Penilaian dan masukan Anda sangat berharga untuk terus memajukan platform marketplace warga &amp; mahasiswa Surabaya.
+                </p>
+                <div className="pt-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setRatingModalOpen(false);
+                      setRatingSubmitted(false);
+                    }}
+                    className="rounded-xl bg-white px-5 py-2.5 text-xs font-semibold text-zinc-950 hover:bg-zinc-200 cursor-pointer transition-colors shadow-sm"
+                  >
+                    Tutup
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="mt-5 space-y-4">
+                {/* Star Selector */}
+                <div className="text-center space-y-2">
+                  <div className="flex items-center justify-center gap-2">
+                    {[1, 2, 3, 4, 5].map((star) => {
+                      const active = (ratingHover || ratingScore) >= star;
+                      return (
+                        <button
+                          key={star}
+                          type="button"
+                          onMouseEnter={() => setRatingHover(star)}
+                          onMouseLeave={() => setRatingHover(0)}
+                          onClick={() => setRatingScore(star)}
+                          className="p-1 transition-transform hover:scale-110 cursor-pointer"
+                          aria-label={`Beri bintang ${star}`}
+                        >
+                          <svg
+                            className={`h-8 w-8 transition-colors ${
+                              active ? "text-yellow-400 fill-yellow-400" : "text-zinc-700 fill-transparent"
+                            }`}
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth={1.5}
+                          >
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                          </svg>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <p className="text-xs font-semibold text-yellow-400">
+                    {ratingScore === 5 && "Sangat Puas! ⭐⭐⭐⭐⭐"}
+                    {ratingScore === 4 && "Puas & Keren! 👍"}
+                    {ratingScore === 3 && "Cukup Baik 🙂"}
+                    {ratingScore === 2 && "Kurang Memuaskan 🙁"}
+                    {ratingScore === 1 && "Perlu Banyak Perbaikan ⚠️"}
+                  </p>
+                </div>
+
+                {/* Quick Chips */}
+                <div className="space-y-1.5">
+                  <label className="text-[11px] font-semibold text-zinc-400 uppercase tracking-wider">
+                    Apa yang paling Anda sukai?
+                  </label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {[
+                      "Tampilan Rapi & Modern",
+                      "Cepat & Ringan",
+                      "Mudah Digunakan",
+                      "Tanpa Potongan Komisi",
+                      "Bermanfaat untuk Kampus",
+                    ].map((tag) => {
+                      const selected = ratingTags.includes(tag);
+                      return (
+                        <button
+                          key={tag}
+                          type="button"
+                          onClick={() => {
+                            if (selected) {
+                              setRatingTags(ratingTags.filter((t) => t !== tag));
+                            } else {
+                              setRatingTags([...ratingTags, tag]);
+                            }
+                          }}
+                          className={`text-xs px-2.5 py-1 rounded-lg border transition-all cursor-pointer ${
+                            selected
+                              ? "bg-amber-500/20 text-amber-300 border-amber-500/50 font-medium"
+                              : "bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-zinc-200"
+                          }`}
+                        >
+                          {tag}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Feedback text */}
+                <div className="space-y-1.5">
+                  <label className="text-[11px] font-semibold text-zinc-400 uppercase tracking-wider">
+                    Saran &amp; Masukan Tambahan
+                  </label>
+                  <textarea
+                    rows={3}
+                    value={ratingFeedback}
+                    onChange={(e) => setRatingFeedback(e.target.value)}
+                    placeholder="Tulis pendapat atau ide fitur yang Anda inginkan..."
+                    className="w-full rounded-xl border border-zinc-800 bg-zinc-900/90 px-3.5 py-2.5 text-xs text-white placeholder-zinc-500 focus:border-amber-500 focus:outline-hidden resize-none"
+                  />
+                </div>
+
+                {/* Buttons */}
+                <div className="pt-2 flex items-center justify-end gap-2.5">
+                  <button
+                    type="button"
+                    onClick={() => setRatingModalOpen(false)}
+                    className="rounded-lg border border-zinc-800 px-4 py-2 text-xs font-medium text-zinc-400 hover:bg-zinc-800 hover:text-white cursor-pointer"
+                  >
+                    Batal
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setRatingSubmitted(true);
+                    }}
+                    className="rounded-lg bg-yellow-500 hover:bg-yellow-400 px-4 py-2 text-xs font-bold text-zinc-950 cursor-pointer shadow-sm transition-colors"
+                  >
+                    Kirim Penilaian &rarr;
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

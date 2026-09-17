@@ -188,7 +188,15 @@ export function Footer() {
                   href="/bantuan"
                   className="text-zinc-400 hover:text-white transition-colors duration-150"
                 >
-                  Pusat Bantuan & FAQ
+                  Pusat Bantuan
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/faq"
+                  className="text-zinc-400 hover:text-white transition-colors duration-150"
+                >
+                  Pertanyaan Umum (FAQ)
                 </Link>
               </li>
               <li>
@@ -198,6 +206,19 @@ export function Footer() {
                 >
                   Panduan Transaksi Aman
                 </Link>
+              </li>
+              <li>
+                <a
+                  href="https://saweria.co"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-amber-400/90 hover:text-amber-300 transition-colors duration-150"
+                >
+                  <span>☕ Beri Kami Semangat</span>
+                  <span className="text-[10px] font-bold px-1 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                    Saweria
+                  </span>
+                </a>
               </li>
               <li>
                 <Link
