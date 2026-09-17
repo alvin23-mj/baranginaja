@@ -393,55 +393,174 @@ export function NavbarClient({
         }`}
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          {/* 1. Dropdown Pengguna: Profil Saya & Keluar (2 Kolom) */}
+          {/* 1. Dropdown Pengguna: Akun Saya, Fitur Penjual, Panel Admin (jika admin) & Sesi Akun */}
           {user && activeDropdown === "user" && (
-            <div className="grid grid-cols-2 divide-x divide-zinc-800/80 w-full animate-in fade-in duration-150">
-              {/* Kolom 1: Profil Saya */}
-              <div className="py-2 pr-4 sm:pr-6 flex items-center">
-                <Link
-                  href="/profil"
-                  onClick={closeDropdowns}
-                  className="group inline-flex items-center gap-2.5 py-1 text-[14px] sm:text-[15px] font-semibold text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer"
-                >
-                  <svg
-                    className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={1.8}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+            <div className={`grid grid-cols-2 ${isAdmin ? "lg:grid-cols-4" : "lg:grid-cols-3"} divide-x divide-zinc-800/80 w-full animate-in fade-in duration-150`}>
+              {/* Kolom 1: Akun Saya */}
+              <div className="py-2 pr-4 sm:pr-6 flex flex-col items-start gap-2.5">
+                <span className="text-[15px] font-semibold text-white">
+                  Akun Saya
+                </span>
+                <div className="flex flex-col items-start gap-2 w-full">
+                  <Link
+                    href="/profil"
+                    onClick={closeDropdowns}
+                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer"
                   >
-                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                    <circle cx="12" cy="7" r="4" />
-                  </svg>
-                  <span>Profil Saya</span>
-                </Link>
+                    <svg
+                      className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={1.8}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                      <circle cx="12" cy="7" r="4" />
+                    </svg>
+                    <span>Profil Saya</span>
+                  </Link>
+
+                  <Link
+                    href="/pesanan-saya"
+                    onClick={closeDropdowns}
+                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer"
+                  >
+                    <svg
+                      className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={1.8}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
+                      <path d="M3 6h18" />
+                      <path d="M16 10a4 4 0 0 1-8 0" />
+                    </svg>
+                    <span>Pesanan Saya</span>
+                  </Link>
+                </div>
               </div>
 
-              {/* Kolom 2: Keluar */}
-              <div className="py-2 px-4 sm:px-6 flex items-center">
-                <button
-                  type="button"
-                  onClick={handleDirectLogout}
-                  disabled={logoutLoading}
-                  className="group inline-flex items-center gap-2.5 py-1 text-[14px] sm:text-[15px] font-semibold text-zinc-300 hover:text-red-400 transition-colors duration-150 cursor-pointer text-left"
-                >
-                  <svg
-                    className="h-4 w-4 text-zinc-400 group-hover:text-red-400 transition-colors shrink-0"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={1.8}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+              {/* Kolom 2: Fitur Penjual */}
+              <div className="py-2 px-4 sm:px-6 flex flex-col items-start gap-2.5">
+                <span className="text-[15px] font-semibold text-white">
+                  Fitur Penjual
+                </span>
+                <div className="flex flex-col items-start gap-2 w-full">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleStoreClick();
+                      closeDropdowns();
+                    }}
+                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
                   >
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                    <polyline points="16 17 21 12 16 7" />
-                    <line x1="21" y1="12" x2="9" y2="12" />
-                  </svg>
-                  <span>{logoutLoading ? "Memproses Keluar..." : "Keluar"}</span>
-                </button>
+                    <svg
+                      className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={1.8}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7" />
+                      <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+                      <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4" />
+                      <path d="M2 7h20" />
+                    </svg>
+                    <span>Kelola Toko</span>
+                  </button>
+
+                  <Link
+                    href="/jual/tambah"
+                    onClick={closeDropdowns}
+                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer"
+                  >
+                    <svg
+                      className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={1.8}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="12" y1="8" x2="12" y2="16" />
+                      <line x1="8" y1="12" x2="16" y2="12" />
+                    </svg>
+                    <span>Jual Barang Baru</span>
+                  </Link>
+                </div>
+              </div>
+
+              {/* Kolom 3: Panel Admin (Khusus Role Admin) */}
+              {isAdmin && (
+                <div className="py-2 px-4 sm:px-6 flex flex-col items-start gap-2.5">
+                  <span className="text-[15px] font-semibold text-white">
+                    Panel Admin
+                  </span>
+                  <div className="flex flex-col items-start gap-2 w-full">
+                    <Link
+                      href="/admin"
+                      onClick={closeDropdowns}
+                      className="group inline-flex items-center gap-2.5 py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer"
+                    >
+                      <svg
+                        className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={1.8}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <rect width="18" height="18" x="3" y="3" rx="2" />
+                        <path d="M9 3v18" />
+                        <path d="m14 9 3 3-3 3" />
+                      </svg>
+                      <span>Buka Panel Admin</span>
+                      <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 border border-zinc-700">
+                        Admin
+                      </span>
+                    </Link>
+                  </div>
+                </div>
+              )}
+
+              {/* Kolom Terakhir: Sesi Akun */}
+              <div className="py-2 pl-4 sm:pl-6 flex flex-col items-start gap-2.5">
+                <span className="text-[15px] font-semibold text-white">
+                  Sesi Akun
+                </span>
+                <div className="flex flex-col items-start gap-2 w-full">
+                  <button
+                    type="button"
+                    onClick={handleDirectLogout}
+                    disabled={logoutLoading}
+                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] font-medium text-zinc-300 hover:text-red-400 transition-colors duration-150 cursor-pointer text-left"
+                  >
+                    <svg
+                      className="h-4 w-4 text-zinc-400 group-hover:text-red-400 transition-colors shrink-0"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={1.8}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                      <polyline points="16 17 21 12 16 7" />
+                      <line x1="21" y1="12" x2="9" y2="12" />
+                    </svg>
+                    <span>{logoutLoading ? "Memproses Keluar..." : "Keluar dari Akun"}</span>
+                  </button>
+                </div>
               </div>
             </div>
           )}
