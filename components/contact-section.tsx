@@ -110,7 +110,7 @@ export function ContactSection() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {/* Nama Lengkap */}
                     <div>
-                      <label htmlFor="contact-name" className="block text-xs font-semibold text-zinc-700 uppercase tracking-wider mb-1.5">
+                      <label htmlFor="contact-name" className="block text-sm font-medium text-zinc-700 mb-1.5">
                         Nama Lengkap <span className="text-rose-500">*</span>
                       </label>
                       <input
@@ -126,7 +126,7 @@ export function ContactSection() {
 
                     {/* Email / WhatsApp */}
                     <div>
-                      <label htmlFor="contact-info" className="block text-xs font-semibold text-zinc-700 uppercase tracking-wider mb-1.5">
+                      <label htmlFor="contact-info" className="block text-sm font-medium text-zinc-700 mb-1.5">
                         No. WhatsApp / Email <span className="text-rose-500">*</span>
                       </label>
                       <input
@@ -143,7 +143,7 @@ export function ContactSection() {
 
                   {/* Kategori Pertanyaan */}
                   <div>
-                    <label htmlFor="contact-category" className="block text-xs font-semibold text-zinc-700 uppercase tracking-wider mb-1.5">
+                    <label htmlFor="contact-category" className="block text-sm font-medium text-zinc-700 mb-1.5">
                       Kategori Pertanyaan
                     </label>
                     <select
@@ -163,7 +163,7 @@ export function ContactSection() {
 
                   {/* Pesan */}
                   <div>
-                    <label htmlFor="contact-message" className="block text-xs font-semibold text-zinc-700 uppercase tracking-wider mb-1.5">
+                    <label htmlFor="contact-message" className="block text-sm font-medium text-zinc-700 mb-1.5">
                       Pesan atau Pertanyaan <span className="text-rose-500">*</span>
                     </label>
                     <textarea
