@@ -212,12 +212,9 @@ export function Footer() {
                   href="https://saweria.co"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-amber-400/90 hover:text-amber-300 transition-colors duration-150"
+                  className="text-zinc-400 hover:text-white transition-colors duration-150"
                 >
-                  <span>☕ Beri Kami Semangat</span>
-                  <span className="text-[10px] font-bold px-1 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                    Saweria
-                  </span>
+                  Beri Kami Semangat
                 </a>
               </li>
               <li>
