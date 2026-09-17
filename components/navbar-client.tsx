@@ -449,9 +449,9 @@ export function NavbarClient({
           {/* 2. Dropdown Bantuan: 4 Kolom Tombol dengan Ikon & Judul Kolom */}
           {activeDropdown === "help" && (
             <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-zinc-800/80 w-full animate-in fade-in duration-150">
-              {/* Kolom 1: Panduan Transaksi (Cara Membeli & Cara Menjual) */}
+              {/* Kolom 1: Panduan Transaksi */}
               <div className="py-2 pr-4 sm:pr-6 flex flex-col items-start gap-2.5">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">
+                <span className="text-[15px] font-semibold text-white">
                   Panduan Transaksi
                 </span>
                 <div className="flex flex-col items-start gap-2 w-full">
@@ -461,7 +461,7 @@ export function NavbarClient({
                       setHelpModalOpen(true);
                       closeDropdowns();
                     }}
-                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] sm:text-[15px] font-semibold text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
+                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
                   >
                     <svg
                       className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
@@ -491,7 +491,7 @@ export function NavbarClient({
                       }
                       closeDropdowns();
                     }}
-                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] sm:text-[15px] font-semibold text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
+                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
                   >
                     <svg
                       className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
@@ -520,7 +520,7 @@ export function NavbarClient({
                       }
                       closeDropdowns();
                     }}
-                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] sm:text-[15px] font-semibold text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
+                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
                   >
                     <svg
                       className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
@@ -543,7 +543,7 @@ export function NavbarClient({
 
               {/* Kolom 2: Pengiriman & Keamanan */}
               <div className="py-2 px-4 sm:px-6 flex flex-col items-start gap-2.5">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">
+                <span className="text-[15px] font-semibold text-white">
                   Pengiriman & Keamanan
                 </span>
                 <div className="flex flex-col items-start gap-2 w-full">
@@ -553,7 +553,7 @@ export function NavbarClient({
                       setShippingModalOpen(true);
                       closeDropdowns();
                     }}
-                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] sm:text-[15px] font-semibold text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
+                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
                   >
                     <svg
                       className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
@@ -579,7 +579,7 @@ export function NavbarClient({
                       setHelpModalOpen(true);
                       closeDropdowns();
                     }}
-                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] sm:text-[15px] font-semibold text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
+                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
                   >
                     <svg
                       className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
@@ -600,14 +600,14 @@ export function NavbarClient({
 
               {/* Kolom 3: Layanan Bantuan */}
               <div className="py-2 px-4 sm:px-6 flex flex-col items-start gap-2.5">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">
+                <span className="text-[15px] font-semibold text-white">
                   Layanan Bantuan
                 </span>
                 <div className="flex flex-col items-start gap-2 w-full">
                   <Link
                     href="/bantuan"
                     onClick={closeDropdowns}
-                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] sm:text-[15px] font-semibold text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer"
+                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer"
                   >
                     <svg
                       className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
@@ -628,7 +628,7 @@ export function NavbarClient({
                   <Link
                     href="/faq"
                     onClick={closeDropdowns}
-                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] sm:text-[15px] font-semibold text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer"
+                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer"
                   >
                     <svg
                       className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
@@ -651,7 +651,7 @@ export function NavbarClient({
 
               {/* Kolom 4: Dukungan & Ulasan */}
               <div className="py-2 pl-4 sm:pl-6 flex flex-col items-start gap-2.5">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">
+                <span className="text-[15px] font-semibold text-white">
                   Dukungan & Ulasan
                 </span>
                 <div className="flex flex-col items-start gap-2 w-full">
@@ -660,7 +660,7 @@ export function NavbarClient({
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={closeDropdowns}
-                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] sm:text-[15px] font-semibold text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer"
+                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer"
                   >
                     <svg
                       className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
@@ -682,7 +682,7 @@ export function NavbarClient({
                       setRatingModalOpen(true);
                       closeDropdowns();
                     }}
-                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] sm:text-[15px] font-semibold text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
+                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
                   >
                     <svg
                       className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
