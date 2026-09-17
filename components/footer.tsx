@@ -89,7 +89,7 @@ export function Footer() {
 
           {/* Kolom 2: Jelajahi */}
           <div className="space-y-3">
-            <h3 className="text-[13px] font-semibold text-white">
+            <h3 className="text-[14px] font-semibold text-white">
               Jelajahi
             </h3>
             <ul className="space-y-2.5 text-[13px]">
@@ -130,7 +130,7 @@ export function Footer() {
 
           {/* Kolom 3: Kategori Populer */}
           <div className="space-y-3">
-            <h3 className="text-[13px] font-semibold text-white">
+            <h3 className="text-[14px] font-semibold text-white">
               Kategori Populer
             </h3>
             <ul className="space-y-2.5 text-[13px]">
@@ -171,7 +171,7 @@ export function Footer() {
 
           {/* Kolom 4: Bantuan & Informasi */}
           <div className="space-y-3">
-            <h3 className="text-[13px] font-semibold text-white">
+            <h3 className="text-[14px] font-semibold text-white">
               Bantuan & Panduan
             </h3>
             <ul className="space-y-2.5 text-[13px]">
