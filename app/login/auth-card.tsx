@@ -199,7 +199,11 @@ export function AuthCard({ districts }: AuthCardProps) {
       <div className="rounded-2xl border border-zinc-200 bg-white p-6 sm:p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
         {/* Header Branding - lowercase baranginaja */}
         <div className="flex flex-col items-center text-center mb-6">
-          <Link href="/" className="inline-flex items-center gap-1.5 group">
+          <Link
+            href="/"
+            title="Kembali ke Beranda"
+            className="inline-flex items-center gap-1.5 group transition-opacity hover:opacity-80"
+          >
             <span className="text-2xl font-bold tracking-tight text-zinc-950 dark:text-white">
               barangin<span className="text-amber-700">aja</span>
             </span>
@@ -589,19 +593,6 @@ export function AuthCard({ districts }: AuthCardProps) {
             </div>
           </form>
         )}
-      </div>
-
-      {/* Return to home link */}
-      <div className="mt-6 text-center">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-1.5 text-xs font-medium text-zinc-500 hover:text-zinc-900 transition-colors dark:text-zinc-400 dark:hover:text-zinc-200"
-        >
-          <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
-          Kembali ke Beranda
-        </Link>
       </div>
     </div>
   );
