@@ -146,19 +146,26 @@ export function ContactSection() {
                     <label htmlFor="contact-category" className="block text-sm font-medium text-zinc-700 mb-1.5">
                       Kategori Pertanyaan
                     </label>
-                    <select
-                      id="contact-category"
-                      value={formData.kategori}
-                      onChange={(e) => setFormData({ ...formData, kategori: e.target.value })}
-                      className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm text-zinc-900 focus:border-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-900 transition-all"
-                    >
-                      <option value="Pertanyaan Umum">Pertanyaan Umum & Cara Jual-Beli</option>
-                      <option value="Kendala Transaksi / COD">Kendala Transaksi / COD</option>
-                      <option value="Verifikasi Akun / Profil">Verifikasi Akun & Profil</option>
-                      <option value="Lapor Barang / Pengguna">Lapor Barang Mencurigakan</option>
-                      <option value="Kemitraan & Kerjasama">Kemitraan Kampus / Kos</option>
-                      <option value="Lainnya">Lainnya</option>
-                    </select>
+                    <div className="relative">
+                      <select
+                        id="contact-category"
+                        value={formData.kategori}
+                        onChange={(e) => setFormData({ ...formData, kategori: e.target.value })}
+                        className="w-full appearance-none rounded-xl border border-zinc-300 bg-white pl-4 pr-11 py-3 text-sm text-zinc-900 focus:border-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-900 transition-all cursor-pointer"
+                      >
+                        <option value="Pertanyaan Umum">Pertanyaan Umum & Cara Jual-Beli</option>
+                        <option value="Kendala Transaksi / COD">Kendala Transaksi / COD</option>
+                        <option value="Verifikasi Akun / Profil">Verifikasi Akun & Profil</option>
+                        <option value="Lapor Barang / Pengguna">Lapor Barang Mencurigakan</option>
+                        <option value="Kemitraan & Kerjasama">Kemitraan Kampus / Kos</option>
+                        <option value="Lainnya">Lainnya</option>
+                      </select>
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-zinc-500">
+                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </div>
+                    </div>
                   </div>
 
                   {/* Pesan */}
