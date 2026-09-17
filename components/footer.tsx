@@ -225,23 +225,7 @@ export function Footer() {
             &copy; {new Date().getFullYear()}{" "}
             <span className="text-zinc-400 font-medium">baranginaja</span>. Dibuat untuk warga & mahasiswa Surabaya.
           </p>
-          <div className="flex items-center gap-4 sm:gap-6">
-            <Link
-              href="/bantuan"
-              className="hover:text-zinc-300 transition-colors"
-            >
-              Pusat Bantuan
-            </Link>
-            <span>•</span>
-            <Link
-              href="/tentang-kami"
-              className="hover:text-zinc-300 transition-colors"
-            >
-              Tentang Kami
-            </Link>
-            <span>•</span>
-            <span className="text-zinc-500">Surabaya, Indonesia</span>
-          </div>
+          <p className="text-zinc-500">Surabaya, Indonesia</p>
         </div>
       </div>
     </footer>
