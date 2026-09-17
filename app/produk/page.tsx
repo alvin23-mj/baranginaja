@@ -106,12 +106,6 @@ export default async function ProdukPage({ searchParams }: PageProps<"/produk">)
             <p className="text-base font-normal text-zinc-500 dark:text-zinc-400">
               Belum ada produk yang sesuai dengan filter atau pencarian Anda.
             </p>
-            <Link
-              href="/produk"
-              className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-zinc-950 hover:underline transition-colors dark:text-white"
-            >
-              Tampilkan semua produk &rarr;
-            </Link>
           </div>
         ) : (
         <>
