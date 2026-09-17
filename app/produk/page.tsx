@@ -90,45 +90,30 @@ export default async function ProdukPage({ searchParams }: PageProps<"/produk">)
         />
       </section>
 
-      <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:py-10">
-        <ProductFilters
-          categories={(categories as Category[]) ?? []}
-          districts={districts}
-        />
-
-      {items.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-3 rounded-lg border border-dashed border-zinc-300 py-16 text-center dark:border-zinc-800">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={1.5}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-              />
-            </svg>
-          </div>
-          <div>
-            <p className="text-base font-semibold text-zinc-950 dark:text-zinc-50">
-              Belum ada produk ditemukan
-            </p>
-            <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-              Coba ubah kata kunci pencarian atau filter yang kamu gunakan.
-            </p>
-          </div>
-          <Link
-            href="/produk"
-            className="mt-2 rounded-md border border-zinc-300 px-3.5 py-1.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
-          >
-            Reset Filter
-          </Link>
+      {/* Filter diposisikan di tengah di bawah banner */}
+      <div className="relative z-10 -mt-6 sm:-mt-8 px-4">
+        <div className="mx-auto w-full max-w-4xl">
+          <ProductFilters
+            categories={(categories as Category[]) ?? []}
+            districts={districts}
+          />
         </div>
-      ) : (
+      </div>
+
+      <div className="mx-auto w-full max-w-6xl px-4 pt-6 pb-12 sm:pb-16">
+        {items.length === 0 ? (
+          <div className="py-16 text-center">
+            <p className="text-base font-normal text-zinc-500 dark:text-zinc-400">
+              Belum ada produk yang sesuai dengan filter atau pencarian Anda.
+            </p>
+            <Link
+              href="/produk"
+              className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-zinc-950 hover:underline transition-colors dark:text-white"
+            >
+              Tampilkan semua produk &rarr;
+            </Link>
+          </div>
+        ) : (
         <>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {items.map((product) => (

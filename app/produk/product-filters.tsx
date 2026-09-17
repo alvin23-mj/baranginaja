@@ -71,29 +71,60 @@ export function ProductFilters({
     updateParam("q", search.trim());
   }
 
+  const hasActiveFilters = Boolean(
+    search ||
+      searchParams.get("kategori") ||
+      selectedDistrict ||
+      searchParams.get("kondisi") ||
+      (searchParams.get("sort") && searchParams.get("sort") !== "terbaru")
+  );
+
+  function resetAllFilters() {
+    setSearch("");
+    router.push("/produk");
+  }
+
   return (
-    <div className="mb-6 flex flex-col gap-3 rounded-lg border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-      <form onSubmit={handleSearchSubmit} className="flex gap-2">
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Cari nama barang..."
-          className="h-10 w-full rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-blue-500"
-        />
+    <div className="flex flex-col gap-3 rounded-2xl border border-zinc-200/90 bg-white/95 p-3.5 sm:p-4.5 shadow-lg shadow-zinc-900/5 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/95">
+      {/* Search Input Bar */}
+      <form onSubmit={handleSearchSubmit} className="relative flex items-center gap-2">
+        <div className="relative flex-1">
+          <svg
+            className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
+          </svg>
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Cari barang bekas, kos, elektronik, buku, perabot..."
+            className="h-10.5 sm:h-11 w-full rounded-xl border border-zinc-200/90 bg-zinc-50/70 pl-10 pr-4 text-sm text-zinc-900 placeholder:text-zinc-400 outline-none transition-all focus:border-zinc-950 focus:bg-white focus:ring-1 focus:ring-zinc-950 dark:border-zinc-700 dark:bg-zinc-800/80 dark:text-zinc-50 dark:focus:border-white"
+          />
+        </div>
         <button
           type="submit"
-          className="h-10 shrink-0 rounded-md bg-blue-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+          className="h-10.5 sm:h-11 shrink-0 cursor-pointer rounded-xl bg-zinc-950 px-5 text-sm font-medium text-white shadow-xs transition-all hover:bg-zinc-800 active:scale-98 dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200"
         >
           Cari
         </button>
       </form>
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      {/* Select Filters Grid */}
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-2.5">
         <select
           value={searchParams.get("kategori") ?? ""}
           onChange={(e) => updateParam("kategori", e.target.value)}
-          className="h-10 w-full rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-blue-500"
+          aria-label="Filter Kategori"
+          className="h-10 w-full cursor-pointer truncate rounded-xl border border-zinc-200/90 bg-zinc-50/70 px-3 text-[13px] sm:text-sm text-zinc-800 outline-none transition-all focus:border-zinc-950 focus:bg-white focus:ring-1 focus:ring-zinc-950 dark:border-zinc-700 dark:bg-zinc-800/80 dark:text-zinc-100"
         >
           <option value="">Semua Kategori</option>
           {categories.map((category) => (
@@ -106,9 +137,10 @@ export function ProductFilters({
         <select
           value={selectedDistrict}
           onChange={(e) => updateParam("kecamatan", e.target.value)}
-          className="h-10 w-full rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-blue-500"
+          aria-label="Filter Kecamatan"
+          className="h-10 w-full cursor-pointer truncate rounded-xl border border-zinc-200/90 bg-zinc-50/70 px-3 text-[13px] sm:text-sm text-zinc-800 outline-none transition-all focus:border-zinc-950 focus:bg-white focus:ring-1 focus:ring-zinc-950 dark:border-zinc-700 dark:bg-zinc-800/80 dark:text-zinc-100"
         >
-          <option value="">Semua Kecamatan (Surabaya)</option>
+          <option value="">Semua Kecamatan</option>
           {districtList.map((d) => (
             <option key={d.id} value={d.id}>
               Kec. {d.name}
@@ -119,7 +151,8 @@ export function ProductFilters({
         <select
           value={searchParams.get("kondisi") ?? ""}
           onChange={(e) => updateParam("kondisi", e.target.value)}
-          className="h-10 w-full rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-blue-500"
+          aria-label="Filter Kondisi"
+          className="h-10 w-full cursor-pointer truncate rounded-xl border border-zinc-200/90 bg-zinc-50/70 px-3 text-[13px] sm:text-sm text-zinc-800 outline-none transition-all focus:border-zinc-950 focus:bg-white focus:ring-1 focus:ring-zinc-950 dark:border-zinc-700 dark:bg-zinc-800/80 dark:text-zinc-100"
         >
           <option value="">Semua Kondisi</option>
           {KONDISI_OPTIONS.map((option) => (
@@ -132,7 +165,8 @@ export function ProductFilters({
         <select
           value={searchParams.get("sort") ?? "terbaru"}
           onChange={(e) => updateParam("sort", e.target.value)}
-          className="h-10 w-full rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-blue-500"
+          aria-label="Urutkan Produk"
+          className="h-10 w-full cursor-pointer truncate rounded-xl border border-zinc-200/90 bg-zinc-50/70 px-3 text-[13px] sm:text-sm text-zinc-800 outline-none transition-all focus:border-zinc-950 focus:bg-white focus:ring-1 focus:ring-zinc-950 dark:border-zinc-700 dark:bg-zinc-800/80 dark:text-zinc-100"
         >
           {SORT_OPTIONS.map((option) => (
             <option key={option.value} value={option.value}>
@@ -141,6 +175,18 @@ export function ProductFilters({
           ))}
         </select>
       </div>
+
+      {hasActiveFilters && (
+        <div className="flex justify-end pt-0.5">
+          <button
+            type="button"
+            onClick={resetAllFilters}
+            className="text-xs font-medium text-zinc-500 hover:text-zinc-950 hover:underline transition-colors dark:text-zinc-400 dark:hover:text-white cursor-pointer"
+          >
+            Hapus Semua Filter &times;
+          </button>
+        </div>
+      )}
     </div>
   );
 }
