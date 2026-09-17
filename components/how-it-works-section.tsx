@@ -32,13 +32,13 @@ export function HowItWorksSection() {
         </div>
       </div>
 
-      {/* Logo BaranginAja di Kanan Bawah */}
+      {/* Watermark Logo BaranginAja Besar di Kanan Bawah (Seperempat Section) */}
       <div
         aria-hidden="true"
-        className="absolute bottom-3 right-4 sm:bottom-4 sm:right-6 lg:bottom-5 lg:right-10 select-none pointer-events-none"
+        className="absolute -bottom-3 right-0 sm:-bottom-5 sm:right-2 lg:-bottom-7 lg:right-4 select-none pointer-events-none z-0"
       >
-        <span className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-zinc-500/40">
-          barangin<span className="text-zinc-600/40">aja</span>
+        <span className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[130px] font-black tracking-tighter leading-none text-zinc-500/25">
+          barangin<span className="text-zinc-600/30">aja</span>
         </span>
       </div>
     </section>
