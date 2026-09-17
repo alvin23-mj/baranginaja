@@ -32,7 +32,7 @@ export function Footer() {
               </span>
             </Link>
 
-            <p className="text-sm text-zinc-400 leading-relaxed max-w-sm">
+            <p className="text-[15px] text-zinc-400 leading-relaxed max-w-sm">
               Platform marketplace jual beli barang bekas terpercaya antar warga dan mahasiswa di 31 kecamatan Kota Surabaya. Transaksi aman, hemat, dan langsung tanpa potongan komisi sepeser pun.
             </p>
 
@@ -89,10 +89,10 @@ export function Footer() {
 
           {/* Kolom 2: Jelajahi */}
           <div className="space-y-3">
-            <h3 className="text-xs font-semibold text-white tracking-wider uppercase">
+            <h3 className="text-[15px] font-semibold text-white tracking-wider uppercase">
               Jelajahi
             </h3>
-            <ul className="space-y-2.5 text-sm">
+            <ul className="space-y-2.5 text-[15px]">
               <li>
                 <Link
                   href="/"
@@ -130,10 +130,10 @@ export function Footer() {
 
           {/* Kolom 3: Kategori Populer */}
           <div className="space-y-3">
-            <h3 className="text-xs font-semibold text-white tracking-wider uppercase">
+            <h3 className="text-[15px] font-semibold text-white tracking-wider uppercase">
               Kategori Populer
             </h3>
-            <ul className="space-y-2.5 text-sm">
+            <ul className="space-y-2.5 text-[15px]">
               <li>
                 <Link
                   href="/produk"
@@ -171,10 +171,10 @@ export function Footer() {
 
           {/* Kolom 4: Bantuan & Informasi */}
           <div className="space-y-3">
-            <h3 className="text-xs font-semibold text-white tracking-wider uppercase">
+            <h3 className="text-[15px] font-semibold text-white tracking-wider uppercase">
               Bantuan & Panduan
             </h3>
-            <ul className="space-y-2.5 text-sm">
+            <ul className="space-y-2.5 text-[15px]">
               <li>
                 <Link
                   href="/#hubungi-kami"
@@ -220,7 +220,7 @@ export function Footer() {
         </div>
 
         {/* Bagian Bawah Footer (Copyright) - Tanpa garis border/outline */}
-        <div className="pt-12 sm:pt-16 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
+        <div className="pt-12 sm:pt-16 flex flex-col sm:flex-row items-center justify-between gap-4 text-[15px] text-zinc-500">
           <p>
             &copy; {new Date().getFullYear()}{" "}
             <span className="text-zinc-400 font-medium">baranginaja</span>. Dibuat untuk warga & mahasiswa Surabaya.
