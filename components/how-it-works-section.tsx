@@ -2,8 +2,8 @@ import Link from "next/link";
 
 export function HowItWorksSection() {
   return (
-    <section className="w-full bg-[#111111] text-white py-14 sm:py-18 lg:py-20">
-      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+    <section className="relative w-full bg-[#111111] text-white py-14 sm:py-18 lg:py-20 overflow-hidden">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 relative z-10">
         <div className="max-w-2xl">
           <span className="text-xs uppercase tracking-widest text-amber-500 font-bold block mb-2">
             PINDAHAN KOS ATAU MAU WISUDA?
@@ -30,6 +30,16 @@ export function HowItWorksSection() {
             Daftar Akun Penjual
           </Link>
         </div>
+      </div>
+
+      {/* Logo BaranginAja di Kanan Bawah */}
+      <div
+        aria-hidden="true"
+        className="absolute bottom-3 right-4 sm:bottom-4 sm:right-6 lg:bottom-5 lg:right-10 select-none pointer-events-none"
+      >
+        <span className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-zinc-500/40">
+          barangin<span className="text-zinc-600/40">aja</span>
+        </span>
       </div>
     </section>
   );
