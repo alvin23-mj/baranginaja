@@ -67,7 +67,7 @@ export function ContactSection() {
               {/* Balon Percakapan Ringkas (Speech Bubble) */}
               <div className="absolute top-4 left-4 right-4 sm:top-5 sm:left-5 sm:right-5 z-10 max-w-sm">
                 <div className="relative rounded-2xl bg-white/95 backdrop-blur-md px-4 py-3 shadow-lg border border-white/90 text-zinc-900">
-                  <div className="flex items-center justify-between gap-2 mb-1">
+                  <div className="flex items-center justify-between gap-2 pb-2 mb-2 border-b border-zinc-200/80">
                     <div className="flex items-center gap-1.5">
                       <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                       <span className="text-[11px] font-bold text-zinc-800 uppercase tracking-wider">
@@ -76,7 +76,7 @@ export function ContactSection() {
                     </div>
 
                     <Link
-                      href="/bantuan"
+                      href="/faq"
                       className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-700 hover:text-amber-800 transition-colors"
                     >
                       <span>Buka FAQ</span>
