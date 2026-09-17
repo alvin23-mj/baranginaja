@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 export function ContactSection() {
   const [formData, setFormData] = useState({
@@ -52,8 +53,8 @@ export function ContactSection() {
         <div className="overflow-hidden rounded-3xl bg-white border border-zinc-200/80 shadow-sm">
           <div className="grid grid-cols-1 lg:grid-cols-12">
             
-            {/* Sisi Kiri: Gambar AI Layanan Bantuan */}
-            <div className="relative lg:col-span-5 min-h-[360px] sm:min-h-[440px] lg:min-h-full overflow-hidden bg-zinc-950 flex items-center justify-center">
+            {/* Sisi Kiri: Gambar AI Layanan Bantuan dengan Balon Percakapan */}
+            <div className="relative lg:col-span-5 min-h-[420px] sm:min-h-[480px] lg:min-h-full overflow-hidden bg-zinc-950 flex items-center justify-center">
               <Image
                 src="/images/contact-support.jpg"
                 alt="Layanan Bantuan BaranginAja"
@@ -62,6 +63,37 @@ export function ContactSection() {
                 className="object-cover object-center"
                 sizes="(max-width: 1024px) 100vw, 42vw"
               />
+
+              {/* Balon Percakapan (Speech Bubble) */}
+              <div className="absolute top-4 left-4 right-4 sm:top-6 sm:left-6 sm:right-6 z-10">
+                <div className="relative rounded-2xl bg-white/95 backdrop-blur-md p-4 shadow-xl border border-white/90 text-zinc-900">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="text-[11px] font-bold text-zinc-900 uppercase tracking-wider">
+                      Tim Support BaranginAja
+                    </span>
+                  </div>
+
+                  <p className="text-[13px] sm:text-[14px] text-zinc-700 leading-snug font-normal">
+                    &ldquo;Hai! Sebelum mengisi formulir, sebaiknya cek halaman <span className="font-semibold text-zinc-950">FAQ</span> terlebih dahulu ya untuk mendapatkan jawaban lebih cepat.&rdquo;
+                  </p>
+
+                  <div className="mt-2.5 pt-2 border-t border-zinc-200/80">
+                    <Link
+                      href="/bantuan"
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-700 hover:text-amber-800 transition-colors"
+                    >
+                      <span>Lihat Pusat Bantuan & FAQ</span>
+                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                      </svg>
+                    </Link>
+                  </div>
+
+                  {/* Ekor Balon Percakapan (Speech Bubble Tail) */}
+                  <div className="absolute -bottom-2 left-8 w-4 h-4 bg-white/95 rotate-45 border-r border-b border-white/90" />
+                </div>
+              </div>
             </div>
 
             {/* Sisi Kanan: Form Kontak Interaktif */}
