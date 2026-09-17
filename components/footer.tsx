@@ -16,9 +16,9 @@ export function Footer() {
   }
 
   return (
-    <footer className="w-full bg-[#111111] text-zinc-300 mt-auto">
+    <footer className="w-full bg-[#111111] text-zinc-300 mt-auto relative overflow-hidden">
       {/* Konten Utama Footer */}
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-6 pb-12 lg:pb-16">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-6 pb-12 lg:pb-16 relative z-10">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-5">
           {/* Kolom 1: Branding & Info */}
           <div className="lg:col-span-2 space-y-4">
@@ -227,6 +227,16 @@ export function Footer() {
           </p>
           <p className="text-zinc-500">Surabaya, Indonesia</p>
         </div>
+      </div>
+
+      {/* Watermark Logo BaranginAja Besar di Kanan Bawah (Seperempat Section) */}
+      <div
+        aria-hidden="true"
+        className="absolute -bottom-3 right-0 sm:-bottom-5 sm:right-2 lg:-bottom-7 lg:right-4 select-none pointer-events-none z-0"
+      >
+        <span className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[130px] font-black tracking-tighter leading-none text-zinc-500/25">
+          barangin<span className="text-zinc-600/30">aja</span>
+        </span>
       </div>
     </footer>
   );
