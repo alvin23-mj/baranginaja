@@ -4,7 +4,6 @@ import { createClient } from "@/lib/supabase/server";
 import { calculateOngkir, formatRupiah } from "@/lib/pricing";
 import { haversineDistanceKm } from "@/lib/geo";
 import { findDistrictName } from "@/lib/districts";
-import { SAMPLE_PRODUCTS } from "@/lib/sample-products";
 import type { ProductWithSeller } from "@/lib/types/database";
 import { ProductGallery } from "./product-gallery";
 
@@ -41,14 +40,9 @@ export default async function ProdukDetailPage({
     .eq("id", id)
     .single();
 
-  let item = product as ProductWithSeller | null;
+  const item = product as ProductWithSeller | null;
   if (!item) {
-    const sample = SAMPLE_PRODUCTS.find((p) => p.id === id);
-    if (sample) {
-      item = sample;
-    } else {
-      notFound();
-    }
+    notFound();
   }
 
   const {

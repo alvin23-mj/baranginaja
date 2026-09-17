@@ -7,7 +7,6 @@ import { CategoryShowcase } from "@/components/category-showcase";
 import { HowItWorksSection } from "@/components/how-it-works-section";
 import { ContactSection } from "@/components/contact-section";
 import { ProductCard } from "@/components/product-card";
-import { SAMPLE_PRODUCTS } from "@/lib/sample-products";
 import type { ProductWithSeller } from "@/lib/types/database";
 
 const PRODUCT_SELECT =
@@ -42,17 +41,10 @@ export default async function Home({ searchParams }: PageProps<"/">) {
       categories = catData;
     }
   } catch {
-    // Graceful fallback to sample products if DB has no available items yet
+    // Abaikan kegagalan koneksi jika belum ada produk
   }
 
-  // Supplement with sample products to ensure exactly 8 cards are shown
-  const sampleNeeded = Math.max(0, 8 - dbProducts.length);
-  const existingIds = new Set(dbProducts.map((p) => p.id));
-  const fallbackItems = SAMPLE_PRODUCTS.filter((sp) => !existingIds.has(sp.id)).slice(
-    0,
-    sampleNeeded
-  );
-  const displayProducts = [...dbProducts, ...fallbackItems].slice(0, 8);
+  const displayProducts = dbProducts;
 
   return (
     <main className="flex-1 bg-[#f0f0f0] text-zinc-900">
@@ -100,12 +92,44 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           </Link>
         </div>
 
-        {/* 8 Product Cards Grid */}
-        <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 lg:gap-6">
-          {displayProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        {/* Product Cards Grid / Empty State */}
+        {displayProducts.length > 0 ? (
+          <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 lg:gap-6">
+            {displayProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-zinc-300 py-16 text-center dark:border-zinc-800 bg-white/60 dark:bg-zinc-900/60 px-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+              <svg
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={1.5}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                />
+              </svg>
+            </div>
+            <p className="text-base font-semibold text-zinc-950 dark:text-zinc-50">
+              Belum ada produk yang dijual saat ini
+            </p>
+            <p className="text-sm text-zinc-500 max-w-sm">
+              Semua produk dummy telah dibersihkan. Jadilah yang pertama menjual barang bekas berkualitasmu di Surabaya!
+            </p>
+            <Link
+              href="/jual"
+              className="mt-2 inline-flex items-center rounded-lg bg-zinc-950 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200 transition-colors"
+            >
+              Mulai Jual Barang
+            </Link>
+          </div>
+        )}
       </section>
 
       {/* ========================================================================= */}
