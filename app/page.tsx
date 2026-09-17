@@ -1,69 +1,122 @@
 import Image from "next/image";
+import Link from "next/link";
+import { createClient } from "@/lib/supabase/server";
+import { AccessDeniedToast } from "@/components/access-denied-toast";
+import { HeroStatsTicker } from "@/components/hero-stats-ticker";
+import { CategoryShowcase } from "@/components/category-showcase";
+import { HowItWorksSection } from "@/components/how-it-works-section";
+import { ContactSection } from "@/components/contact-section";
+import { ProductCard } from "@/components/product-card";
+import { SAMPLE_PRODUCTS } from "@/lib/sample-products";
+import type { ProductWithSeller } from "@/lib/types/database";
 
-export default function Home() {
+const PRODUCT_SELECT =
+  "*, kategori:categories(id, nama_kategori), seller:users!inner(id, nama_lengkap, status_verifikasi, kecamatan_id, kecamatan:districts(id, nama_kecamatan))";
+
+export default async function Home({ searchParams }: PageProps<"/">) {
+  const params = await searchParams;
+  const aksesDitolak = params.akses_ditolak === "1";
+
+  const supabase = await createClient();
+  let dbProducts: ProductWithSeller[] = [];
+  let categories: { id: string; nama_kategori: string }[] = [];
+
+  try {
+    const [{ data: prodData }, { data: catData }] = await Promise.all([
+      supabase
+        .from("products")
+        .select(PRODUCT_SELECT)
+        .eq("status", "Tersedia")
+        .order("created_at", { ascending: false })
+        .limit(8),
+      supabase
+        .from("categories")
+        .select("id, nama_kategori")
+        .order("nama_kategori", { ascending: true }),
+    ]);
+
+    if (prodData && prodData.length > 0) {
+      dbProducts = prodData as ProductWithSeller[];
+    }
+    if (catData && catData.length > 0) {
+      categories = catData;
+    }
+  } catch {
+    // Graceful fallback to sample products if DB has no available items yet
+  }
+
+  // Supplement with sample products to ensure exactly 8 cards are shown
+  const sampleNeeded = Math.max(0, 8 - dbProducts.length);
+  const existingIds = new Set(dbProducts.map((p) => p.id));
+  const fallbackItems = SAMPLE_PRODUCTS.filter((sp) => !existingIds.has(sp.id)).slice(
+    0,
+    sampleNeeded
+  );
+  const displayProducts = [...dbProducts, ...fallbackItems].slice(0, 8);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
+    <main className="flex-1 bg-[#f0f0f0] text-zinc-900">
+      {aksesDitolak && <AccessDeniedToast />}
+
+      {/* ========================================================================= */}
+      {/* 1. HERO IMAGE (CONTAINER FLUID - EDGE TO EDGE FULL)                       */}
+      {/* ========================================================================= */}
+      <section className="w-full overflow-hidden bg-zinc-950">
         <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
+          src="/images/hero-campus.jpg"
+          alt="BaranginAja Pasar Barang Bekas Mahasiswa"
+          width={1920}
+          height={800}
           priority
+          className="w-full h-auto object-cover max-h-[480px] sm:max-h-[560px] lg:max-h-[640px]"
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 2. KEUNGGULAN / STATS TICKER (SLIDER AUTO BERJALAN)                        */}
+      {/* ========================================================================= */}
+      <HeroStatsTicker />
+
+      {/* ========================================================================= */}
+      {/* 3. SECTION: KATEGORI PILIHAN (4 CARDS EDITORIAL LAYOUT)                   */}
+      {/* ========================================================================= */}
+      <CategoryShowcase categories={categories} />
+
+      {/* ========================================================================= */}
+      {/* 4. SECTION: PRODUK TERBARU DI SURABAYA (8 CARDS)                          */}
+      {/* ========================================================================= */}
+      <section className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 lg:pt-20 pb-16 lg:pb-24">
+        {/* Section Header */}
+        <div className="mb-6 sm:mb-8 flex items-baseline justify-between gap-4">
+          <h2 className="text-2xl sm:text-3xl font-normal tracking-tight text-zinc-950 dark:text-zinc-50">
+            Produk Terbaru di Surabaya
+          </h2>
+
+          <Link
+            href="/produk"
+            className="text-[14px] font-normal text-zinc-950 hover:text-amber-600 dark:text-white dark:hover:text-amber-400 transition-colors shrink-0"
           >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            Lihat Semua Produk
+          </Link>
         </div>
-      </main>
-    </div>
+
+        {/* 8 Product Cards Grid */}
+        <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 lg:gap-6">
+          {displayProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 5. SECTION: ALUR TRANSAKSI & JUAL BELI (BG SEPERTI NAVBAR #111111)        */}
+      {/* ========================================================================= */}
+      <HowItWorksSection />
+
+      {/* ========================================================================= */}
+      {/* 6. SECTION: HUBUNGI KAMI (FORM & SALURAN BANTUAN)                         */}
+      {/* ========================================================================= */}
+      <ContactSection />
+    </main>
   );
 }

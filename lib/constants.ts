@@ -1,0 +1,15 @@
+export const BANK_OPTIONS = [
+  "BCA",
+  "BRI",
+  "BNI",
+  "Mandiri",
+  "BSI",
+  "CIMB Niaga",
+  "Danamon",
+  "Permata",
+  "Jago",
+  "SeaBank",
+  "Jenius (BTPN)",
+  "OCBC NISP",
+  "Lainnya",
+] as const;
