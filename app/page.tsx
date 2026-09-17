@@ -104,12 +104,6 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             <p className="text-base text-zinc-500 font-normal">
               Belum ada barang yang tersedia saat ini.
             </p>
-            <Link
-              href="/jual"
-              className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-zinc-950 hover:underline transition-colors dark:text-white"
-            >
-              Mulai jual barang &rarr;
-            </Link>
           </div>
         )}
       </section>
