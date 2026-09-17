@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 export function ContactSection() {
   const [formData, setFormData] = useState({
@@ -51,44 +52,16 @@ export function ContactSection() {
         <div className="overflow-hidden rounded-3xl bg-white border border-zinc-200/80 shadow-sm">
           <div className="grid grid-cols-1 lg:grid-cols-12">
             
-            {/* Sisi Kiri: Informasi & Kontak Langsung */}
-            <div className="lg:col-span-5 bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-950 p-8 sm:p-10 lg:p-12 text-white flex flex-col justify-between">
-              <div>
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-normal tracking-tight text-white">
-                  Ada Pertanyaan atau Butuh Bantuan?
-                </h2>
-
-                <p className="mt-4 text-sm sm:text-base text-zinc-300 leading-relaxed">
-                  Tim BaranginAja siap membantu seputar jual beli barang bekas kos, verifikasi akun, hingga pelaporan kendala transaksi di Surabaya.
-                </p>
-
-                {/* Informasi Kontak (Teks Saja Tanpa Tombol) */}
-                <div className="mt-8 space-y-6 text-[15px]">
-                  {/* WhatsApp */}
-                  <div>
-                    <div className="font-semibold text-white">WhatsApp Hotline</div>
-                    <div className="text-zinc-400 mt-0.5">+62 812-3456-7890 (Respon Cepat)</div>
-                  </div>
-
-                  {/* Email */}
-                  <div>
-                    <div className="font-semibold text-white">Email Dukungan</div>
-                    <div className="text-zinc-400 mt-0.5">halo@baranginaja.id</div>
-                  </div>
-
-                  {/* Lokasi */}
-                  <div>
-                    <div className="font-semibold text-white">Area Layanan</div>
-                    <div className="text-zinc-400 mt-0.5">31 Kecamatan Kota Surabaya</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Jam Operasional */}
-              <div className="mt-8 pt-6 border-t border-zinc-800 text-[15px] text-zinc-400 flex items-center justify-between">
-                <span>Jam Layanan:</span>
-                <span className="font-medium text-zinc-200">Senin – Minggu, 08:00 – 21:00 WIB</span>
-              </div>
+            {/* Sisi Kiri: Gambar AI Layanan Bantuan */}
+            <div className="relative lg:col-span-5 min-h-[360px] sm:min-h-[440px] lg:min-h-full overflow-hidden bg-zinc-950 flex items-center justify-center">
+              <Image
+                src="/images/contact-support.jpg"
+                alt="Layanan Bantuan BaranginAja"
+                fill
+                priority
+                className="object-cover object-center"
+                sizes="(max-width: 1024px) 100vw, 42vw"
+              />
             </div>
 
             {/* Sisi Kanan: Form Kontak Interaktif */}
