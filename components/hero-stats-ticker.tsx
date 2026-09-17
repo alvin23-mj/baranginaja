@@ -48,12 +48,12 @@ export function HeroStatsTicker() {
           <div key={index} className="flex items-center shrink-0 px-6 sm:px-10">
             <div className="flex items-center gap-2.5 group cursor-default">
               {/* Highlight Keunggulan */}
-              <span className="text-sm sm:text-base font-bold text-zinc-950 leading-normal">
+              <span className="text-[15px] font-bold text-zinc-950 leading-normal">
                 {item.highlight}
               </span>
 
               {/* Keterangan Keunggulan */}
-              <span className="text-sm sm:text-base font-normal text-zinc-600 leading-normal whitespace-nowrap">
+              <span className="text-[15px] font-normal text-zinc-600 leading-normal whitespace-nowrap">
                 {item.label}
               </span>
             </div>
