@@ -565,7 +565,7 @@ export function NavbarClient({
             </div>
           )}
 
-          {/* 2. Dropdown Bantuan: 4 Kolom Tombol dengan Ikon & Judul Kolom */}
+          {/* 2. Dropdown Bantuan: 4 Kolom Tombol Navigasi ke Halaman Sendiri-Sendiri */}
           {activeDropdown === "help" && (
             <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-zinc-800/80 w-full animate-in fade-in duration-150">
               {/* Kolom 1: Panduan Transaksi */}
@@ -574,89 +574,29 @@ export function NavbarClient({
                   Panduan Transaksi
                 </span>
                 <div className="flex flex-col items-start gap-2 w-full">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setHelpModalOpen(true);
-                      closeDropdowns();
-                    }}
-                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
+                  <Link
+                    href="/panduan/cara-membeli"
+                    onClick={closeDropdowns}
+                    className="py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
                   >
-                    <svg
-                      className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1.8}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
-                      <path d="M3 6h18" />
-                      <path d="M16 10a4 4 0 0 1-8 0" />
-                    </svg>
-                    <span>Cara Membeli</span>
-                  </button>
+                    Cara Membeli
+                  </Link>
 
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (!user) {
-                        router.push("/login?redirectTo=/jual/tambah");
-                      } else if (!isSeller) {
-                        setSellerPromptOpen(true);
-                      } else {
-                        router.push("/jual/tambah");
-                      }
-                      closeDropdowns();
-                    }}
-                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
+                  <Link
+                    href="/panduan/cara-menjual"
+                    onClick={closeDropdowns}
+                    className="py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
                   >
-                    <svg
-                      className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1.8}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z" />
-                      <circle cx="7" cy="7" r="1" fill="currentColor" />
-                    </svg>
-                    <span>Cara Menjual</span>
-                  </button>
+                    Cara Menjual
+                  </Link>
 
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (!user) {
-                        router.push("/login?redirectTo=/profil");
-                      } else if (!isSeller) {
-                        setSellerPromptOpen(true);
-                      } else {
-                        router.push("/jual");
-                      }
-                      closeDropdowns();
-                    }}
-                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
+                  <Link
+                    href="/panduan/daftar-penjual"
+                    onClick={closeDropdowns}
+                    className="py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
                   >
-                    <svg
-                      className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1.8}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                      <circle cx="9" cy="7" r="4" />
-                      <line x1="19" x2="19" y1="8" y2="14" />
-                      <line x1="22" x2="16" y1="11" y2="11" />
-                    </svg>
-                    <span>Daftar Jadi Penjual</span>
-                  </button>
+                    Daftar Jadi Penjual
+                  </Link>
                 </div>
               </div>
 
@@ -666,54 +606,21 @@ export function NavbarClient({
                   Pengiriman & Keamanan
                 </span>
                 <div className="flex flex-col items-start gap-2 w-full">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setShippingModalOpen(true);
-                      closeDropdowns();
-                    }}
-                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
+                  <Link
+                    href="/panduan/tarif-ongkir"
+                    onClick={closeDropdowns}
+                    className="py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
                   >
-                    <svg
-                      className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1.8}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" />
-                      <path d="M15 18H9" />
-                      <path d="M19 18h2a1 1 0 0 0 1-1v-5l-3-4h-5v10Z" />
-                      <circle cx="7" cy="18" r="2" />
-                      <circle cx="17" cy="18" r="2" />
-                    </svg>
-                    <span>Tarif & Ongkir</span>
-                  </button>
+                    Tarif & Ongkir
+                  </Link>
 
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setHelpModalOpen(true);
-                      closeDropdowns();
-                    }}
-                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
+                  <Link
+                    href="/panduan/keamanan-cod"
+                    onClick={closeDropdowns}
+                    className="py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
                   >
-                    <svg
-                      className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1.8}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
-                      <path d="m9 12 2 2 4-4" />
-                    </svg>
-                    <span>Keamanan & COD</span>
-                  </button>
+                    Keamanan & COD
+                  </Link>
                 </div>
               </div>
 
@@ -726,44 +633,17 @@ export function NavbarClient({
                   <Link
                     href="/bantuan"
                     onClick={closeDropdowns}
-                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer"
+                    className="py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer"
                   >
-                    <svg
-                      className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1.8}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <circle cx="12" cy="12" r="10" />
-                      <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-                      <line x1="12" y1="17" x2="12.01" y2="17" strokeWidth={2.5} />
-                    </svg>
-                    <span>Pusat Bantuan</span>
+                    Pusat Bantuan
                   </Link>
 
                   <Link
                     href="/faq"
                     onClick={closeDropdowns}
-                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer"
+                    className="py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer"
                   >
-                    <svg
-                      className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1.8}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                      <path d="M9 10h.01" />
-                      <path d="M12 10h.01" />
-                      <path d="M15 10h.01" />
-                    </svg>
-                    <span>Pertanyaan Umum (FAQ)</span>
+                    Pertanyaan Umum (FAQ)
                   </Link>
                 </div>
               </div>
@@ -779,43 +659,18 @@ export function NavbarClient({
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={closeDropdowns}
-                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer"
+                    className="py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer"
                   >
-                    <svg
-                      className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1.8}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
-                    </svg>
-                    <span>Beri Kami Semangat</span>
+                    Beri Kami Semangat
                   </a>
 
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setRatingModalOpen(true);
-                      closeDropdowns();
-                    }}
-                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
+                  <Link
+                    href="/ulasan"
+                    onClick={closeDropdowns}
+                    className="py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
                   >
-                    <svg
-                      className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1.8}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                    </svg>
-                    <span>Rating Kepuasan Website</span>
-                  </button>
+                    Rating Kepuasan Website
+                  </Link>
                 </div>
               </div>
             </div>
@@ -867,26 +722,27 @@ export function NavbarClient({
             <Link href="/tentang-kami" className={mobileNavLinkClass("/tentang-kami")}>
               Tentang Kami
             </Link>
-            <button
-              type="button"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                setHelpModalOpen(true);
-              }}
+            <Link
+              href="/bantuan"
+              onClick={() => setMobileMenuOpen(false)}
               className="text-left block w-full px-3 py-2.5 rounded-lg text-[15px] font-medium text-zinc-300 hover:bg-zinc-800 hover:text-white cursor-pointer"
             >
-              Bantuan & Panduan
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                setShippingModalOpen(true);
-              }}
+              Pusat Bantuan
+            </Link>
+            <Link
+              href="/panduan/tarif-ongkir"
+              onClick={() => setMobileMenuOpen(false)}
               className="text-left block w-full px-3 py-2.5 rounded-lg text-[15px] font-medium text-zinc-300 hover:bg-zinc-800 hover:text-white cursor-pointer"
             >
               Tarif & Ongkir
-            </button>
+            </Link>
+            <Link
+              href="/panduan/keamanan-cod"
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-left block w-full px-3 py-2.5 rounded-lg text-[15px] font-medium text-zinc-300 hover:bg-zinc-800 hover:text-white cursor-pointer"
+            >
+              Keamanan & COD
+            </Link>
             <Link
               href="/faq"
               onClick={() => setMobileMenuOpen(false)}
@@ -903,16 +759,13 @@ export function NavbarClient({
             >
               Beri Kami Semangat
             </a>
-            <button
-              type="button"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                setRatingModalOpen(true);
-              }}
+            <Link
+              href="/ulasan"
+              onClick={() => setMobileMenuOpen(false)}
               className="text-left block w-full px-3 py-2.5 rounded-lg text-[15px] font-medium text-zinc-300 hover:bg-zinc-800 hover:text-white cursor-pointer"
             >
               Rating Kepuasan Website
-            </button>
+            </Link>
             <button
               type="button"
               onClick={() => {
