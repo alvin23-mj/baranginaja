@@ -30,6 +30,7 @@ export function AdminSidebar({ adminName, adminEmail }: AdminSidebarProps) {
 
   // Close mobile drawer on route change
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMobileOpen(false);
   }, [pathname, currentTab]);
 
@@ -266,9 +267,12 @@ export function AdminSidebar({ adminName, adminEmail }: AdminSidebarProps) {
             </svg>
           </button>
           <div className="flex items-center gap-2">
-            <span className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-950 text-xs font-bold text-white dark:bg-zinc-100 dark:text-zinc-950">
-              B
-            </span>
+            <div className="relative h-7 w-7 shrink-0">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logo-black.png" alt="BaranginAja Logo" className="h-full w-full object-contain block dark:hidden" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logo-white.png" alt="BaranginAja Logo" className="h-full w-full object-contain hidden dark:block" />
+            </div>
             <span className="font-bold text-sm text-zinc-900 dark:text-zinc-100">
               Admin Panel
             </span>
@@ -291,9 +295,12 @@ export function AdminSidebar({ adminName, adminEmail }: AdminSidebarProps) {
               {/* Header */}
               <div className="flex items-center justify-between pb-4 border-b border-zinc-200 dark:border-zinc-800">
                 <div className="flex items-center gap-2">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-md bg-zinc-950 font-bold text-white dark:bg-zinc-100 dark:text-zinc-950">
-                    B
-                  </span>
+                  <div className="relative h-8 w-8 shrink-0">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/logo-black.png" alt="BaranginAja Logo" className="h-full w-full object-contain block dark:hidden" />
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/logo-white.png" alt="BaranginAja Logo" className="h-full w-full object-contain hidden dark:block" />
+                  </div>
                   <div>
                     <h2 className="text-sm font-bold text-zinc-950 dark:text-zinc-50">
                       BaranginAja
@@ -379,9 +386,12 @@ export function AdminSidebar({ adminName, adminEmail }: AdminSidebarProps) {
         <div className="p-5">
           {/* Brand Header */}
           <div className="flex items-center gap-3 pb-5 border-b border-zinc-200 dark:border-zinc-800">
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-zinc-950 font-bold text-white dark:bg-zinc-100 dark:text-zinc-950 shadow-xs">
-              B
-            </span>
+            <div className="relative h-9 w-9 shrink-0">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logo-black.png" alt="BaranginAja Logo" className="h-full w-full object-contain block dark:hidden" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logo-white.png" alt="BaranginAja Logo" className="h-full w-full object-contain hidden dark:block" />
+            </div>
             <div>
               <Link
                 href="/admin"

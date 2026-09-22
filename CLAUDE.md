@@ -4,7 +4,7 @@
 Next.js (App Router) + TailwindCSS, Supabase (Auth + Postgres + Storage).
 
 ## Skema data (Supabase)
-- users: id, nama_lengkap, email, no_hp, kampus_id (FK), alamat_kos, lat, lng,
+- users: id, nama_lengkap, email, password, no_hp, kampus_id (FK), alamat_kos, lat, lng,
   status_verifikasi (pending/verified), is_seller (bool), no_rekening, nama_bank,
   nama_pemilik_rekening, role (buyer/seller/admin)
 - campuses: id, nama_kampus, kota, aktif

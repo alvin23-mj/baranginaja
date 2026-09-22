@@ -146,6 +146,7 @@ export function ContactSection() {
                         Nama Lengkap <span className="text-rose-500">*</span>
                       </label>
                       <input
+                        suppressHydrationWarning
                         id="contact-name"
                         type="text"
                         required
@@ -162,6 +163,7 @@ export function ContactSection() {
                         No. WhatsApp / Email <span className="text-rose-500">*</span>
                       </label>
                       <input
+                        suppressHydrationWarning
                         id="contact-info"
                         type="text"
                         required
@@ -180,6 +182,7 @@ export function ContactSection() {
                     </label>
                     <div className="relative">
                       <select
+                        suppressHydrationWarning
                         id="contact-category"
                         value={formData.kategori}
                         onChange={(e) => setFormData({ ...formData, kategori: e.target.value })}
@@ -206,6 +209,7 @@ export function ContactSection() {
                       Pesan atau Pertanyaan <span className="text-rose-500">*</span>
                     </label>
                     <textarea
+                      suppressHydrationWarning
                       id="contact-message"
                       rows={4}
                       required
@@ -219,6 +223,7 @@ export function ContactSection() {
                   {/* Tombol Aksi */}
                   <div className="pt-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                     <button
+                      suppressHydrationWarning
                       type="submit"
                       disabled={status === "submitting"}
                       className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-zinc-950 px-7 py-3.5 text-sm font-semibold text-white transition-all hover:bg-zinc-800 disabled:opacity-70 shadow-sm cursor-pointer"
@@ -250,6 +255,7 @@ export function ContactSection() {
                         <span>Rekomendasi</span>
                       </span>
                       <button
+                        suppressHydrationWarning
                         type="button"
                         onClick={handleWhatsAppDirect}
                         className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-500 bg-emerald-50/70 px-6 py-3.5 text-sm font-semibold text-emerald-700 shadow-xs transition-all hover:bg-emerald-100/70 cursor-pointer"

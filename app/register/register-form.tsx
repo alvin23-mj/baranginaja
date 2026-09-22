@@ -50,6 +50,7 @@ export function RegisterForm({ districts }: { districts: District[] }) {
       id: userId,
       nama_lengkap: namaLengkap,
       email,
+      password,
       no_hp: noHp,
       kecamatan_id: isNaN(parsedKecamatanId) ? null : parsedKecamatanId,
       status_verifikasi: "pending",

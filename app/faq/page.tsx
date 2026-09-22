@@ -9,7 +9,11 @@ export default function FaqPage() {
   const faqCategories = [
     {
       category: "Jual & Beli",
-      icon: "🛍️",
+      icon: (
+        <svg className="h-5 w-5 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+        </svg>
+      ),
       items: [
         {
           q: "Bagaimana cara mulai menjual barang di BaranginAja?",
@@ -27,7 +31,11 @@ export default function FaqPage() {
     },
     {
       category: "Keamanan & COD",
-      icon: "🛡️",
+      icon: (
+        <svg className="h-5 w-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+        </svg>
+      ),
       items: [
         {
           q: "Di mana lokasi terbaik untuk COD di Surabaya?",
@@ -45,7 +53,11 @@ export default function FaqPage() {
     },
     {
       category: "Pengiriman & Ongkir",
-      icon: "🚚",
+      icon: (
+        <svg className="h-5 w-5 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 102 0 1 1 0 00-2 0zm-7 0a1 1 0 102 0 1 1 0 00-2 0z" />
+        </svg>
+      ),
       items: [
         {
           q: "Berapa tarif ongkos kirim jika menggunakan kurir?",
@@ -59,7 +71,11 @@ export default function FaqPage() {
     },
     {
       category: "Dukungan & Komunitas",
-      icon: "☕",
+      icon: (
+        <svg className="h-5 w-5 text-rose-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+        </svg>
+      ),
       items: [
         {
           q: "Bagaimana cara mendukung kelangsungan website BaranginAja?",
@@ -79,7 +95,10 @@ export default function FaqPage() {
         {/* Header */}
         <div className="text-center space-y-4">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-800/80 border border-zinc-700 text-amber-400 text-xs font-semibold">
-            <span>❓</span> Pusat Pertanyaan &amp; Jawaban
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Pusat Pertanyaan &amp; Jawaban
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
             Pertanyaan Umum (FAQ)
@@ -94,7 +113,9 @@ export default function FaqPage() {
           {faqCategories.map((cat, catIdx) => (
             <div key={catIdx} className="space-y-4">
               <div className="flex items-center gap-2.5 pb-2 border-b border-zinc-800">
-                <span className="text-xl">{cat.icon}</span>
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-800 shrink-0">
+                  {cat.icon}
+                </span>
                 <h2 className="text-lg sm:text-xl font-bold text-white">
                   {cat.category}
                 </h2>
@@ -128,7 +149,10 @@ export default function FaqPage() {
         <div className="rounded-2xl border border-zinc-800 bg-linear-to-r from-zinc-900 to-zinc-900/60 p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="space-y-1.5 text-center sm:text-left">
             <h3 className="text-lg font-bold text-white flex items-center justify-center sm:justify-start gap-2">
-              <span>☕</span> Suka dengan BaranginAja?
+              <svg className="h-5 w-5 text-rose-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+              Suka dengan BaranginAja?
             </h3>
             <p className="text-xs sm:text-sm text-zinc-400 max-w-md">
               Dukung tim mahasiswa pengembang kami lewat donasi seikhlasnya atau beri kami masukan.
@@ -141,7 +165,10 @@ export default function FaqPage() {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-zinc-950 px-4 py-2.5 text-xs sm:text-sm font-bold transition-colors shadow-sm"
             >
-              <span>☕</span> Beri Kami Semangat
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+              Beri Kami Semangat
             </a>
             <Link
               href="/#hubungi-kami"

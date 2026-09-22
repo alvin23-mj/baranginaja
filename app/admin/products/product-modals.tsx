@@ -46,7 +46,10 @@ export function ProductDetailModal({
   const photos = product.foto_urls && product.foto_urls.length > 0 ? product.foto_urls : [];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs overflow-y-auto animate-backdrop">
+    <div
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs overflow-y-auto animate-backdrop"
+    >
       <div className="relative w-full max-w-2xl rounded-2xl bg-white p-6 shadow-2xl dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 my-8 max-h-[90vh] overflow-y-auto animate-modal-pop">
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-zinc-200 dark:border-zinc-800">
@@ -263,6 +266,7 @@ export function ProductCreateModal({
 
   useEffect(() => {
     if (sellers.length > 0 && !sellerId) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSellerId(sellers[0].id);
     }
     if (categories.length > 0 && !kategoriId) {
@@ -351,7 +355,10 @@ export function ProductCreateModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs overflow-y-auto animate-backdrop">
+    <div
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs overflow-y-auto animate-backdrop"
+    >
       <div className="relative w-full max-w-xl rounded-2xl bg-white p-6 shadow-2xl dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 my-8 max-h-[90vh] overflow-y-auto animate-modal-pop">
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-zinc-200 dark:border-zinc-800">
@@ -601,6 +608,7 @@ export function ProductEditModal({
 
   useEffect(() => {
     if (product) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSellerId(product.seller_id);
       setNamaBarang(product.nama_barang);
       setKategoriId(product.kategori_id);
@@ -707,7 +715,10 @@ export function ProductEditModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs overflow-y-auto animate-backdrop">
+    <div
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs overflow-y-auto animate-backdrop"
+    >
       <div className="relative w-full max-w-xl rounded-2xl bg-white p-6 shadow-2xl dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 my-8 max-h-[90vh] overflow-y-auto animate-modal-pop">
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-zinc-200 dark:border-zinc-800">
@@ -1003,7 +1014,10 @@ export function ProductDeleteModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-backdrop">
+    <div
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-backdrop"
+    >
       <div className="relative w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 animate-modal-pop">
         <div className="flex items-center gap-3 text-red-600 dark:text-red-400">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 dark:bg-red-950/60 border border-red-200 dark:border-red-900">
@@ -1022,12 +1036,17 @@ export function ProductDeleteModal({
         </div>
 
         <p className="mt-4 text-sm text-zinc-700 dark:text-zinc-300">
-          Apakah Anda yakin ingin menghapus katalog <span className="font-semibold text-zinc-950 dark:text-zinc-100">"{product.nama_barang}"</span>?
+          Apakah Anda yakin ingin menghapus katalog <span className="font-semibold text-zinc-950 dark:text-zinc-100">&ldquo;{product.nama_barang}&rdquo;</span>?
         </p>
 
         {product.status === "Dipesan" && (
-          <div className="mt-3 rounded-xl border border-amber-300 bg-amber-50 p-3 text-xs text-amber-900 dark:border-amber-800/60 dark:bg-amber-950/50 dark:text-amber-200">
-            ⚠️ <strong>Peringatan:</strong> Produk ini saat ini berstatus <strong>Dipesan</strong>. Menghapus produk dapat memengaruhi pesanan pembeli yang sedang berlangsung.
+          <div className="mt-3 flex items-start gap-2 rounded-xl border border-amber-300 bg-amber-50 p-3 text-xs text-amber-900 dark:border-amber-800/60 dark:bg-amber-950/50 dark:text-amber-200">
+            <svg className="h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <div>
+              <strong>Peringatan:</strong> Produk ini saat ini berstatus <strong>Dipesan</strong>. Menghapus produk dapat memengaruhi pesanan pembeli yang sedang berlangsung.
+            </div>
           </div>
         )}
 

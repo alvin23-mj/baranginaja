@@ -42,6 +42,7 @@ export function UserManagementView({
   const [formData, setFormData] = useState<{
     nama_lengkap: string;
     email: string;
+    password: string;
     no_hp: string;
     role: UserRow["role"];
     is_seller: boolean;
@@ -54,6 +55,7 @@ export function UserManagementView({
   }>({
     nama_lengkap: "",
     email: "",
+    password: "",
     no_hp: "",
     role: "buyer",
     is_seller: false,
@@ -65,10 +67,16 @@ export function UserManagementView({
     kecamatan_id: "",
   });
 
+  const [visiblePasswords, setVisiblePasswords] = useState<Record<string, boolean>>({});
+  const [showFormPassword, setShowFormPassword] = useState(false);
+
+  const togglePasswordVisibility = (userId: string) => {
+    setVisiblePasswords((prev) => ({ ...prev, [userId]: !prev[userId] }));
+  };
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Counts
-  const totalUsers = users.length;
   const totalPending = useMemo(
     () => users.filter((u) => u.status_verifikasi === "pending").length,
     [users]
@@ -95,6 +103,7 @@ export function UserManagementView({
     setFormData({
       nama_lengkap: "",
       email: "",
+      password: "",
       no_hp: "",
       role: "buyer",
       is_seller: false,
@@ -105,6 +114,7 @@ export function UserManagementView({
       alamat_kos: "",
       kecamatan_id: districts[0]?.id ? String(districts[0].id) : "",
     });
+    setShowFormPassword(false);
     setCreateModalOpen(true);
   };
 
@@ -114,6 +124,7 @@ export function UserManagementView({
     setFormData({
       nama_lengkap: user.nama_lengkap || "",
       email: user.email || "",
+      password: user.password || "",
       no_hp: user.no_hp || "",
       role: user.role || "buyer",
       is_seller: user.is_seller || false,
@@ -124,6 +135,7 @@ export function UserManagementView({
       alamat_kos: user.alamat_kos || "",
       kecamatan_id: user.kecamatan_id ? String(user.kecamatan_id) : "",
     });
+    setShowFormPassword(false);
   };
 
   // Submit Create Account
@@ -135,6 +147,7 @@ export function UserManagementView({
     const payload = {
       nama_lengkap: formData.nama_lengkap,
       email: formData.email,
+      password: formData.password || null,
       no_hp: formData.no_hp,
       role: formData.role,
       is_seller: formData.is_seller || formData.role === "seller",
@@ -183,6 +196,7 @@ export function UserManagementView({
     const payload = {
       nama_lengkap: formData.nama_lengkap,
       email: formData.email,
+      password: formData.password || null,
       no_hp: formData.no_hp,
       role: formData.role,
       is_seller: formData.is_seller || formData.role === "seller",
@@ -401,6 +415,7 @@ export function UserManagementView({
             <thead className="border-b border-zinc-200 bg-zinc-50 text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:border-zinc-800 dark:bg-zinc-800/60 dark:text-zinc-300">
               <tr>
                 <th className="px-4 py-3">Nama &amp; Email</th>
+                <th className="px-4 py-3">Password / Sandi</th>
                 <th className="px-4 py-3">No. HP</th>
                 <th className="px-4 py-3">Lokasi / Kecamatan</th>
                 <th className="px-4 py-3">Role (RBAC)</th>
@@ -426,6 +441,32 @@ export function UserManagementView({
                       <p className="text-xs text-zinc-500 font-mono dark:text-zinc-400">
                         {user.email}
                       </p>
+                    </td>
+
+                    {/* Password / Sandi */}
+                    <td className="px-4 py-3 font-mono text-xs text-zinc-700 dark:text-zinc-300">
+                      <div className="flex items-center gap-1.5">
+                        {user.password ? (
+                          <>
+                            <span>{visiblePasswords[user.id] ? user.password : "••••••••"}</span>
+                            <button
+                              suppressHydrationWarning
+                              type="button"
+                              onClick={() => togglePasswordVisibility(user.id)}
+                              className="rounded p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800 dark:hover:text-zinc-200 cursor-pointer"
+                              title={visiblePasswords[user.id] ? "Sembunyikan Password" : "Tampilkan Password"}
+                            >
+                              {visiblePasswords[user.id] ? (
+                                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908a8.96 8.96 0 013.682-.788c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21M3 3l18 18" /></svg>
+                              ) : (
+                                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                              )}
+                            </button>
+                          </>
+                        ) : (
+                          <span className="text-zinc-400 italic dark:text-zinc-500">-</span>
+                        )}
+                      </div>
                     </td>
 
                     {/* No HP */}
@@ -533,7 +574,10 @@ export function UserManagementView({
 
       {/* ---- Create User Modal ---- */}
       {createModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
+        <div
+          onClick={(e) => { if (e.target === e.currentTarget) setCreateModalOpen(false); }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs"
+        >
           <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 max-h-[90vh] overflow-y-auto scrollbar-thin">
             <div className="flex items-center justify-between border-b border-zinc-200 pb-3 dark:border-zinc-800">
               <h3 className="text-base font-bold text-zinc-950 dark:text-zinc-50">
@@ -582,18 +626,47 @@ export function UserManagementView({
                 </div>
                 <div>
                   <label className="font-semibold text-zinc-700 dark:text-zinc-300 block mb-1">
-                    No. HP (WhatsApp) *
+                    Password / Sandi Akun *
                   </label>
-                  <input
-                    suppressHydrationWarning
-                    required
-                    type="text"
-                    value={formData.no_hp}
-                    onChange={(e) => setFormData({ ...formData, no_hp: e.target.value })}
-                    placeholder="081234567890"
-                    className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-xs text-zinc-950 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
-                  />
+                  <div className="relative">
+                    <input
+                      suppressHydrationWarning
+                      required
+                      type={showFormPassword ? "text" : "password"}
+                      value={formData.password}
+                      onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                      placeholder="Password6..."
+                      className="w-full rounded-lg border border-zinc-300 px-3 py-2 pr-8 text-xs text-zinc-950 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowFormPassword((prev) => !prev)}
+                      className="absolute right-2 top-2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 text-xs p-0.5 rounded"
+                      title={showFormPassword ? "Sembunyikan Password" : "Tampilkan Password"}
+                    >
+                      {showFormPassword ? (
+                        <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908a8.96 8.96 0 013.682-.788c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21M3 3l18 18" /></svg>
+                      ) : (
+                        <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                      )}
+                    </button>
+                  </div>
                 </div>
+              </div>
+
+              <div>
+                <label className="font-semibold text-zinc-700 dark:text-zinc-300 block mb-1">
+                  No. HP (WhatsApp) *
+                </label>
+                <input
+                  suppressHydrationWarning
+                  required
+                  type="text"
+                  value={formData.no_hp}
+                  onChange={(e) => setFormData({ ...formData, no_hp: e.target.value })}
+                  placeholder="081234567890"
+                  className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-xs text-zinc-950 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+                />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
@@ -754,7 +827,10 @@ export function UserManagementView({
 
       {/* ---- Edit User & RBAC Modal ---- */}
       {editUser && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
+        <div
+          onClick={(e) => { if (e.target === e.currentTarget) setEditUser(null); }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs"
+        >
           <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 max-h-[90vh] overflow-y-auto scrollbar-thin">
             <div className="flex items-center justify-between border-b border-zinc-200 pb-3 dark:border-zinc-800">
               <h3 className="text-base font-bold text-zinc-950 dark:text-zinc-50">
@@ -801,17 +877,45 @@ export function UserManagementView({
                 </div>
                 <div>
                   <label className="font-semibold text-zinc-700 dark:text-zinc-300 block mb-1">
-                    No. HP *
+                    Password / Sandi Akun
                   </label>
-                  <input
-                    suppressHydrationWarning
-                    required
-                    type="text"
-                    value={formData.no_hp}
-                    onChange={(e) => setFormData({ ...formData, no_hp: e.target.value })}
-                    className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-xs text-zinc-950 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
-                  />
+                  <div className="relative">
+                    <input
+                      suppressHydrationWarning
+                      type={showFormPassword ? "text" : "password"}
+                      value={formData.password}
+                      onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                      placeholder="Password baru..."
+                      className="w-full rounded-lg border border-zinc-300 px-3 py-2 pr-8 text-xs text-zinc-950 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowFormPassword((prev) => !prev)}
+                      className="absolute right-2 top-2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 text-xs p-0.5 rounded"
+                      title={showFormPassword ? "Sembunyikan Password" : "Tampilkan Password"}
+                    >
+                      {showFormPassword ? (
+                        <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908a8.96 8.96 0 013.682-.788c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21M3 3l18 18" /></svg>
+                      ) : (
+                        <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                      )}
+                    </button>
+                  </div>
                 </div>
+              </div>
+
+              <div>
+                <label className="font-semibold text-zinc-700 dark:text-zinc-300 block mb-1">
+                  No. HP *
+                </label>
+                <input
+                  suppressHydrationWarning
+                  required
+                  type="text"
+                  value={formData.no_hp}
+                  onChange={(e) => setFormData({ ...formData, no_hp: e.target.value })}
+                  className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-xs text-zinc-950 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+                />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
@@ -968,7 +1072,10 @@ export function UserManagementView({
 
       {/* ---- Delete User Confirmation Modal ---- */}
       {deleteUserTarget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
+        <div
+          onClick={(e) => { if (e.target === e.currentTarget) setDeleteUserTarget(null); }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs"
+        >
           <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
             <h3 className="text-base font-bold text-zinc-950 dark:text-zinc-50">
               Konfirmasi Hapus Akun
@@ -976,7 +1083,7 @@ export function UserManagementView({
             <p className="mt-2 text-xs text-zinc-600 dark:text-zinc-400">
               Apakah Anda yakin ingin menghapus akun user{" "}
               <strong className="text-zinc-900 dark:text-zinc-100">
-                "{deleteUserTarget.nama_lengkap}" ({deleteUserTarget.email})
+                &ldquo;{deleteUserTarget.nama_lengkap}&rdquo; ({deleteUserTarget.email})
               </strong>
               ? Tindakan ini tidak dapat dibatalkan.
             </p>

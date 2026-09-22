@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import Link from "next/link";
 import { formatRupiah } from "@/lib/pricing";
 import type { Category, UserRow } from "@/lib/types/database";
 import {

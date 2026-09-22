@@ -39,6 +39,7 @@ export function MapPickerModal({
   // Sync state with props when modal opens
   useEffect(() => {
     if (isOpen) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedLat(initialLat ?? SURABAYA_LAT);
       setSelectedLng(initialLng ?? SURABAYA_LNG);
       setAddressText("");
@@ -144,6 +145,7 @@ export function MapPickerModal({
         mapInstanceRef.current = null;
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
   // Handle Search Location
@@ -229,7 +231,10 @@ export function MapPickerModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-3 sm:p-4 backdrop-blur-xs animate-in fade-in duration-200">
+    <div
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-3 sm:p-4 backdrop-blur-xs animate-in fade-in duration-200"
+    >
       <div className="flex flex-col w-full max-w-2xl h-[85vh] max-h-[680px] rounded-2xl bg-white shadow-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 dark:bg-zinc-900">
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/80 shrink-0">

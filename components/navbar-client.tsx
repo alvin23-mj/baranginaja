@@ -29,8 +29,6 @@ export function NavbarClient({
   isSeller,
   districtName,
   campusName,
-  districts = [],
-  campuses = [],
 }: NavbarClientProps) {
   const pathname = usePathname();
   const router = useRouter();
@@ -165,10 +163,12 @@ export function NavbarClient({
 
   // Close all menus on route change
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     closeDropdowns();
     setMobileMenuOpen(false);
     setSellerPromptOpen(false);
     setShippingModalOpen(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   const handleStoreClick = () => {
@@ -879,8 +879,9 @@ export function NavbarClient({
 
             <div className="mt-4 space-y-3 text-sm text-zinc-300">
               <div className="rounded-xl border border-zinc-800 bg-zinc-900/80 p-3.5">
-                <p className="font-semibold text-white flex items-center gap-1.5">
-                  <span>🛡️</span> Transaksi Mahasiswa Terverifikasi
+                <p className="font-semibold text-white flex items-center gap-2">
+                  <svg className="h-4 w-4 text-emerald-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                  Transaksi Mahasiswa Terverifikasi
                 </p>
                 <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
                   Semua penjual dan pembeli terdaftar dengan email kampus aktif demi kenyamanan dan keamanan transaksi.
@@ -888,8 +889,9 @@ export function NavbarClient({
               </div>
 
               <div className="rounded-xl border border-zinc-800 bg-zinc-900/80 p-3.5">
-                <p className="font-semibold text-white flex items-center gap-1.5">
-                  <span>🤝</span> COD di Lingkungan Kampus
+                <p className="font-semibold text-white flex items-center gap-2">
+                  <svg className="h-4 w-4 text-indigo-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                  COD di Lingkungan Kampus
                 </p>
                 <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
                   Bisa janjian bertemu langsung (COD) di perpustakaan, kantin, atau lobi fakultas tanpa biaya admin.
@@ -897,8 +899,9 @@ export function NavbarClient({
               </div>
 
               <div className="rounded-xl border border-zinc-800 bg-zinc-900/80 p-3.5">
-                <p className="font-semibold text-white flex items-center gap-1.5">
-                  <span>💬</span> Ada Kendala?
+                <p className="font-semibold text-white flex items-center gap-2">
+                  <svg className="h-4 w-4 text-amber-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+                  Ada Kendala?
                 </p>
                 <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
                   Hubungi admin kampus atau buka halaman detail pesanan untuk melihat kontak penjual.
@@ -934,8 +937,8 @@ export function NavbarClient({
           <div className="w-full max-w-lg rounded-2xl border border-zinc-800 bg-[#161616] p-6 shadow-2xl text-white max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-4 border-b border-zinc-800">
               <div className="flex items-center gap-2.5">
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-800 text-white font-bold text-sm">
-                  🚚
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-800 text-white">
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 102 0 1 1 0 00-2 0zm-7 0a1 1 0 102 0 1 1 0 00-2 0z" /></svg>
                 </span>
                 <div>
                   <h3 className="text-base font-bold text-white">
@@ -988,8 +991,9 @@ export function NavbarClient({
 
               {/* Rumus perhitungan */}
               <div className="rounded-xl border border-zinc-800 bg-zinc-900/80 p-3.5 space-y-1.5">
-                <p className="font-semibold text-white flex items-center gap-1.5 text-xs sm:text-sm">
-                  <span>📐</span> Rumus Perhitungan Kurir
+                <p className="font-semibold text-white flex items-center gap-2 text-xs sm:text-sm">
+                  <svg className="h-4 w-4 text-emerald-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                  Rumus Perhitungan Kurir
                 </p>
                 <div className="bg-zinc-950/80 border border-zinc-800 rounded-lg p-2.5 font-mono text-xs text-zinc-200">
                   Ongkir = (Jarak × Rp 2.500) + (Berat × Rp 5.000)
@@ -1001,8 +1005,9 @@ export function NavbarClient({
 
               {/* Contoh simulasi */}
               <div className="rounded-xl border border-zinc-800 bg-zinc-900/80 p-3.5 space-y-2">
-                <p className="font-semibold text-white flex items-center gap-1.5 text-xs sm:text-sm">
-                  <span>💡</span> Simulasi Contoh Pengiriman
+                <p className="font-semibold text-white flex items-center gap-2 text-xs sm:text-sm">
+                  <svg className="h-4 w-4 text-amber-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
+                  Simulasi Contoh Pengiriman
                 </p>
                 <div className="space-y-2 text-xs text-zinc-300">
                   <div className="p-2.5 rounded-lg bg-zinc-950/50 border border-zinc-800/60">
@@ -1029,8 +1034,9 @@ export function NavbarClient({
 
               {/* Opsi COD Surabaya / Titik Temu */}
               <div className="rounded-xl border border-emerald-900/40 bg-emerald-950/20 p-3.5">
-                <p className="font-semibold text-emerald-300 flex items-center gap-1.5 text-xs sm:text-sm">
-                  <span>🤝</span> Opsi COD / Titik Temu Surabaya: Gratis (Rp 0)
+                <p className="font-semibold text-emerald-300 flex items-center gap-2 text-xs sm:text-sm">
+                  <svg className="h-4 w-4 text-emerald-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                  Opsi COD / Titik Temu Surabaya: Gratis (Rp 0)
                 </p>
                 <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
                   Jika memilih metode COD / ketemuan langsung di titik temu area Surabaya (misal minimarket, taman, atau kampus), tidak dikenakan biaya ongkos kirim.
@@ -1149,8 +1155,8 @@ export function NavbarClient({
           <div className="w-full max-w-md rounded-2xl border border-zinc-800 bg-[#161616] p-6 shadow-2xl text-white">
             <div className="flex items-center justify-between pb-4 border-b border-zinc-800">
               <div className="flex items-center gap-2.5">
-                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-yellow-500/20 text-yellow-400 font-bold text-base border border-yellow-500/30">
-                  ⭐
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                  <svg className="h-5 w-5 fill-amber-400" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                 </span>
                 <div>
                   <h3 className="text-base font-bold text-white">
@@ -1178,8 +1184,8 @@ export function NavbarClient({
 
             {ratingSubmitted ? (
               <div className="py-8 text-center space-y-3 animate-in fade-in zoom-in-95 duration-200">
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 text-2xl border border-emerald-500/30">
-                  🎉
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                  <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 </div>
                 <h4 className="text-lg font-bold text-white">
                   Terima Kasih Banyak!
@@ -1231,12 +1237,12 @@ export function NavbarClient({
                       );
                     })}
                   </div>
-                  <p className="text-xs font-semibold text-yellow-400">
-                    {ratingScore === 5 && "Sangat Puas! ⭐⭐⭐⭐⭐"}
-                    {ratingScore === 4 && "Puas & Keren! 👍"}
-                    {ratingScore === 3 && "Cukup Baik 🙂"}
-                    {ratingScore === 2 && "Kurang Memuaskan 🙁"}
-                    {ratingScore === 1 && "Perlu Banyak Perbaikan ⚠️"}
+                  <p className="text-xs font-semibold text-amber-400">
+                    {ratingScore === 5 && "Sangat Puas!"}
+                    {ratingScore === 4 && "Puas & Keren!"}
+                    {ratingScore === 3 && "Cukup Baik"}
+                    {ratingScore === 2 && "Kurang Memuaskan"}
+                    {ratingScore === 1 && "Perlu Banyak Perbaikan"}
                   </p>
                 </div>
 

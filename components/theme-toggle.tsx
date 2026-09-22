@@ -33,14 +33,17 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
-    const saved = localStorage.getItem("theme");
-    if (saved === "dark") {
-      setTheme("dark");
-      document.documentElement.classList.add("dark");
-    } else if (saved === "light") {
-      setTheme("light");
-      document.documentElement.classList.remove("dark");
+    if (window.location.pathname.startsWith("/admin")) {
+      const saved = localStorage.getItem("theme");
+      if (saved === "dark") {
+        setTheme("dark");
+        document.documentElement.classList.add("dark");
+      } else {
+        setTheme("light");
+        document.documentElement.classList.remove("dark");
+      }
     } else {
       setTheme("light");
       document.documentElement.classList.remove("dark");
@@ -60,10 +63,12 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
   function handleThemeChange(nextTheme: "light" | "dark") {
     setTheme(nextTheme);
     localStorage.setItem("theme", nextTheme);
-    if (nextTheme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
+    if (window.location.pathname.startsWith("/admin")) {
+      if (nextTheme === "dark") {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
     }
     setIsOpen(false);
   }
@@ -113,11 +118,10 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
             suppressHydrationWarning
             type="button"
             onClick={() => handleThemeChange("light")}
-            className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium transition-colors ${
-              theme === "light"
+            className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium transition-colors ${theme === "light"
                 ? "bg-zinc-100 font-semibold text-zinc-950 dark:bg-zinc-800 dark:text-zinc-50"
                 : "text-zinc-600 hover:bg-zinc-50 dark:text-zinc-400 dark:hover:bg-zinc-800/60 dark:hover:text-zinc-200"
-            }`}
+              }`}
           >
             <SunIcon />
             <span>Mode Siang (Terang)</span>
@@ -126,11 +130,10 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
             suppressHydrationWarning
             type="button"
             onClick={() => handleThemeChange("dark")}
-            className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium transition-colors ${
-              theme === "dark"
+            className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium transition-colors ${theme === "dark"
                 ? "bg-zinc-100 font-semibold text-zinc-950 dark:bg-zinc-800 dark:text-zinc-50"
                 : "text-zinc-600 hover:bg-zinc-50 dark:text-zinc-400 dark:hover:bg-zinc-800/60 dark:hover:text-zinc-200"
-            }`}
+              }`}
           >
             <MoonIcon />
             <span>Mode Malam (Gelap)</span>

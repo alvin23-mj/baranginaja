@@ -116,6 +116,7 @@ export function OrderManagementView({
 
   // Update props sync
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setOrders(initialOrders);
   }, [initialOrders]);
 
@@ -174,7 +175,7 @@ export function OrderManagementView({
 
   // Memoized Filter & Search & Sort
   const filteredOrders = useMemo(() => {
-    let list = orders.filter((order) => {
+    const list = orders.filter((order) => {
       if (activeTab !== "all" && order.status !== activeTab) {
         return false;
       }
@@ -575,7 +576,7 @@ export function OrderManagementView({
           <select
             suppressHydrationWarning
             value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as any)}
+            onChange={(e) => setSortBy(e.target.value as "terbaru" | "terlama" | "tertinggi")}
             className="rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-xs font-medium text-zinc-950 shadow-2xs focus:border-zinc-500 focus:outline-hidden dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
           >
             <option value="terbaru">Urutkan: Waktu Terbaru</option>
@@ -969,7 +970,10 @@ export function OrderManagementView({
 
       {/* ---- Cetak Label Shipping Modal ---- */}
       {selectedPrintOrder && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
+        <div
+          onClick={(e) => { if (e.target === e.currentTarget) setSelectedPrintOrder(null); }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs"
+        >
           <div className="w-full max-w-xl rounded-2xl bg-white p-6 shadow-2xl dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
             <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-3">
               <h3 className="text-base font-bold text-zinc-950 dark:text-zinc-50">
