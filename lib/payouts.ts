@@ -8,9 +8,9 @@ export const PAYOUT_STATUS_LABEL: Record<PayoutStatus, string> = {
 
 export const PAYOUT_STATUS_CLASS: Record<PayoutStatus, string> = {
   menunggu:
-    "bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-800",
+    "bg-zinc-100 text-zinc-800 border border-zinc-300 dark:bg-zinc-900 dark:text-zinc-300 dark:border-zinc-700",
   dicairkan:
-    "bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800",
+    "bg-zinc-950 text-white border border-zinc-950 dark:bg-white dark:text-zinc-950 dark:border-white font-semibold",
 };
 
 // Nominal payout = harga_input produk (bukan harga_jual) — markup & ongkir

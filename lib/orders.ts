@@ -15,19 +15,19 @@ export const ORDER_STATUS_LABEL: Record<OrderStatus, string> = {
 
 export const ORDER_STATUS_CLASS: Record<OrderStatus, string> = {
   "Menunggu Pembayaran":
-    "bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-800",
+    "bg-zinc-100 text-zinc-800 border border-zinc-300 dark:bg-zinc-900 dark:text-zinc-300 dark:border-zinc-700",
   Dibayar:
-    "bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-950/40 dark:text-blue-400 dark:border-blue-800",
+    "bg-zinc-900 text-zinc-50 border border-zinc-900 dark:bg-zinc-100 dark:text-zinc-950 dark:border-zinc-100",
   Dijemput:
-    "bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-950/40 dark:text-blue-400 dark:border-blue-800",
+    "bg-zinc-800 text-zinc-100 border border-zinc-800 dark:bg-zinc-200 dark:text-zinc-900 dark:border-zinc-200",
   "Dalam Pengiriman":
-    "bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-950/40 dark:text-blue-400 dark:border-blue-800",
+    "bg-zinc-800 text-zinc-100 border border-zinc-800 dark:bg-zinc-200 dark:text-zinc-900 dark:border-zinc-200",
   Diterima:
-    "bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-950/40 dark:text-blue-400 dark:border-blue-800",
+    "bg-zinc-800 text-zinc-100 border border-zinc-800 dark:bg-zinc-200 dark:text-zinc-900 dark:border-zinc-200",
   Selesai:
-    "bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800",
+    "bg-zinc-950 text-white border border-zinc-950 dark:bg-white dark:text-zinc-950 dark:border-white font-semibold",
   Dibatalkan:
-    "bg-red-50 text-red-700 border border-red-200 dark:bg-red-950/40 dark:text-red-400 dark:border-red-800",
+    "bg-zinc-100 text-zinc-500 border border-zinc-300 dark:bg-zinc-900/60 dark:text-zinc-400 dark:border-zinc-800 line-through",
 };
 
 interface HoldableOrder {

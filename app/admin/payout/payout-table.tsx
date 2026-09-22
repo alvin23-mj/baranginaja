@@ -116,7 +116,7 @@ export function PayoutTable({
                     type="button"
                     onClick={() => handleTandaiDicairkan(payout)}
                     disabled={loadingId === payout.id}
-                    className="whitespace-nowrap rounded-md border border-blue-600 bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700 transition-colors hover:bg-blue-100 disabled:opacity-60 dark:border-blue-800 dark:bg-blue-950/40 dark:text-blue-400"
+                    className="whitespace-nowrap rounded-md bg-zinc-950 px-2.5 py-1 text-xs font-medium text-white transition-colors hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-zinc-200 disabled:opacity-60"
                   >
                     {loadingId === payout.id
                       ? "Memproses..."

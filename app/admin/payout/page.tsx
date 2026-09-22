@@ -14,6 +14,8 @@ function paramStr(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
 }
 
+import { AdminPageHeader } from "../admin-page-header";
+
 export default async function AdminPayoutPage({
   searchParams,
 }: PageProps<"/admin/payout">) {
@@ -67,17 +69,19 @@ export default async function AdminPayoutPage({
     : statusFiltered;
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-10">
-      <h1 className="mb-6 text-2xl font-semibold text-zinc-950 dark:text-zinc-50">
-        Dashboard Payout
-      </h1>
+    <div className="w-full px-4 sm:px-6 md:px-8 py-6">
+      <AdminPageHeader
+        title="Dashboard Payout"
+        subtitle="Kelola dan konfirmasi pencairan dana saldo dompet penjual (seller)"
+        backLink={{ href: "/admin", label: "Kembali ke Dashboard" }}
+      />
 
       <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
           <p className="text-sm text-zinc-500 dark:text-zinc-400">
             Total belum dicairkan
           </p>
-          <p className="text-xl font-semibold text-amber-700 dark:text-amber-400">
+          <p className="text-xl font-semibold text-zinc-950 dark:text-zinc-50">
             {formatRupiah(totalMenunggu)}
           </p>
         </div>
@@ -85,7 +89,7 @@ export default async function AdminPayoutPage({
           <p className="text-sm text-zinc-500 dark:text-zinc-400">
             Total sudah dicairkan
           </p>
-          <p className="text-xl font-semibold text-green-700 dark:text-green-400">
+          <p className="text-xl font-semibold text-zinc-950 dark:text-zinc-50">
             {formatRupiah(totalDicairkan)}
           </p>
         </div>
@@ -94,7 +98,7 @@ export default async function AdminPayoutPage({
       <PayoutFilters />
 
       {payoutsError ? (
-        <p className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-400">
+        <p className="rounded-lg border border-zinc-300 bg-zinc-100 px-4 py-3 text-sm text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
           Gagal memuat data payout: {payoutsError.message}
         </p>
       ) : displayed.length === 0 ? (

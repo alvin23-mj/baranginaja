@@ -239,6 +239,7 @@ export function NavbarClient({
             Tentang Kami
           </Link>
           <button
+            suppressHydrationWarning
             ref={helpToggleRef}
             type="button"
             onMouseEnter={handleHelpMouseEnter}
@@ -275,6 +276,7 @@ export function NavbarClient({
         <div className="flex items-center gap-4 sm:gap-5 shrink-0 z-10">
           {/* Ikon Toko / Kelola Toko */}
           <button
+            suppressHydrationWarning
             type="button"
             onClick={handleStoreClick}
             className="text-zinc-300 hover:text-white transition-colors p-1 cursor-pointer flex items-center justify-center"
@@ -301,6 +303,7 @@ export function NavbarClient({
           {/* Masuk / Menu Pengguna */}
           {user ? (
             <button
+              suppressHydrationWarning
               ref={userToggleRef}
               type="button"
               onMouseEnter={handleUserMouseEnter}
@@ -342,6 +345,7 @@ export function NavbarClient({
 
           {/* Tombol Jual Barang (rounded-lg) */}
           <button
+            suppressHydrationWarning
             type="button"
             onClick={() => {
               if (!user) {
@@ -361,6 +365,7 @@ export function NavbarClient({
 
           {/* Mobile Hamburger Toggle Button */}
           <button
+            suppressHydrationWarning
             type="button"
             onClick={() => setMobileMenuOpen((prev) => !prev)}
             className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-700 text-zinc-300 hover:text-white md:hidden cursor-pointer"

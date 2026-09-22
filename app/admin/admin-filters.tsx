@@ -43,11 +43,13 @@ export function AdminFilters() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Cari nama barang atau nama pembeli..."
-          className="h-10 w-full rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-blue-500"
+          suppressHydrationWarning
+          className="h-10 w-full rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none focus:border-zinc-950 focus:ring-1 focus:ring-zinc-950 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-zinc-100 dark:focus:ring-zinc-100"
         />
         <button
           type="submit"
-          className="h-10 shrink-0 rounded-md bg-blue-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+          suppressHydrationWarning
+          className="h-10 shrink-0 rounded-md bg-zinc-950 px-4 text-sm font-medium text-white transition-colors hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-zinc-200"
         >
           Cari
         </button>
@@ -56,7 +58,8 @@ export function AdminFilters() {
       <select
         value={searchParams.get("status") ?? ""}
         onChange={(e) => updateParam("status", e.target.value)}
-        className="h-10 w-full shrink-0 rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-blue-500 sm:w-56"
+        suppressHydrationWarning
+        className="h-10 w-full shrink-0 rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none focus:border-zinc-950 focus:ring-1 focus:ring-zinc-950 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-zinc-100 dark:focus:ring-zinc-100 sm:w-56"
       >
         {STATUS_OPTIONS.map((option) => (
           <option key={option.value} value={option.value}>

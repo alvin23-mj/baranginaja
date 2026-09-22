@@ -41,7 +41,7 @@ export default async function AdminOrderDetailPage({
     <div className="mx-auto w-full max-w-2xl px-4 py-10">
       <Link
         href="/admin"
-        className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-zinc-600 transition-colors hover:text-blue-600 dark:text-zinc-400 dark:hover:text-blue-400"
+        className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-zinc-600 transition-colors hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50"
       >
         ← Kembali ke Dashboard Order
       </Link>

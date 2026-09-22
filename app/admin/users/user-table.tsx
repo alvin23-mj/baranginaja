@@ -15,11 +15,11 @@ const STATUS_LABEL: Record<AdminUserListItem["status_verifikasi"], string> = {
 
 const STATUS_CLASS: Record<AdminUserListItem["status_verifikasi"], string> = {
   pending:
-    "bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-800",
+    "bg-zinc-100 text-zinc-800 border border-zinc-300 dark:bg-zinc-900 dark:text-zinc-300 dark:border-zinc-700",
   verified:
-    "bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800",
+    "bg-zinc-950 text-white border border-zinc-950 dark:bg-white dark:text-zinc-950 dark:border-white font-semibold",
   rejected:
-    "bg-red-50 text-red-700 border border-red-200 dark:bg-red-950/40 dark:text-red-400 dark:border-red-800",
+    "bg-zinc-100 text-zinc-500 border border-zinc-300 dark:bg-zinc-900/60 dark:text-zinc-400 dark:border-zinc-800 line-through",
 };
 
 export function UserTable({
@@ -116,7 +116,7 @@ export function UserTable({
               </td>
               <td className="px-4 py-3 text-zinc-700 dark:text-zinc-300">
                 {user.is_seller ? (
-                  <span className="rounded-full border border-blue-200 bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 dark:border-blue-800 dark:bg-blue-950/40 dark:text-blue-400">
+                  <span className="rounded-full border border-zinc-950 bg-zinc-950 px-2 py-0.5 text-xs font-medium text-white dark:border-zinc-100 dark:bg-zinc-100 dark:text-zinc-950">
                     Ya
                   </span>
                 ) : (
@@ -136,7 +136,7 @@ export function UserTable({
                     type="button"
                     onClick={() => handleVerifikasi(user)}
                     disabled={loadingId === user.id}
-                    className="whitespace-nowrap rounded-md bg-blue-600 px-2.5 py-1 text-xs font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-60"
+                    className="whitespace-nowrap rounded-md bg-zinc-950 px-2.5 py-1 text-xs font-medium text-white transition-colors hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-zinc-200 disabled:opacity-60"
                   >
                     {loadingId === user.id ? "Memproses..." : "Verifikasi"}
                   </button>

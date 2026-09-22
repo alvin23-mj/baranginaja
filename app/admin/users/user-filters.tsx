@@ -35,7 +35,8 @@ export function UserFilters() {
       <select
         value={searchParams.get("role") ?? ""}
         onChange={(e) => updateParam("role", e.target.value)}
-        className="h-10 w-full shrink-0 rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-blue-500 sm:w-48"
+        suppressHydrationWarning
+        className="h-10 w-full shrink-0 rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none focus:border-zinc-950 focus:ring-1 focus:ring-zinc-950 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-zinc-100 dark:focus:ring-zinc-100 sm:w-48"
       >
         {ROLE_OPTIONS.map((option) => (
           <option key={option.value} value={option.value}>
@@ -47,7 +48,8 @@ export function UserFilters() {
       <select
         value={searchParams.get("status") ?? ""}
         onChange={(e) => updateParam("status", e.target.value)}
-        className="h-10 w-full shrink-0 rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-blue-500 sm:w-48"
+        suppressHydrationWarning
+        className="h-10 w-full shrink-0 rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none focus:border-zinc-950 focus:ring-1 focus:ring-zinc-950 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-zinc-100 dark:focus:ring-zinc-100 sm:w-48"
       >
         {STATUS_OPTIONS.map((option) => (
           <option key={option.value} value={option.value}>

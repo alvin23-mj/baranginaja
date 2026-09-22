@@ -1,11 +1,17 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import dynamic from "next/dynamic";
 import { createClient } from "@/lib/supabase/client";
 import { isValidIndonesianPhone } from "@/lib/validation";
 import { Toast } from "@/components/toast";
 import { KECAMATAN_SURABAYA } from "@/lib/districts";
 import type { Campus, District, UserWithKampus } from "@/lib/types/database";
+
+const MapPickerModal = dynamic(
+  () => import("@/components/map-picker-modal").then((mod) => mod.MapPickerModal),
+  { ssr: false }
+);
 
 export function ProfileForm({
   user,
@@ -26,6 +32,7 @@ export function ProfileForm({
   const [lng, setLng] = useState<number | null>(user.lng);
   const [locating, setLocating] = useState(false);
   const [locationError, setLocationError] = useState<string | null>(null);
+  const [mapModalOpen, setMapModalOpen] = useState(false);
 
   const districtList: { id: string | number; nama_kecamatan: string }[] =
     districts && districts.length > 0
@@ -108,101 +115,132 @@ export function ProfileForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <div className="flex flex-col gap-1.5">
-        <label htmlFor="nama_lengkap" className="text-sm font-medium text-zinc-950 dark:text-zinc-50">
-          Nama lengkap
-        </label>
-        <input
-          id="nama_lengkap"
-          type="text"
-          value={namaLengkap}
-          onChange={(e) => setNamaLengkap(e.target.value)}
-          className="h-10 w-full rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-blue-500"
-        />
-        {errors.namaLengkap && (
-          <p className="text-xs text-red-600 dark:text-red-400">{errors.namaLengkap}</p>
-        )}
-      </div>
+    <>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="nama_lengkap" className="text-sm font-medium text-zinc-950 dark:text-zinc-50">
+            Nama lengkap
+          </label>
+          <input
+            id="nama_lengkap"
+            type="text"
+            value={namaLengkap}
+            onChange={(e) => setNamaLengkap(e.target.value)}
+            className="h-10 w-full rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-blue-500"
+          />
+          {errors.namaLengkap && (
+            <p className="text-xs text-red-600 dark:text-red-400">{errors.namaLengkap}</p>
+          )}
+        </div>
 
-      <div className="flex flex-col gap-1.5">
-        <label htmlFor="no_hp" className="text-sm font-medium text-zinc-950 dark:text-zinc-50">
-          No. HP
-        </label>
-        <input
-          id="no_hp"
-          type="tel"
-          value={noHp}
-          onChange={(e) => setNoHp(e.target.value)}
-          className="h-10 w-full rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-blue-500"
-        />
-        {errors.noHp && <p className="text-xs text-red-600 dark:text-red-400">{errors.noHp}</p>}
-      </div>
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="no_hp" className="text-sm font-medium text-zinc-950 dark:text-zinc-50">
+            No. HP
+          </label>
+          <input
+            id="no_hp"
+            type="tel"
+            value={noHp}
+            onChange={(e) => setNoHp(e.target.value)}
+            className="h-10 w-full rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-blue-500"
+          />
+          {errors.noHp && <p className="text-xs text-red-600 dark:text-red-400">{errors.noHp}</p>}
+        </div>
 
-      <div className="flex flex-col gap-1.5">
-        <label htmlFor="kecamatan_id" className="text-sm font-medium text-zinc-950 dark:text-zinc-50">
-          Kecamatan Domisili (Surabaya)
-        </label>
-        <select
-          id="kecamatan_id"
-          value={districtId}
-          onChange={(e) => setDistrictId(e.target.value)}
-          className="h-10 w-full rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-blue-500"
-        >
-          <option value="" disabled>
-            Pilih Kecamatan di Surabaya
-          </option>
-          {districtList.map((district) => (
-            <option key={district.id} value={district.id}>
-              Kec. {district.nama_kecamatan}
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="kecamatan_id" className="text-sm font-medium text-zinc-950 dark:text-zinc-50">
+            Kecamatan Domisili (Surabaya)
+          </label>
+          <select
+            id="kecamatan_id"
+            value={districtId}
+            onChange={(e) => setDistrictId(e.target.value)}
+            className="h-10 w-full rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-blue-500"
+          >
+            <option value="" disabled>
+              Pilih Kecamatan di Surabaya
             </option>
-          ))}
-        </select>
-      </div>
+            {districtList.map((district) => (
+              <option key={district.id} value={district.id}>
+                Kec. {district.nama_kecamatan}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      <div className="flex flex-col gap-1.5">
-        <label htmlFor="alamat_kos" className="text-sm font-medium text-zinc-950 dark:text-zinc-50">
-          Alamat Lengkap / Kos
-        </label>
-        <textarea
-          id="alamat_kos"
-          rows={3}
-          placeholder="Jl. Contoh No. 123, RT/RW..."
-          value={alamatKos}
-          onChange={(e) => setAlamatKos(e.target.value)}
-          className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-950 outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-blue-500"
-        />
-      </div>
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="alamat_kos" className="text-sm font-medium text-zinc-950 dark:text-zinc-50">
+            Alamat Lengkap / Kos
+          </label>
+          <textarea
+            id="alamat_kos"
+            rows={3}
+            placeholder="Jl. Contoh No. 123, RT/RW..."
+            value={alamatKos}
+            onChange={(e) => setAlamatKos(e.target.value)}
+            className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-950 outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-blue-500"
+          />
+        </div>
 
-      <div className="flex flex-col gap-1.5">
-        <span className="text-sm font-medium text-zinc-950 dark:text-zinc-50">Lokasi</span>
+        <div className="flex flex-col gap-1.5">
+          <span className="text-sm font-medium text-zinc-950 dark:text-zinc-50">Lokasi</span>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <button
+              suppressHydrationWarning
+              type="button"
+              onClick={handleAmbilLokasi}
+              disabled={locating}
+              className="h-10 flex-1 rounded-md border border-zinc-300 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50 disabled:opacity-60 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+            >
+              {locating ? "Mengambil lokasi..." : "Ambil Lokasi Saya"}
+            </button>
+            <button
+              suppressHydrationWarning
+              type="button"
+              onClick={() => setMapModalOpen(true)}
+              className="h-10 flex items-center justify-center gap-2 px-4 rounded-md border border-blue-600 bg-blue-50 text-sm font-semibold text-blue-700 hover:bg-blue-100 dark:border-blue-500 dark:bg-blue-950/40 dark:text-blue-300 dark:hover:bg-blue-900/50 transition-colors shrink-0 cursor-pointer"
+            >
+              <svg className="h-4 w-4 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <span>Pilih dari Maps</span>
+            </button>
+          </div>
+          {lat !== null && lng !== null && (
+            <p className="text-xs font-mono text-zinc-600 dark:text-zinc-400">
+              Koordinat: {lat.toFixed(6)}, {lng.toFixed(6)}
+            </p>
+          )}
+          {locationError && (
+            <p className="text-xs text-red-600 dark:text-red-400">{locationError}</p>
+          )}
+        </div>
+
         <button
-          type="button"
-          onClick={handleAmbilLokasi}
-          disabled={locating}
-          className="h-10 w-full rounded-md border border-zinc-300 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50 disabled:opacity-60 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+          suppressHydrationWarning
+          type="submit"
+          disabled={loading}
+          className="mt-2 h-11 w-full rounded-md bg-blue-600 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-60"
         >
-          {locating ? "Mengambil lokasi..." : "Ambil Lokasi Saya"}
+          {loading ? "Menyimpan..." : "Simpan Perubahan"}
         </button>
-        {lat !== null && lng !== null && (
-          <p className="text-xs text-zinc-600 dark:text-zinc-400">
-            Koordinat: {lat.toFixed(6)}, {lng.toFixed(6)}
-          </p>
-        )}
-        {locationError && (
-          <p className="text-xs text-red-600 dark:text-red-400">{locationError}</p>
-        )}
-      </div>
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="mt-2 h-11 w-full rounded-md bg-blue-600 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-60"
-      >
-        {loading ? "Menyimpan..." : "Simpan Perubahan"}
-      </button>
+        {toast && <Toast message={toast} onDismiss={() => setToast(null)} />}
+      </form>
 
-      {toast && <Toast message={toast} onDismiss={() => setToast(null)} />}
-    </form>
+      <MapPickerModal
+        isOpen={mapModalOpen}
+        onClose={() => setMapModalOpen(false)}
+        initialLat={lat}
+        initialLng={lng}
+        onSelectLocation={(newLat, newLng) => {
+          setLat(newLat);
+          setLng(newLng);
+          setLocationError(null);
+        }}
+      />
+    </>
   );
 }
+

@@ -20,10 +20,27 @@ Next.js (App Router) + TailwindCSS, Supabase (Auth + Postgres + Storage).
 ## Business rules — WAJIB diikuti persis
 
 ### Markup harga jual
-- harga_input < 50000 → markup 20%
-- 50000 <= harga_input < 100000 → markup 15%
-- harga_input >= 100000 → markup 10%
-- harga_jual = harga_input * (1 + markup)
+| Tier | Kondisi Harga Input Penjual | Markup Platform |
+|---|---|---|
+| 1 | < Rp 100.000 | +12% |
+| 2 | ≥ Rp 100.000 dan < Rp 500.000 | +10% |
+| 3 | ≥ Rp 500.000 | +8% |
+
+**Formula:**
+```
+harga_jual_tampil = harga_input_penjual × (1 + markup%)
+fee_platform = harga_jual_tampil − harga_input_penjual
+```
+
+**Contoh perhitungan:**
+
+| Harga Input Penjual | Tier | Markup | Harga Tampil di Katalog | Fee Platform |
+|---|---|---|---|---|
+| Rp 35.000 | 1 | 12% | Rp 39.200 | Rp 4.200 |
+| Rp 99.000 | 1 | 12% | Rp 110.880 | Rp 11.880 |
+| Rp 100.000 | 2 | 10% | Rp 110.000 | Rp 10.000 |
+| Rp 499.000 | 2 | 10% | Rp 548.900 | Rp 48.900 |
+| Rp 500.000 | 3 | 8% | Rp 540.000 | Rp 40.000 |
 
 ### Ongkir (opsi kurir)
 - ongkir_raw = (jarak_km * 2500) + (berat_kg * 5000)

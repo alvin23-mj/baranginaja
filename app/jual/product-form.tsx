@@ -2,11 +2,17 @@
 
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
+import dynamic from "next/dynamic";
 import { createClient } from "@/lib/supabase/client";
 import { PRODUCT_PHOTOS_BUCKET, getStoragePathFromPublicUrl } from "@/lib/supabase/storage";
 import { calculateHargaJual, formatRupiah } from "@/lib/pricing";
 import type { Category, ProductCondition, ProductWithCategory } from "@/lib/types/database";
 import { PhotoPicker } from "./photo-picker";
+
+const MapPickerModal = dynamic(
+  () => import("@/components/map-picker-modal").then((mod) => mod.MapPickerModal),
+  { ssr: false }
+);
 
 const KONDISI_OPTIONS: ProductCondition[] = [
   "Baru",
@@ -68,6 +74,7 @@ export function ProductForm({
   const [lng, setLng] = useState<number | null>(product?.lng ?? defaultLng);
   const [locating, setLocating] = useState(false);
   const [locationError, setLocationError] = useState<string | null>(null);
+  const [mapModalOpen, setMapModalOpen] = useState(false);
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState(false);
@@ -235,7 +242,8 @@ export function ProductForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <div className="flex flex-col gap-1.5">
         <label htmlFor="nama_barang" className="text-sm font-medium text-zinc-950 dark:text-zinc-50">
           Nama barang
@@ -370,17 +378,32 @@ export function ProductForm({
       />
 
       <div className="flex flex-col gap-1.5">
-        <span className="text-sm font-medium text-zinc-950 dark:text-zinc-50">Lokasi</span>
-        <button
-          type="button"
-          onClick={handleAmbilLokasi}
-          disabled={locating}
-          className="h-10 w-full rounded-md border border-zinc-300 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50 disabled:opacity-60 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
-        >
-          {locating ? "Mengambil lokasi..." : "Ambil Lokasi Saya"}
-        </button>
+        <span className="text-sm font-medium text-zinc-950 dark:text-zinc-50">Lokasi Penjual</span>
+        <div className="flex flex-col sm:flex-row gap-2">
+          <button
+            suppressHydrationWarning
+            type="button"
+            onClick={handleAmbilLokasi}
+            disabled={locating}
+            className="h-10 flex-1 rounded-md border border-zinc-300 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50 disabled:opacity-60 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+          >
+            {locating ? "Mengambil lokasi..." : "Ambil Lokasi Saya"}
+          </button>
+          <button
+            suppressHydrationWarning
+            type="button"
+            onClick={() => setMapModalOpen(true)}
+            className="h-10 flex items-center justify-center gap-2 px-4 rounded-md border border-blue-600 bg-blue-50 text-sm font-semibold text-blue-700 hover:bg-blue-100 dark:border-blue-500 dark:bg-blue-950/40 dark:text-blue-300 dark:hover:bg-blue-900/50 transition-colors shrink-0 cursor-pointer"
+          >
+            <svg className="h-4 w-4 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <span>Pilih dari Maps</span>
+          </button>
+        </div>
         {lat !== null && lng !== null && (
-          <p className="text-xs text-zinc-600 dark:text-zinc-400">
+          <p className="text-xs font-mono text-zinc-600 dark:text-zinc-400">
             Koordinat: {lat.toFixed(6)}, {lng.toFixed(6)}
           </p>
         )}
@@ -405,5 +428,18 @@ export function ProductForm({
             : "Simpan Perubahan"}
       </button>
     </form>
+
+    <MapPickerModal
+      isOpen={mapModalOpen}
+      onClose={() => setMapModalOpen(false)}
+      initialLat={lat}
+      initialLng={lng}
+      onSelectLocation={(newLat, newLng) => {
+        setLat(newLat);
+        setLng(newLng);
+        setLocationError(null);
+      }}
+    />
+  </>
   );
 }
