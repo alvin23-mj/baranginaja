@@ -19,21 +19,7 @@ export default async function AdminProductsPage({
   const kategoriParam = paramStr(params.kategori);
   const bulanParam = paramStr(params.bulan);
 
-  // 1. Fetch categories for filter & modal dropdown
-  const { data: categoriesData } = await supabase
-    .from("categories")
-    .select("id, nama_kategori")
-    .order("nama_kategori", { ascending: true });
-  const categories = (categoriesData as Category[]) ?? [];
-
-  // 2. Fetch users/sellers for create/edit modal dropdown
-  const { data: sellersData } = await supabase
-    .from("users")
-    .select("id, nama_lengkap, email, no_hp, status_verifikasi, role, is_seller, no_rekening, nama_bank, nama_pemilik_rekening, alamat_kos, lat, lng")
-    .order("nama_lengkap", { ascending: true });
-  const sellers = (sellersData as UserRow[]) ?? [];
-
-  // 3. Fetch products query
+  // Build products query
   let productsQuery = supabase
     .from("products")
     .select("*, kategori:categories(id, nama_kategori), seller:users!products_seller_id_fkey(id, nama_lengkap, email, no_hp)")
@@ -43,7 +29,24 @@ export default async function AdminProductsPage({
     productsQuery = productsQuery.eq("kategori_id", kategoriParam);
   }
 
-  const { data: productsData, error } = await productsQuery;
+  // Execute all 3 database queries in parallel for fast server response
+  const [{ data: categoriesData }, { data: sellersData }, { data: productsData, error }] =
+    await Promise.all([
+      supabase
+        .from("categories")
+        .select("id, nama_kategori")
+        .order("nama_kategori", { ascending: true }),
+
+      supabase
+        .from("users")
+        .select("id, nama_lengkap, email, no_hp, status_verifikasi, role, is_seller, no_rekening, nama_bank, nama_pemilik_rekening, alamat_kos, lat, lng")
+        .order("nama_lengkap", { ascending: true }),
+
+      productsQuery,
+    ]);
+
+  const categories = (categoriesData as Category[]) ?? [];
+  const sellers = (sellersData as UserRow[]) ?? [];
 
   if (error) {
     console.error("Failed to fetch products for admin:", error);

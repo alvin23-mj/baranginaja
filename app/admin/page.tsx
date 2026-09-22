@@ -10,6 +10,7 @@ import {
 import type { AdminOrderListItem, OrderStatus } from "@/lib/types/database";
 import { AdminFilters } from "./admin-filters";
 import { DashboardProfitChart, DashboardOrderProfitData } from "./dashboard-profit-chart";
+import { AdminPageHeader } from "./admin-page-header";
 
 const ORDER_STATUSES: OrderStatus[] = [
   "Menunggu Pembayaran",
@@ -28,8 +29,6 @@ function paramStr(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
 }
 
-import { AdminPageHeader } from "./admin-page-header";
-
 export default async function AdminDashboardPage({
   searchParams,
 }: PageProps<"/admin">) {
@@ -45,7 +44,7 @@ export default async function AdminDashboardPage({
     : "";
   const search = paramStr(params.q).toLowerCase();
 
-  // Parallel Queries
+  // Optimized Parallel Database Queries
   const [
     { data: ordersData },
     { count: ordersPending },
@@ -54,45 +53,57 @@ export default async function AdminDashboardPage({
     { count: totalUsers },
     { count: totalSellers },
   ] = await Promise.all([
-    // Main order list
+    // 1. Main order list (Recent 100 orders for ultra-fast rendering)
     supabase
       .from("orders")
       .select(ORDER_SELECT)
-      .order("created_at", { ascending: false }),
+      .order("created_at", { ascending: false })
+      .limit(100),
 
-    // Stat: pending orders (Menunggu Pembayaran)
+    // 2. Count pending orders
     supabase
       .from("orders")
-      .select("*", { count: "exact", head: true })
+      .select("id", { count: "exact", head: true })
       .eq("status", "Menunggu Pembayaran"),
 
-    // Stat: completed orders all time (need total_harga, ongkir, opsi_pengiriman, product:harga_input, harga_jual)
+    // 3. Completed orders stats
     supabase
       .from("orders")
       .select("id, status, created_at, completed_at, total_harga, ongkir, opsi_pengiriman, product:products(harga_input, harga_jual)")
       .eq("status", "Selesai"),
 
-    // Stat: pending payouts
+    // 4. Pending payouts
     supabase
       .from("payouts")
       .select("id, nominal, status")
       .eq("status", "menunggu"),
 
-    // Stat: total users
+    // 5. Total users count
     supabase
       .from("users")
-      .select("*", { count: "exact", head: true }),
+      .select("id", { count: "exact", head: true }),
 
-    // Stat: total sellers
+    // 6. Total sellers count
     supabase
       .from("users")
-      .select("*", { count: "exact", head: true })
+      .select("id", { count: "exact", head: true })
       .eq("is_seller", true),
   ]);
 
-  const completedOrders = (completedOrdersData as unknown as DashboardOrderProfitData[]) ?? [];
+  const rawOrders = (ordersData as AdminOrderListItem[]) ?? [];
 
-  // Profit Calculations for Top Card 1
+  // Fast Reconcile: Only run expireHoldIfNeeded for orders in "Menunggu Pembayaran" status
+  const pendingHoldOrders = rawOrders.filter(
+    (o) => o.status === "Menunggu Pembayaran"
+  );
+  if (pendingHoldOrders.length > 0) {
+    await Promise.all(
+      pendingHoldOrders.map((order) => expireHoldIfNeeded(supabase, order))
+    );
+  }
+
+  // Profit Calculations
+  const completedOrders = (completedOrdersData as unknown as DashboardOrderProfitData[]) ?? [];
   let totalMarkupProfit = 0;
   let totalOngkirProfit = 0;
 
@@ -114,16 +125,10 @@ export default async function AdminDashboardPage({
   const pendingPayoutCount = pendingPayouts.length;
   const pendingPayoutNominal = pendingPayouts.reduce((sum, p) => sum + (p.nominal ?? 0), 0);
 
-  // Reconcile hold timers for table display
-  const reconciled = await Promise.all(
-    ((ordersData as AdminOrderListItem[]) ?? []).map((order) =>
-      expireHoldIfNeeded(supabase, order)
-    )
-  );
-
+  // Filter Status & Search locally
   const statusFiltered = status
-    ? reconciled.filter((order) => order.status === status)
-    : reconciled;
+    ? rawOrders.filter((order) => order.status === status)
+    : rawOrders;
 
   const orders = search
     ? statusFiltered.filter((order) => {
@@ -143,12 +148,12 @@ export default async function AdminDashboardPage({
       {/* ---- Top 4 Metric Cards ---- */}
       <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {/* Card 1: KEUNTUNGAN PLATFORM */}
-        <div className="rounded-xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="rounded-xl border border-zinc-200 bg-white p-5 shadow-2xs dark:border-zinc-800 dark:bg-zinc-900">
           <div className="flex items-start justify-between">
             <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
               KEUNTUNGAN PLATFORM
             </span>
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950 font-bold text-sm shadow-xs">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950 font-bold text-sm shadow-2xs">
               $
             </div>
           </div>
@@ -161,7 +166,7 @@ export default async function AdminDashboardPage({
         </div>
 
         {/* Card 2: PESANAN PENDING WA */}
-        <div className="rounded-xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="rounded-xl border border-zinc-200 bg-white p-5 shadow-2xs dark:border-zinc-800 dark:bg-zinc-900">
           <div className="flex items-start justify-between">
             <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
               PESANAN PENDING WA
@@ -181,7 +186,7 @@ export default async function AdminDashboardPage({
         </div>
 
         {/* Card 3: DAFTAR PAYOUT SELLER */}
-        <div className="rounded-xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="rounded-xl border border-zinc-200 bg-white p-5 shadow-2xs dark:border-zinc-800 dark:bg-zinc-900">
           <div className="flex items-start justify-between">
             <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
               DAFTAR PAYOUT SELLER
@@ -201,7 +206,7 @@ export default async function AdminDashboardPage({
         </div>
 
         {/* Card 4: TOTAL SELLER */}
-        <div className="rounded-xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="rounded-xl border border-zinc-200 bg-white p-5 shadow-2xs dark:border-zinc-800 dark:bg-zinc-900">
           <div className="flex items-start justify-between">
             <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
               TOTAL SELLER
@@ -224,9 +229,9 @@ export default async function AdminDashboardPage({
       {/* ---- Grafik Tren Keuntungan Platform Component ---- */}
       <DashboardProfitChart completedOrders={completedOrders} />
 
-      {/* ---- Existing Order Table ---- */}
+      {/* ---- Order Table ---- */}
       <h2 className="mb-4 text-lg font-semibold text-zinc-950 dark:text-zinc-50">
-        Semua Order
+        Order Terbaru
       </h2>
 
       <AdminFilters />
@@ -236,7 +241,7 @@ export default async function AdminDashboardPage({
           Tidak ada order ditemukan.
         </p>
       ) : (
-        <div className="overflow-x-auto rounded-lg border border-zinc-200 bg-white shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white shadow-2xs dark:border-zinc-800 dark:bg-zinc-900">
           <table className="w-full text-left text-sm">
             <thead className="border-b border-zinc-200 bg-zinc-50 text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:border-zinc-800 dark:bg-zinc-800/60 dark:text-zinc-300">
               <tr>

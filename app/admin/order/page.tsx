@@ -23,21 +23,25 @@ export default async function AdminOrderManagementPage() {
       "Gagal mengambil data orders:",
       JSON.stringify(error, null, 2),
       "| message:",
-      error.message,
-      "| details:",
-      error.details
+      error.message
     );
   }
 
   const rawOrders = (ordersData as unknown as AdminOrderListItemFull[]) ?? [];
 
-  const reconciledOrders = await Promise.all(
-    rawOrders.map((order) => expireHoldIfNeeded(supabase, order))
+  // Fast Reconcile: Only run expireHoldIfNeeded for pending payment orders
+  const pendingHoldOrders = rawOrders.filter(
+    (o) => o.status === "Menunggu Pembayaran"
   );
+  if (pendingHoldOrders.length > 0) {
+    await Promise.all(
+      pendingHoldOrders.map((order) => expireHoldIfNeeded(supabase, order))
+    );
+  }
 
   return (
     <OrderManagementView
-      initialOrders={reconciledOrders}
+      initialOrders={rawOrders}
       adminId={user.id}
     />
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { formatRupiah, calculateHargaJual } from "@/lib/pricing";
 
 export interface DashboardOrderProfitData {
@@ -47,55 +47,53 @@ export function DashboardProfitChart({ completedOrders }: DashboardProfitChartPr
   const daysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
 
   // Filter completed orders for selected month and year
-  const monthlyOrders = completedOrders.filter((order) => {
-    const dateStr = order.completed_at || order.created_at;
-    if (!dateStr) return false;
-    const date = new Date(dateStr);
-    return date.getMonth() === selectedMonth && date.getFullYear() === selectedYear;
-  });
+  // Single-pass O(N) calculation for monthly summary & daily map with useMemo
+  const { selectedMonthMarkupProfit, selectedMonthOngkirProfit, dailyMap } = useMemo(() => {
+    let markupSum = 0;
+    let ongkirSum = 0;
+    const map = new Map<number, { markupProfit: number; ongkirProfit: number }>();
 
-  // Calculate monthly summary
-  let selectedMonthMarkupProfit = 0;
-  let selectedMonthOngkirProfit = 0;
-
-  monthlyOrders.forEach((order) => {
-    const hargaInput = order.product?.harga_input ?? 0;
-    const hargaJual =
-      order.product?.harga_jual ?? calculateHargaJual(hargaInput).hargaJual;
-    const markup = Math.max(0, hargaJual - hargaInput);
-    const ongkir = order.opsi_pengiriman === "kurir" ? order.ongkir ?? 0 : 0;
-
-    selectedMonthMarkupProfit += markup;
-    selectedMonthOngkirProfit += ongkir;
-  });
-
-  const selectedMonthTotalProfit = selectedMonthMarkupProfit + selectedMonthOngkirProfit;
-
-  // Daily breakdown
-  const dailyBreakdown = Array.from({ length: daysInMonth }, (_, i) => {
-    const day = i + 1;
-    let markupProfit = 0;
-    let ongkirProfit = 0;
-
-    monthlyOrders.forEach((order) => {
+    completedOrders.forEach((order) => {
       const dateStr = order.completed_at || order.created_at;
       if (!dateStr) return;
       const date = new Date(dateStr);
-      if (date.getDate() === day) {
+      if (date.getMonth() === selectedMonth && date.getFullYear() === selectedYear) {
         const hargaInput = order.product?.harga_input ?? 0;
         const hargaJual =
           order.product?.harga_jual ?? calculateHargaJual(hargaInput).hargaJual;
         const markup = Math.max(0, hargaJual - hargaInput);
         const ongkir = order.opsi_pengiriman === "kurir" ? order.ongkir ?? 0 : 0;
 
-        markupProfit += markup;
-        ongkirProfit += ongkir;
+        markupSum += markup;
+        ongkirSum += ongkir;
+
+        const day = date.getDate();
+        const existing = map.get(day) || { markupProfit: 0, ongkirProfit: 0 };
+        map.set(day, {
+          markupProfit: existing.markupProfit + markup,
+          ongkirProfit: existing.ongkirProfit + ongkir,
+        });
       }
     });
 
-    const totalProfit = markupProfit + ongkirProfit;
-    return { day, markupProfit, ongkirProfit, totalProfit };
-  });
+    return {
+      selectedMonthMarkupProfit: markupSum,
+      selectedMonthOngkirProfit: ongkirSum,
+      dailyMap: map,
+    };
+  }, [completedOrders, selectedMonth, selectedYear]);
+
+  const selectedMonthTotalProfit = selectedMonthMarkupProfit + selectedMonthOngkirProfit;
+
+  // Daily breakdown
+  const dailyBreakdown = useMemo(() => {
+    return Array.from({ length: daysInMonth }, (_, i) => {
+      const day = i + 1;
+      const data = dailyMap.get(day) || { markupProfit: 0, ongkirProfit: 0 };
+      const totalProfit = data.markupProfit + data.ongkirProfit;
+      return { day, markupProfit: data.markupProfit, ongkirProfit: data.ongkirProfit, totalProfit };
+    });
+  }, [daysInMonth, dailyMap]);
 
   // Maximum daily value for scale (at least 50.000 for standard scale if values are small)
   const maxDailyFound = Math.max(...dailyBreakdown.map((d) => d.totalProfit));
