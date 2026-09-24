@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { AdminThemeGuard } from "@/components/admin-theme-guard";
+import { ExpirationTicker } from "@/components/expiration-ticker";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -60,6 +61,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col font-sans">
         <AdminThemeGuard />
+        <ExpirationTicker />
         <Navbar />
         <div className="flex-1 flex flex-col">{children}</div>
         <Footer />

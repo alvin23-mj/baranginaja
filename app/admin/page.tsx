@@ -11,6 +11,7 @@ import type { AdminOrderListItem, OrderStatus } from "@/lib/types/database";
 import { AdminFilters } from "./admin-filters";
 import { DashboardProfitChart, DashboardOrderProfitData } from "./dashboard-profit-chart";
 import { AdminPageHeader } from "./admin-page-header";
+import { OrderCountdownBadge } from "@/components/order-countdown-badge";
 
 const ORDER_STATUSES: OrderStatus[] = [
   "Menunggu Pembayaran",
@@ -181,7 +182,7 @@ export default async function AdminDashboardPage({
             {ordersPending ?? 0}
           </p>
           <p className="mt-1 text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase">
-            PERLU KONFIRMASI WA (HOLD 5 MNT)
+            PERLU KONFIRMASI WA (HOLD 10 MNT)
           </p>
         </div>
 
@@ -283,11 +284,16 @@ export default async function AdminDashboardPage({
                     {formatRupiah(order.total_harga)}
                   </td>
                   <td className="px-4 py-3">
-                    <span
-                      className={`w-fit rounded-full px-2.5 py-0.5 text-xs font-medium ${ORDER_STATUS_CLASS[order.status]}`}
-                    >
-                      {ORDER_STATUS_LABEL[order.status]}
-                    </span>
+                    <div className="flex flex-col gap-1 items-start">
+                      <span
+                        className={`w-fit rounded-full px-2.5 py-0.5 text-xs font-medium ${ORDER_STATUS_CLASS[order.status]}`}
+                      >
+                        {ORDER_STATUS_LABEL[order.status]}
+                      </span>
+                      {order.status === "Menunggu Pembayaran" && order.hold_expires_at && (
+                        <OrderCountdownBadge holdExpiresAt={order.hold_expires_at} compact />
+                      )}
+                    </div>
                   </td>
                   <td className="px-4 py-3 text-zinc-500 dark:text-zinc-400">
                     {new Date(order.created_at).toLocaleString("id-ID")}

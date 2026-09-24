@@ -12,7 +12,7 @@ Dokumen ini berisi gambaran menyeluruh dan mendetail mengenai **Alur Bisnis**, *
    - 1.4 Sistem Hak Akses & Dual-Role (Buyer, Seller, Admin)
    - 1.5 State Machine Status Produk
    - 1.6 State Machine Status Order & Logistik Pengiriman
-   - 1.7 Sistem Proteksi Hold Stok 45 Menit (Lazy Expiration)
+   - 1.7 Sistem Proteksi Hold Stok 10 Menit (Lazy Expiration)
    - 1.8 Alur Pembayaran (QRIS + WhatsApp API Integration)
    - 1.9 Alur Pencairan Saldo Penjual (Payouts) & Margin Keuntungan Platform
    - 1.10 Audit Trail & Logging SIM Admin Operasional
@@ -70,7 +70,7 @@ Status produk (`products.status`) mengikuti transisi berikut:
 ```
 [Tersedia] ---> (Buyer melakukan Checkout) ---> [Dipesan]
     ^                                               |
-    |------- (Hold Timer 45 Menit Habis) -----------|
+    |------- (Hold Timer 10 Menit Habis) -----------|
                                                     |
                                             (Pembayaran Dikonfirmasi Admin)
                                                     v
@@ -87,9 +87,9 @@ Status pesanan (`orders.status`) memiliki alur transisi bertahap:
 6. `Selesai`: Pesanan ditandai selesai, sistem otomatis membuat antrian **Payout** untuk penjual.
 7. `Dibatalkan`: Dipicu jika hold timer habis atau pesanan ditolak/dibatalkan oleh admin/user.
 
-### 1.7 Sistem Proteksi Hold Stok 45 Menit (Lazy Expiration)
+### 1.7 Sistem Proteksi Hold Stok 10 Menit (Lazy Expiration)
 Untuk mencegah *double order* tanpa memerlukan *cron job* server yang berat, sistem menggunakan pendekatan **Lazy Expiration** via fungsi `expireHoldIfNeeded`:
-* Saat pembeli menekan "Buat Pesanan", `hold_expires_at` diisi waktu `NOW + 45 menit` dan produk berubah ke `Dipesan`.
+* Saat pembeli menekan "Buat Pesanan", `hold_expires_at` diisi waktu `NOW + 10 menit` dan produk berubah ke `Dipesan`.
 * Setiap kali halaman detail order (`/order/[id]`) atau daftar pesanan dibuka, sistem memeriksa apakah `status === "Menunggu Pembayaran"` dan `hold_expires_at < NOW()`. Jika waktu habis, status order otomatis diubah ke `Dibatalkan` dan stok produk dikembalikan ke `Tersedia`.
 
 ### 1.8 Alur Pembayaran (QRIS + WhatsApp API Integration)
@@ -214,12 +214,12 @@ Berikut adalah penjelasan mendetail fungsi, isi, dan peranan dari **seluruh file
 * **Isi Codingan:** `haversineDistanceKm(lat1, lng1, lat2, lng2)` menghitung jarak lurus dalam satuan kilometer di permukaan bumi menggunakan rumus Haversine.
 
 #### 13. `lib/orders.ts`
-* **Fungsi:** Modul manajemen status order, label badge CSS status, dan proteksi hold timer stok 45 menit.
+* **Fungsi:** Modul manajemen status order, label badge CSS status, dan proteksi hold timer stok 10 menit.
 * **Isi Codingan:**
-  - `HOLD_DURATION_MINUTES = 45`: Durasi masa kunci stok produk.
+  - `HOLD_DURATION_MINUTES = 10`: Durasi masa kunci stok produk.
   - `ORDER_STATUS_LABEL` & `ORDER_STATUS_CLASS`: Map warna badge CSS untuk tiap status pesanan.
   - `expireHoldIfNeeded(supabase, order)`: Mengubah status order ke `Dibatalkan` dan stok produk kembali ke `Tersedia` secara *lazy* jika waktu hold habis.
-  - `computeHoldExpiresAt()`: Menghasilkan ISO timestamp untuk 45 menit ke depan.
+  - `computeHoldExpiresAt()`: Menghasilkan ISO timestamp untuk 10 menit ke depan.
   - `formatCountdown(msRemaining)`: Mengubah milidetik tersisa menjadi string timer `MM:SS`.
   - `nextShippingStatus(status)`: Menentukan alur transisi status logistik berikutnya.
 
@@ -412,7 +412,7 @@ Berikut adalah penjelasan mendetail fungsi, isi, dan peranan dari **seluruh file
   - Menghitung jarak pengiriman otomatis via `haversineDistanceKm` jika memilih Kurir Platform.
   - Menghitung ongkir via `calculateOngkir`.
   - Mengubah status produk menjadi `Dipesan` secara atomik di database.
-  - Membuat record transaksi baru pada tabel `orders` dengan `status = "Menunggu Pembayaran"` dan `hold_expires_at = NOW + 45 menit`.
+  - Membuat record transaksi baru pada tabel `orders` dengan `status = "Menunggu Pembayaran"` dan `hold_expires_at = NOW + 10 menit`.
   - Meredirect ke halaman `/order/[order_id]`.
 
 ##### 55. `app/order/[id]/page.tsx`
@@ -422,7 +422,7 @@ Berikut adalah penjelasan mendetail fungsi, isi, dan peranan dari **seluruh file
   - Menampilkan ringkasan produk, status order badge, instruksi pembayaran QRIS, upload bukti bayar, dan tombol **"Konfirmasi via WhatsApp"**.
 
 ##### 56. `app/order/[id]/order-countdown.tsx`
-* **Fungsi:** Ticker hitung mundur (countdown timer) sisa waktu hold 45 menit.
+* **Fungsi:** Ticker hitung mundur (countdown timer) sisa waktu hold 10 menit.
 * **Isi Codingan:** Menggunakan `setInterval` setiap detik untuk memperbarui tampilan waktu `MM:SS` secara realtime di browser pembeli.
 
 ##### 57. `app/pesanan-saya/page.tsx`
@@ -556,5 +556,5 @@ Berikut adalah penjelasan mendetail fungsi, isi, dan peranan dari **seluruh file
 
 Project **BaranginAja** dirancang secara rapi dan modular dengan pemisahan tugas (*Separation of Concerns*) yang jelas:
 1. **Model Bisnis Transparan:** Komisi platform berbasis tiering otomatis dan kalkulasi ongkir berbasis spasial Haversine memberikan kepastian transaksional bagi mahasiswa kos.
-2. **Keamanan & Efisiensi Sistem:** Proteksi stok dengan *Lazy Hold Expiration 45 Menit* dan *Middleware SSR Cookies* menjaga konsistensi data tanpa mengorbankan performa server.
+2. **Keamanan & Efisiensi Sistem:** Proteksi stok dengan *Lazy Hold Expiration 10 Menit* dan *Middleware SSR Cookies* menjaga konsistensi data tanpa mengorbankan performa server.
 3. **Keteraturan Kode:** Struktur Next.js 16 App Router memisahkan komponen reusable UI (`components/`), utilitas logika bisnis (`lib/`), dan route handler aplikasi (`app/`) sehingga sangat mudah dirawat dan dikembangkan lebih lanjut.

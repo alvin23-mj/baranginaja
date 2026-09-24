@@ -27,6 +27,40 @@ export function AdminSidebar({ adminName, adminEmail }: AdminSidebarProps) {
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
+  const [pendingCount, setPendingCount] = useState<number>(0);
+
+  // Realtime & Periodic Pending Orders Listener
+  useEffect(() => {
+    const supabase = createClient();
+
+    const fetchPendingCount = async () => {
+      const { count } = await supabase
+        .from("orders")
+        .select("id", { count: "exact", head: true })
+        .eq("status", "Menunggu Pembayaran");
+      setPendingCount(count ?? 0);
+    };
+
+    fetchPendingCount();
+
+    const channel = supabase
+      .channel("admin-sidebar-pending-orders")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "orders" },
+        () => {
+          fetchPendingCount();
+        }
+      )
+      .subscribe();
+
+    const interval = setInterval(fetchPendingCount, 10000);
+
+    return () => {
+      supabase.removeChannel(channel);
+      clearInterval(interval);
+    };
+  }, []);
 
   // Close mobile drawer on route change
   useEffect(() => {
@@ -221,18 +255,38 @@ export function AdminSidebar({ adminName, adminEmail }: AdminSidebarProps) {
         <div className="mt-2 space-y-1">
           {transactionNavItems.map((item) => {
             const active = isActive(item);
+            const hasPending = item.href === "/admin/order" && pendingCount > 0;
             return (
               <Link
                 key={item.href + item.label}
                 href={item.href}
-                className={`group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                className={`group flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                   active
                     ? "bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950 font-semibold shadow-xs"
                     : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800/60 dark:hover:text-zinc-100"
                 }`}
               >
-                {item.icon(active)}
-                <span>{item.label}</span>
+                <div className="flex items-center gap-3">
+                  {item.icon(active)}
+                  <span>{item.label}</span>
+                </div>
+                {hasPending && (
+                  <div className="flex items-center gap-1.5">
+                    <span className="relative flex h-2.5 w-2.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500"></span>
+                    </span>
+                    <span
+                      className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                        active
+                          ? "bg-rose-500 text-white dark:bg-rose-600 dark:text-white"
+                          : "bg-rose-500/15 text-rose-600 dark:bg-rose-950/60 dark:text-rose-400 border border-rose-200 dark:border-rose-900/40"
+                      }`}
+                    >
+                      {pendingCount}
+                    </span>
+                  </div>
+                )}
               </Link>
             );
           })}
@@ -249,7 +303,7 @@ export function AdminSidebar({ adminName, adminEmail }: AdminSidebarProps) {
           <button
             type="button"
             onClick={() => setMobileOpen(true)}
-            className="rounded-md p-1.5 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800"
+            className="relative rounded-md p-1.5 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800"
             aria-label="Buka Menu Admin"
           >
             <svg
@@ -265,6 +319,12 @@ export function AdminSidebar({ adminName, adminEmail }: AdminSidebarProps) {
                 d="M4 6h16M4 12h16M4 18h16"
               />
             </svg>
+            {pendingCount > 0 && (
+              <span className="absolute top-1 right-1 flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500"></span>
+              </span>
+            )}
           </button>
           <div className="flex items-center gap-2">
             <div className="relative h-7 w-7 shrink-0">

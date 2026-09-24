@@ -9,7 +9,7 @@ interface MapPickerModalProps {
   onClose: () => void;
   initialLat: number | null;
   initialLng: number | null;
-  onSelectLocation: (lat: number, lng: number) => void;
+  onSelectLocation: (lat: number, lng: number, address?: string) => void;
 }
 
 const SURABAYA_LAT = -7.257472;
@@ -224,7 +224,7 @@ export function MapPickerModal({
 
   // Handle Confirm Selection
   const handleConfirm = () => {
-    onSelectLocation(selectedLat, selectedLng);
+    onSelectLocation(selectedLat, selectedLng, addressText);
     onClose();
   };
 

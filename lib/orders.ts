@@ -1,7 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { OrderStatus } from "@/lib/types/database";
 
-export const HOLD_DURATION_MINUTES = 45;
+export const HOLD_DURATION_MINUTES = 10;
 
 export const ORDER_STATUS_LABEL: Record<OrderStatus, string> = {
   "Menunggu Pembayaran": "Menunggu Pembayaran",
@@ -69,6 +69,49 @@ export async function expireHoldIfNeeded<T extends HoldableOrder>(
     .eq("status", "Dipesan");
 
   return { ...order, status: "Dibatalkan" as OrderStatus };
+}
+
+// Bulk reconciliation: find all orders in "Menunggu Pembayaran" whose hold_expires_at has passed,
+// cancel them and return their products to "Tersedia".
+export async function expireAllLapsedHolds(
+  supabase: SupabaseClient
+): Promise<{ expiredCount: number; error: string | null }> {
+  const now = new Date().toISOString();
+
+  const { data: expiredOrders, error: fetchError } = await supabase
+    .from("orders")
+    .select("id, product_id")
+    .eq("status", "Menunggu Pembayaran")
+    .lte("hold_expires_at", now);
+
+  if (fetchError) {
+    return { expiredCount: 0, error: fetchError.message };
+  }
+
+  if (!expiredOrders || expiredOrders.length === 0) {
+    return { expiredCount: 0, error: null };
+  }
+
+  const expiredOrderIds = expiredOrders.map((o) => o.id);
+  const productIds = expiredOrders.map((o) => o.product_id);
+
+  const { error: orderUpdateError } = await supabase
+    .from("orders")
+    .update({ status: "Dibatalkan" })
+    .in("id", expiredOrderIds)
+    .eq("status", "Menunggu Pembayaran");
+
+  if (orderUpdateError) {
+    return { expiredCount: 0, error: orderUpdateError.message };
+  }
+
+  await supabase
+    .from("products")
+    .update({ status: "Tersedia" })
+    .in("id", productIds)
+    .eq("status", "Dipesan");
+
+  return { expiredCount: expiredOrders.length, error: null };
 }
 
 export function computeHoldExpiresAt(): string {

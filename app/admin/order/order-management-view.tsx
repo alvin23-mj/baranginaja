@@ -8,6 +8,7 @@ import { ORDER_STATUS_LABEL, ORDER_STATUS_CLASS } from "@/lib/orders";
 import type { OrderStatus } from "@/lib/types/database";
 import { createClient } from "@/lib/supabase/client";
 import { createPayoutIfNeeded } from "@/lib/payouts";
+import { OrderCountdownBadge } from "@/components/order-countdown-badge";
 
 function LiveClock() {
   const [time, setTime] = useState("");
@@ -670,14 +671,9 @@ export function OrderManagementView({
                       • {ORDER_STATUS_LABEL[order.status]}
                     </span>
 
-                    {/* Hold / Shipping Info Tag */}
+                    {/* Live Running Hold Countdown Timer */}
                     {order.status === "Menunggu Pembayaran" && (
-                      <span className="flex items-center gap-1 rounded-md border border-amber-200 bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-800 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-300">
-                        <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        Otomatis Rilis (Hold 5 Mnt)
-                      </span>
+                      <OrderCountdownBadge holdExpiresAt={order.hold_expires_at} />
                     )}
 
                     <span className="rounded-md border border-zinc-200 bg-white px-2 py-0.5 text-[11px] font-medium text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">

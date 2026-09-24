@@ -45,6 +45,45 @@ export function ProfileForm({
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
 
+  async function reverseGeocode(latitude: number, longitude: number) {
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`,
+        {
+          headers: {
+            "Accept-Language": "id,en",
+          },
+        }
+      );
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.display_name) {
+          setAlamatKos(data.display_name);
+
+          if (data.address) {
+            const rawDistrict = (
+              data.address.suburb ||
+              data.address.city_district ||
+              data.address.town ||
+              ""
+            ).toLowerCase();
+            if (rawDistrict) {
+              const matched = districtList.find((d) =>
+                rawDistrict.includes(d.nama_kecamatan.toLowerCase()) ||
+                d.nama_kecamatan.toLowerCase().includes(rawDistrict)
+              );
+              if (matched) {
+                setDistrictId(String(matched.id));
+              }
+            }
+          }
+        }
+      }
+    } catch {
+      // Ignore geocode error
+    }
+  }
+
   function handleAmbilLokasi() {
     if (!navigator.geolocation) {
       setLocationError("Browser ini tidak mendukung geolocation.");
@@ -55,9 +94,12 @@ export function ProfileForm({
     setLocationError(null);
 
     navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setLat(position.coords.latitude);
-        setLng(position.coords.longitude);
+      async (position) => {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        setLat(latitude);
+        setLng(longitude);
+        await reverseGeocode(latitude, longitude);
         setLocating(false);
       },
       (error) => {
@@ -189,54 +231,37 @@ export function ProfileForm({
           </div>
         </div>
 
-        {/* Alamat Kos */}
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="alamat_kos" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
-            Alamat Detail / Lokasi Kos / Jalan
-          </label>
-          <div className="relative">
-            <textarea
-              id="alamat_kos"
-              rows={3}
-              placeholder="Contoh: Jl. Keputih Tegal No. 42 (Dekat Kantin Utama)"
-              value={alamatKos}
-              onChange={(e) => setAlamatKos(e.target.value)}
-              className="w-full rounded-xl border border-zinc-300 bg-white p-3 text-xs text-zinc-950 shadow-2xs outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-900/10 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:focus:border-zinc-500 transition-all"
-            />
-          </div>
-        </div>
-
-        {/* Lokasi Pin GPS & Map Picker */}
-        <div className="flex flex-col gap-2 rounded-xl border border-zinc-200 bg-zinc-50/60 p-3.5 dark:border-zinc-800 dark:bg-zinc-800/40">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-zinc-800 dark:text-zinc-200 flex items-center gap-1.5">
+        {/* Unified Alamat Detail & Lokasi GPS Card */}
+        <div className="flex flex-col gap-3 rounded-xl border border-zinc-200 bg-zinc-50/60 p-3.5 dark:border-zinc-800 dark:bg-zinc-800/40">
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <label htmlFor="alamat_kos" className="text-xs font-semibold text-zinc-800 dark:text-zinc-200 flex items-center gap-1.5">
               <svg className="h-4 w-4 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              Pin Peta &amp; Koordinat GPS
-            </span>
+              Alamat Detail &amp; Pin Lokasi GPS
+            </label>
             {lat !== null && lng !== null ? (
               <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 border border-emerald-300 px-2 py-0.5 text-[11px] font-medium text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300">
-                ✓ Lokasi Tersimpan
+                ✓ GPS Tersimpan
               </span>
             ) : (
               <span className="text-[11px] text-zinc-400 italic">Belum diatur</span>
             )}
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-2 pt-1">
+          <div className="flex flex-col sm:flex-row gap-2">
             <button
               suppressHydrationWarning
               type="button"
               onClick={handleAmbilLokasi}
               disabled={locating}
-              className="h-9 flex-1 flex items-center justify-center gap-1.5 rounded-lg border border-zinc-300 bg-white text-xs font-semibold text-zinc-700 shadow-2xs hover:bg-zinc-100 disabled:opacity-60 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700 transition-colors"
+              className="h-9 flex-1 flex items-center justify-center gap-1.5 rounded-lg border border-zinc-300 bg-white text-xs font-semibold text-zinc-700 shadow-2xs hover:bg-zinc-100 disabled:opacity-60 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
             >
-              <svg className="h-3.5 w-3.5 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg className={`h-3.5 w-3.5 text-zinc-500 ${locating ? "animate-spin" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3A8.994 8.994 0 0013 3.06V1h-2v2.06A8.994 8.994 0 003.06 11H1v2h2.06A8.994 8.994 0 0011 20.94V23h2v-2.06A8.994 8.994 0 0020.94 13H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z" />
               </svg>
-              {locating ? "Deteksi GPS..." : "Deteksi Otomatis GPS"}
+              {locating ? "Deteksi GPS & Alamat..." : "Deteksi Otomatis GPS (Isi Alamat)"}
             </button>
             <button
               suppressHydrationWarning
@@ -251,13 +276,24 @@ export function ProfileForm({
             </button>
           </div>
 
+          <div className="relative">
+            <textarea
+              id="alamat_kos"
+              rows={3}
+              placeholder="Contoh: Jl. Keputih Tegal No. 42 (Dekat Kantin Utama)"
+              value={alamatKos}
+              onChange={(e) => setAlamatKos(e.target.value)}
+              className="w-full rounded-xl border border-zinc-300 bg-white p-3 text-xs text-zinc-950 shadow-2xs outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-900/10 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:focus:border-zinc-500 transition-all"
+            />
+          </div>
+
           {lat !== null && lng !== null && (
-            <p className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400 mt-0.5">
+            <p className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400">
               Lat: {lat.toFixed(6)}, Lng: {lng.toFixed(6)}
             </p>
           )}
           {locationError && (
-            <p className="text-xs text-rose-600 dark:text-rose-400 mt-1">{locationError}</p>
+            <p className="text-xs text-rose-600 dark:text-rose-400">{locationError}</p>
           )}
         </div>
 
@@ -291,10 +327,15 @@ export function ProfileForm({
         onClose={() => setMapModalOpen(false)}
         initialLat={lat}
         initialLng={lng}
-        onSelectLocation={(newLat, newLng) => {
+        onSelectLocation={async (newLat, newLng, addressText) => {
           setLat(newLat);
           setLng(newLng);
           setLocationError(null);
+          if (addressText) {
+            setAlamatKos(addressText);
+          } else {
+            await reverseGeocode(newLat, newLng);
+          }
         }}
       />
     </>
