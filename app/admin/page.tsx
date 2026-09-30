@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/supabase/guards";
-import { formatRupiah } from "@/lib/pricing";
+import { formatRupiah, calculateHargaJual } from "@/lib/pricing";
 import {
   ORDER_STATUS_CLASS,
   ORDER_STATUS_LABEL,
@@ -9,6 +9,9 @@ import {
 } from "@/lib/orders";
 import type { AdminOrderListItem, OrderStatus } from "@/lib/types/database";
 import { AdminFilters } from "./admin-filters";
+import { DashboardProfitChart, DashboardOrderProfitData } from "./dashboard-profit-chart";
+import { AdminPageHeader } from "./admin-page-header";
+import { OrderCountdownBadge } from "@/components/order-countdown-badge";
 
 const ORDER_STATUSES: OrderStatus[] = [
   "Menunggu Pembayaran",
@@ -21,25 +24,10 @@ const ORDER_STATUSES: OrderStatus[] = [
 ];
 
 const ORDER_SELECT =
-  "*, product:products(id, nama_barang), buyer:users!buyer_id(id, nama_lengkap, no_hp)";
+  "*, product:products(id, nama_barang, harga_input, harga_jual), buyer:users!buyer_id(id, nama_lengkap, no_hp)";
 
 function paramStr(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
-}
-
-function startOfTodayISO(): string {
-  const now = new Date();
-  const y = now.getFullYear();
-  const m = String(now.getMonth() + 1).padStart(2, "0");
-  const d = String(now.getDate()).padStart(2, "0");
-  return `${y}-${m}-${d}T00:00:00`;
-}
-
-function startOfMonthISO(): string {
-  const now = new Date();
-  const y = now.getFullYear();
-  const m = String(now.getMonth() + 1).padStart(2, "0");
-  return `${y}-${m}-01T00:00:00`;
 }
 
 export default async function AdminDashboardPage({
@@ -57,84 +45,91 @@ export default async function AdminDashboardPage({
     : "";
   const search = paramStr(params.q).toLowerCase();
 
-  // ---- Stat queries (parallel) ----
-  const todayISO = startOfTodayISO();
-  const monthISO = startOfMonthISO();
-
+  // Optimized Parallel Database Queries
   const [
     { data: ordersData },
-    { count: ordersToday },
     { count: ordersPending },
-    { data: completedOrdersThisMonth },
-    { count: activeProducts },
+    { data: completedOrdersData },
+    { data: pendingPayoutsData },
     { count: totalUsers },
     { count: totalSellers },
   ] = await Promise.all([
-    // Main order list
+    // 1. Main order list (Recent 100 orders for ultra-fast rendering)
     supabase
       .from("orders")
       .select(ORDER_SELECT)
-      .order("created_at", { ascending: false }),
+      .order("created_at", { ascending: false })
+      .limit(100),
 
-    // Stat: orders today
+    // 2. Count pending orders
     supabase
       .from("orders")
-      .select("*", { count: "exact", head: true })
-      .gte("created_at", todayISO),
-
-    // Stat: pending orders
-    supabase
-      .from("orders")
-      .select("*", { count: "exact", head: true })
+      .select("id", { count: "exact", head: true })
       .eq("status", "Menunggu Pembayaran"),
 
-    // Stat: completed orders this month (need total_harga & harga_input)
+    // 3. Completed orders stats
     supabase
       .from("orders")
-      .select("total_harga, product:products(harga_input)")
-      .eq("status", "Selesai")
-      .gte("completed_at", monthISO),
+      .select("id, status, created_at, completed_at, total_harga, ongkir, opsi_pengiriman, product:products(harga_input, harga_jual)")
+      .eq("status", "Selesai"),
 
-    // Stat: active products
+    // 4. Pending payouts
     supabase
-      .from("products")
-      .select("*", { count: "exact", head: true })
-      .eq("status", "Tersedia"),
+      .from("payouts")
+      .select("id, nominal, status")
+      .eq("status", "menunggu"),
 
-    // Stat: total users
-    supabase
-      .from("users")
-      .select("*", { count: "exact", head: true }),
-
-    // Stat: total sellers
+    // 5. Total users count
     supabase
       .from("users")
-      .select("*", { count: "exact", head: true })
+      .select("id", { count: "exact", head: true }),
+
+    // 6. Total sellers count
+    supabase
+      .from("users")
+      .select("id", { count: "exact", head: true })
       .eq("is_seller", true),
   ]);
 
-  // Platform revenue = SUM(total_harga - harga_input) for completed orders this month
-  const pendapatanPlatform = (completedOrdersThisMonth ?? []).reduce(
-    (sum, order) => {
-      const product = order.product as unknown as
-        | { harga_input: number }
-        | null;
-      const hargaInput = product?.harga_input ?? 0;
-      return sum + (order.total_harga - hargaInput);
-    },
-    0
-  );
+  const rawOrders = (ordersData as AdminOrderListItem[]) ?? [];
 
-  // ---- Reconcile hold timers ----
-  const reconciled = await Promise.all(
-    ((ordersData as AdminOrderListItem[]) ?? []).map((order) =>
-      expireHoldIfNeeded(supabase, order)
-    )
+  // Fast Reconcile: Only run expireHoldIfNeeded for orders in "Menunggu Pembayaran" status
+  const pendingHoldOrders = rawOrders.filter(
+    (o) => o.status === "Menunggu Pembayaran"
   );
+  if (pendingHoldOrders.length > 0) {
+    await Promise.all(
+      pendingHoldOrders.map((order) => expireHoldIfNeeded(supabase, order))
+    );
+  }
 
+  // Profit Calculations
+  const completedOrders = (completedOrdersData as unknown as DashboardOrderProfitData[]) ?? [];
+  let totalMarkupProfit = 0;
+  let totalOngkirProfit = 0;
+
+  completedOrders.forEach((order) => {
+    const hargaInput = order.product?.harga_input ?? 0;
+    const hargaJual =
+      order.product?.harga_jual ?? calculateHargaJual(hargaInput).hargaJual;
+    const markup = Math.max(0, hargaJual - hargaInput);
+    const ongkir = order.opsi_pengiriman === "kurir" ? order.ongkir ?? 0 : 0;
+
+    totalMarkupProfit += markup;
+    totalOngkirProfit += ongkir;
+  });
+
+  const totalPlatformProfit = totalMarkupProfit + totalOngkirProfit;
+
+  // Payout Stats
+  const pendingPayouts = pendingPayoutsData ?? [];
+  const pendingPayoutCount = pendingPayouts.length;
+  const pendingPayoutNominal = pendingPayouts.reduce((sum, p) => sum + (p.nominal ?? 0), 0);
+
+  // Filter Status & Search locally
   const statusFiltered = status
-    ? reconciled.filter((order) => order.status === status)
-    : reconciled;
+    ? rawOrders.filter((order) => order.status === status)
+    : rawOrders;
 
   const orders = search
     ? statusFiltered.filter((order) => {
@@ -144,66 +139,100 @@ export default async function AdminDashboardPage({
       })
     : statusFiltered;
 
-  const stats = [
-    {
-      label: "Order Hari Ini",
-      value: String(ordersToday ?? 0),
-      accent: "text-zinc-950 dark:text-zinc-50",
-    },
-    {
-      label: "Menunggu Pembayaran",
-      value: String(ordersPending ?? 0),
-      accent: "text-amber-700 dark:text-amber-400",
-    },
-    {
-      label: "Pendapatan Bulan Ini",
-      value: formatRupiah(pendapatanPlatform),
-      accent: "text-green-700 dark:text-green-400",
-    },
-    {
-      label: "Produk Aktif",
-      value: String(activeProducts ?? 0),
-      accent: "text-zinc-950 dark:text-zinc-50",
-    },
-    {
-      label: `User Terdaftar`,
-      value: `${totalUsers ?? 0}`,
-      sub: `${totalSellers ?? 0} penjual`,
-      accent: "text-zinc-950 dark:text-zinc-50",
-    },
-  ];
-
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-10">
-      <h1 className="mb-6 text-2xl font-semibold text-zinc-950 dark:text-zinc-50">
-        Dashboard Admin
-      </h1>
+    <div className="w-full px-4 sm:px-6 md:px-8 py-6">
+      <AdminPageHeader
+        title="Dashboard Admin"
+        subtitle="Ringkasan performa platform, statistik keuangan, dan transaksi terbaru"
+      />
 
-      {/* ---- Stat Cards ---- */}
-      <div className="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-        {stats.map((stat) => (
-          <div
-            key={stat.label}
-            className="rounded-lg border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
-          >
-            <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-              {stat.label}
-            </p>
-            <p className={`mt-1 text-xl font-bold ${stat.accent}`}>
-              {stat.value}
-            </p>
-            {stat.sub && (
-              <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
-                {stat.sub}
-              </p>
-            )}
+      {/* ---- Top 4 Metric Cards ---- */}
+      <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {/* Card 1: KEUNTUNGAN PLATFORM */}
+        <div className="rounded-xl border border-zinc-200 bg-white p-5 shadow-2xs dark:border-zinc-800 dark:bg-zinc-900">
+          <div className="flex items-start justify-between">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+              KEUNTUNGAN PLATFORM
+            </span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950 font-bold text-sm shadow-2xs">
+              $
+            </div>
           </div>
-        ))}
+          <p className="mt-2 text-2xl font-bold text-zinc-950 dark:text-zinc-50">
+            {formatRupiah(totalPlatformProfit)}
+          </p>
+          <p className="mt-1 text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase">
+            MARKUP ({formatRupiah(totalMarkupProfit)}) + ONGKIR ({formatRupiah(totalOngkirProfit)})
+          </p>
+        </div>
+
+        {/* Card 2: PESANAN PENDING WA */}
+        <div className="rounded-xl border border-zinc-200 bg-white p-5 shadow-2xs dark:border-zinc-800 dark:bg-zinc-900">
+          <div className="flex items-start justify-between">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+              PESANAN PENDING WA
+            </span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-500/10 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400">
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
+            </div>
+          </div>
+          <p className="mt-2 text-2xl font-bold text-zinc-950 dark:text-zinc-50">
+            {ordersPending ?? 0}
+          </p>
+          <p className="mt-1 text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase">
+            PERLU KONFIRMASI WA (HOLD 10 MNT)
+          </p>
+        </div>
+
+        {/* Card 3: DAFTAR PAYOUT SELLER */}
+        <div className="rounded-xl border border-zinc-200 bg-white p-5 shadow-2xs dark:border-zinc-800 dark:bg-zinc-900">
+          <div className="flex items-start justify-between">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+              DAFTAR PAYOUT SELLER
+            </span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500/10 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400">
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </div>
+          </div>
+          <p className="mt-2 text-2xl font-bold text-zinc-950 dark:text-zinc-50">
+            {pendingPayoutCount}
+          </p>
+          <p className="mt-1 text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase">
+            PENDING: {formatRupiah(pendingPayoutNominal)}
+          </p>
+        </div>
+
+        {/* Card 4: TOTAL SELLER */}
+        <div className="rounded-xl border border-zinc-200 bg-white p-5 shadow-2xs dark:border-zinc-800 dark:bg-zinc-900">
+          <div className="flex items-start justify-between">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+              TOTAL SELLER
+            </span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400">
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+              </svg>
+            </div>
+          </div>
+          <p className="mt-2 text-2xl font-bold text-zinc-950 dark:text-zinc-50">
+            {totalSellers ?? 0}
+          </p>
+          <p className="mt-1 text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase">
+            DARI TOTAL {totalUsers ?? 0} MAHASISWA
+          </p>
+        </div>
       </div>
 
-      {/* ---- Existing Order Table ---- */}
+      {/* ---- Grafik Tren Keuntungan Platform Component ---- */}
+      <DashboardProfitChart completedOrders={completedOrders} />
+
+      {/* ---- Order Table ---- */}
       <h2 className="mb-4 text-lg font-semibold text-zinc-950 dark:text-zinc-50">
-        Semua Order
+        Order Terbaru
       </h2>
 
       <AdminFilters />
@@ -213,7 +242,7 @@ export default async function AdminDashboardPage({
           Tidak ada order ditemukan.
         </p>
       ) : (
-        <div className="overflow-x-auto rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white shadow-2xs dark:border-zinc-800 dark:bg-zinc-900">
           <table className="w-full text-left text-sm">
             <thead className="border-b border-zinc-200 bg-zinc-50 text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:border-zinc-800 dark:bg-zinc-800/60 dark:text-zinc-300">
               <tr>
@@ -235,7 +264,7 @@ export default async function AdminDashboardPage({
                   <td className="px-4 py-3 font-mono">
                     <Link
                       href={`/admin/order/${order.id}`}
-                      className="font-semibold text-blue-600 hover:underline dark:text-blue-400"
+                      className="font-semibold text-zinc-950 hover:underline dark:text-zinc-50"
                     >
                       {order.id.slice(0, 8)}
                     </Link>
@@ -255,11 +284,16 @@ export default async function AdminDashboardPage({
                     {formatRupiah(order.total_harga)}
                   </td>
                   <td className="px-4 py-3">
-                    <span
-                      className={`w-fit rounded-full px-2.5 py-0.5 text-xs font-medium ${ORDER_STATUS_CLASS[order.status]}`}
-                    >
-                      {ORDER_STATUS_LABEL[order.status]}
-                    </span>
+                    <div className="flex flex-col gap-1 items-start">
+                      <span
+                        className={`w-fit rounded-full px-2.5 py-0.5 text-xs font-medium ${ORDER_STATUS_CLASS[order.status]}`}
+                      >
+                        {ORDER_STATUS_LABEL[order.status]}
+                      </span>
+                      {order.status === "Menunggu Pembayaran" && order.hold_expires_at && (
+                        <OrderCountdownBadge holdExpiresAt={order.hold_expires_at} compact />
+                      )}
+                    </div>
                   </td>
                   <td className="px-4 py-3 text-zinc-500 dark:text-zinc-400">
                     {new Date(order.created_at).toLocaleString("id-ID")}

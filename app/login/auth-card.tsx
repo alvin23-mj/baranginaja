@@ -195,8 +195,8 @@ export function AuthCard({ districts }: AuthCardProps) {
 
   return (
     <div className="w-full max-w-md">
-      {/* Container Card */}
-      <div className="rounded-2xl border border-zinc-200 bg-white p-6 sm:p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
+      {/* Container Card with Glassmorphism */}
+      <div className="rounded-2xl border border-zinc-200/90 bg-white/90 p-6 sm:p-8 shadow-2xl backdrop-blur-xl dark:border-zinc-800/90 dark:bg-zinc-950/85">
         {/* Header Branding - lowercase baranginaja */}
         <div className="flex flex-col items-center text-center mb-6">
           <Link

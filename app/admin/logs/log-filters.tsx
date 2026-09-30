@@ -51,11 +51,12 @@ export function LogFilters({ admins }: { admins: AdminOption[] }) {
             Dari
           </label>
           <input
+            suppressHydrationWarning
             id="dari"
             type="date"
             defaultValue={searchParams.get("dari") ?? ""}
             onChange={(e) => applyParams({ dari: e.target.value })}
-            className="h-10 w-full rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-blue-500"
+            className="h-10 w-full rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none focus:border-zinc-950 focus:ring-1 focus:ring-zinc-950 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-zinc-100 dark:focus:ring-zinc-100"
           />
         </div>
         <div className="flex flex-1 items-center gap-2">
@@ -66,18 +67,20 @@ export function LogFilters({ admins }: { admins: AdminOption[] }) {
             Sampai
           </label>
           <input
+            suppressHydrationWarning
             id="sampai"
             type="date"
             defaultValue={searchParams.get("sampai") ?? ""}
             onChange={(e) => applyParams({ sampai: e.target.value })}
-            className="h-10 w-full rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-blue-500"
+            className="h-10 w-full rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none focus:border-zinc-950 focus:ring-1 focus:ring-zinc-950 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-zinc-100 dark:focus:ring-zinc-100"
           />
         </div>
         {admins.length > 1 && (
           <select
+            suppressHydrationWarning
             defaultValue={searchParams.get("admin") ?? ""}
             onChange={(e) => applyParams({ admin: e.target.value })}
-            className="h-10 w-full shrink-0 rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-blue-500 sm:w-48"
+            className="h-10 w-full shrink-0 rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none focus:border-zinc-950 focus:ring-1 focus:ring-zinc-950 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-zinc-100 dark:focus:ring-zinc-100 sm:w-48"
           >
             <option value="">Semua Admin</option>
             {admins.map((a) => (
@@ -93,20 +96,23 @@ export function LogFilters({ admins }: { admins: AdminOption[] }) {
       <div className="flex gap-2">
         <form onSubmit={handleSearchSubmit} className="flex flex-1 gap-2">
           <input
+            suppressHydrationWarning
             type="text"
             value={searchAksi}
             onChange={(e) => setSearchAksi(e.target.value)}
             placeholder="Cari jenis aksi..."
-            className="h-10 w-full rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-blue-500"
+            className="h-10 w-full rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none focus:border-zinc-950 focus:ring-1 focus:ring-zinc-950 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-zinc-100 dark:focus:ring-zinc-100"
           />
           <button
+            suppressHydrationWarning
             type="submit"
-            className="h-10 shrink-0 rounded-md bg-blue-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+            className="h-10 shrink-0 rounded-md bg-zinc-950 px-4 text-sm font-medium text-white transition-colors hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-zinc-200"
           >
             Cari
           </button>
         </form>
         <button
+          suppressHydrationWarning
           type="button"
           onClick={handleReset}
           className="h-10 shrink-0 rounded-md border border-zinc-300 px-4 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"

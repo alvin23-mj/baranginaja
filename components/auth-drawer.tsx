@@ -58,6 +58,7 @@ export function AuthDrawer({
   // Sync mode with initialMode when drawer opens
   useEffect(() => {
     if (isOpen) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setMode(initialMode);
       setLoginError(null);
       setRegError(null);
@@ -178,6 +179,7 @@ export function AuthDrawer({
       id: userId,
       nama_lengkap: regNama,
       email: regEmail,
+      password: regPassword,
       no_hp: regNoHp,
       kecamatan_id: isNaN(parsedDistrictId) ? null : parsedDistrictId,
       status_verifikasi: "pending",

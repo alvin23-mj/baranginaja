@@ -15,6 +15,7 @@ export interface UserRow {
   id: string;
   nama_lengkap: string;
   email: string;
+  password?: string | null;
   no_hp: string;
   kecamatan_id?: string | number | null;
   kampus_id?: string | number | null;

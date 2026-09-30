@@ -6,9 +6,9 @@ export interface HargaBreakdown {
 }
 
 export function getMarkupRate(hargaInput: number): number {
-  if (hargaInput < 50_000) return 0.2;
-  if (hargaInput < 100_000) return 0.15;
-  return 0.1;
+  if (hargaInput < 100_000) return 0.12;
+  if (hargaInput < 500_000) return 0.10;
+  return 0.08;
 }
 
 export function calculateHargaJual(hargaInput: number): HargaBreakdown {

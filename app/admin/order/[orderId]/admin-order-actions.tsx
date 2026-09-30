@@ -277,7 +277,7 @@ export function AdminOrderActions({
               onClick={() => setBuktiMode("manual")}
               className={`h-9 flex-1 rounded-md border text-sm font-medium transition-colors ${
                 buktiMode === "manual"
-                  ? "border-blue-600 bg-blue-600 text-white"
+                  ? "border-zinc-950 bg-zinc-950 text-white dark:border-zinc-100 dark:bg-zinc-100 dark:text-zinc-950"
                   : "border-zinc-300 text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
               }`}
             >
@@ -288,7 +288,7 @@ export function AdminOrderActions({
               onClick={() => setBuktiMode("upload")}
               className={`h-9 flex-1 rounded-md border text-sm font-medium transition-colors ${
                 buktiMode === "upload"
-                  ? "border-blue-600 bg-blue-600 text-white"
+                  ? "border-zinc-950 bg-zinc-950 text-white dark:border-zinc-100 dark:bg-zinc-100 dark:text-zinc-950"
                   : "border-zinc-300 text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
               }`}
             >
@@ -302,7 +302,7 @@ export function AdminOrderActions({
               value={catatan}
               onChange={(e) => setCatatan(e.target.value)}
               placeholder="Catatan konfirmasi manual (misal: sudah dikonfirmasi via WhatsApp)"
-              className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-950 outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:border-blue-500"
+              className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-950 outline-none focus:border-zinc-950 focus:ring-1 focus:ring-zinc-950 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:border-zinc-100 dark:focus:ring-zinc-100"
             />
           ) : (
             <input
@@ -317,7 +317,7 @@ export function AdminOrderActions({
             type="button"
             onClick={handleKonfirmasiPembayaran}
             disabled={loading}
-            className="h-10 w-full rounded-md bg-blue-600 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-60"
+            className="h-10 w-full rounded-md bg-zinc-950 text-sm font-medium text-white transition-colors hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-zinc-200 disabled:opacity-60"
           >
             {loading ? "Memproses..." : "Konfirmasi Pembayaran Diterima"}
           </button>
@@ -329,7 +329,7 @@ export function AdminOrderActions({
           type="button"
           onClick={handleLanjutkanPengiriman}
           disabled={loading}
-          className="h-10 w-full rounded-md bg-blue-600 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-60"
+          className="h-10 w-full rounded-md bg-zinc-950 text-sm font-medium text-white transition-colors hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-zinc-200 disabled:opacity-60"
         >
           {loading
             ? "Memproses..."
@@ -342,14 +342,14 @@ export function AdminOrderActions({
           type="button"
           onClick={handleBatalkan}
           disabled={loading}
-          className="h-10 w-full rounded-md border border-red-300 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 disabled:opacity-60 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-950"
+          className="h-10 w-full rounded-md border border-zinc-400 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-100 disabled:opacity-60 dark:border-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-800"
         >
           {loading ? "Memproses..." : "Batalkan Order"}
         </button>
       )}
 
       {errorMessage && (
-        <p className="text-xs text-red-600 dark:text-red-400">{errorMessage}</p>
+        <p className="text-xs font-semibold text-zinc-950 dark:text-zinc-50">{errorMessage}</p>
       )}
 
       {toastMessage && (

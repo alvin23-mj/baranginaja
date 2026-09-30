@@ -16,12 +16,12 @@ export default async function AdminLayout({
     .single();
 
   return (
-    <div className="flex min-h-screen flex-col md:flex-row bg-zinc-50 dark:bg-zinc-950 font-sans">
+    <div className="flex min-h-screen flex-col md:flex-row bg-white dark:bg-zinc-950 font-sans">
       <AdminSidebar
         adminName={profile?.nama_lengkap ?? "Admin"}
         adminEmail={user.email ?? null}
       />
-      <main className="flex-1 min-w-0 overflow-y-auto">
+      <main className="flex-1 min-w-0 overflow-y-auto animate-page-in">
         {children}
       </main>
     </div>

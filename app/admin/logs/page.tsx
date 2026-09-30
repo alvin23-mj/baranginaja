@@ -4,6 +4,7 @@ import { requireAdmin } from "@/lib/supabase/guards";
 import type { ActivityLogWithDetails } from "@/lib/types/database";
 import { LogFilters } from "./log-filters";
 import { LogPagination } from "./log-pagination";
+import { AdminPageHeader } from "../admin-page-header";
 
 const PAGE_SIZE = 20;
 
@@ -22,18 +23,17 @@ export default async function AdminLogsPage({
   await requireAdmin(supabase, "/admin/logs");
 
   // Parse filters
+  const page = Math.max(1, parseInt(paramStr(params.page), 10) || 1);
   const dari = paramStr(params.dari);
   const sampai = paramStr(params.sampai);
   const adminFilter = paramStr(params.admin);
-  const aksiSearch = paramStr(params.aksi).toLowerCase();
-  const page = Math.max(1, Number(paramStr(params.page)) || 1);
+  const aksiSearch = paramStr(params.q);
 
   // Fetch admin users for dropdown
   const { data: adminUsers } = await supabase
     .from("users")
     .select("id, nama_lengkap")
-    .eq("role", "admin")
-    .order("nama_lengkap", { ascending: true });
+    .eq("role", "admin");
 
   // Build log query
   let query = supabase
@@ -63,17 +63,12 @@ export default async function AdminLogsPage({
   const totalPages = Math.max(1, Math.ceil((count ?? 0) / PAGE_SIZE));
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-10">
-      <Link
-        href="/admin"
-        className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-zinc-600 transition-colors hover:text-blue-600 dark:text-zinc-400 dark:hover:text-blue-400"
-      >
-        ← Kembali ke Dashboard
-      </Link>
-
-      <h1 className="mb-6 text-2xl font-semibold text-zinc-950 dark:text-zinc-50">
-        Activity Logs
-      </h1>
+    <div className="w-full px-4 sm:px-6 md:px-8 py-6">
+      <AdminPageHeader
+        title="Activity Logs"
+        subtitle="Riwayat audit log seluruh aktivitas tindakan admin di platform"
+        backLink={{ href: "/admin", label: "Kembali ke Dashboard" }}
+      />
 
       <LogFilters admins={adminUsers ?? []} />
 
@@ -112,7 +107,7 @@ export default async function AdminLogsPage({
                       {log.order ? (
                         <Link
                           href={`/admin/order/${log.order.id}`}
-                          className="font-medium text-blue-600 hover:underline dark:text-blue-400"
+                          className="font-semibold text-zinc-950 hover:underline dark:text-zinc-50"
                         >
                           {log.order.id.slice(0, 8)}
                           {log.order.product?.nama_barang &&

@@ -1,6 +1,6 @@
-export default function AdminLoading() {
+export default function AdminDashboardLoading() {
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-10">
+    <div className="w-full px-4 sm:px-6 md:px-8 py-6">
       <div className="mb-6 h-8 w-52 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" />
 
       {/* Stat card skeletons */}
