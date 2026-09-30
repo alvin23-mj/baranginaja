@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, type FormEvent } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Toast } from "@/components/toast";
@@ -203,31 +204,65 @@ export function SellerSection({ user }: { user: UserWithKampus }) {
       )}
 
       {isSeller && (
-        <div className="flex flex-col gap-4 rounded-lg border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-          <div>
-            <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">
-              Data Rekening
-            </h2>
-            <p className="text-sm text-zinc-600 dark:text-zinc-400">
-              Perubahan data rekening akan digunakan untuk pencairan dana selanjutnya.
-            </p>
-          </div>
-          <form onSubmit={handleBankSubmit} className="flex flex-col gap-4">
-            <BankFields
-              idPrefix="bank"
-              value={bankValue}
-              onChange={setBankValue}
-              errors={bankErrors}
-            />
-            <button
-              type="submit"
-              disabled={bankLoading}
-              className="h-11 w-full rounded-md bg-blue-600 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-60"
+        <>
+          {/* Quick links penjual */}
+          <div className="grid grid-cols-2 gap-3">
+            <Link
+              href="/jual"
+              className="flex flex-col gap-1 rounded-lg border border-zinc-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900"
             >
-              {bankLoading ? "Menyimpan..." : "Simpan Data Rekening"}
-            </button>
-          </form>
-        </div>
+              <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                Toko Saya
+              </span>
+              <span className="text-sm font-semibold text-zinc-950 dark:text-zinc-50">
+                Kelola Produk
+              </span>
+              <span className="mt-0.5 text-xs text-zinc-400 dark:text-zinc-500">
+                Tambah &amp; atur barang jualanmu
+              </span>
+            </Link>
+            <Link
+              href="/jual/pendapatan"
+              className="flex flex-col gap-1 rounded-lg border border-zinc-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900"
+            >
+              <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                Keuangan
+              </span>
+              <span className="text-sm font-semibold text-zinc-950 dark:text-zinc-50">
+                Pendapatan Saya
+              </span>
+              <span className="mt-0.5 text-xs text-zinc-400 dark:text-zinc-500">
+                Lihat riwayat &amp; pencairan dana
+              </span>
+            </Link>
+          </div>
+
+          <div className="flex flex-col gap-4 rounded-lg border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+            <div>
+              <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">
+                Data Rekening
+              </h2>
+              <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                Perubahan data rekening akan digunakan untuk pencairan dana selanjutnya.
+              </p>
+            </div>
+            <form onSubmit={handleBankSubmit} className="flex flex-col gap-4">
+              <BankFields
+                idPrefix="bank"
+                value={bankValue}
+                onChange={setBankValue}
+                errors={bankErrors}
+              />
+              <button
+                type="submit"
+                disabled={bankLoading}
+                className="h-11 w-full rounded-md bg-blue-600 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-60"
+              >
+                {bankLoading ? "Menyimpan..." : "Simpan Data Rekening"}
+              </button>
+            </form>
+          </div>
+        </>
       )}
 
       {showModal && (

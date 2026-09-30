@@ -38,6 +38,7 @@ export function NavbarClient({
   // Dropdown & modal states (activeDropdown is mutually exclusive: "user" | "help" | null)
   const [activeDropdown, setActiveDropdown] = useState<"user" | "help" | null>(null);
   const [lockedDropdown, setLockedDropdown] = useState<"user" | "help" | null>(null);
+  const [userDropdownPos, setUserDropdownPos] = useState({ top: 0, right: 0 });
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [helpModalOpen, setHelpModalOpen] = useState(false);
@@ -52,8 +53,10 @@ export function NavbarClient({
   const [logoutLoading, setLogoutLoading] = useState(false);
 
   const userDropdownRef = useRef<HTMLDivElement>(null);
+  const userBarRef = useRef<HTMLDivElement>(null);
   const userToggleRef = useRef<HTMLButtonElement>(null);
   const helpToggleRef = useRef<HTMLButtonElement>(null);
+  const userDropdownPanelRef = useRef<HTMLDivElement>(null);
 
   const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -73,6 +76,13 @@ export function NavbarClient({
   // User menu handlers
   const handleUserMouseEnter = () => {
     clearDropdownTimeout();
+    if (userToggleRef.current) {
+      const rect = userToggleRef.current.getBoundingClientRect();
+      setUserDropdownPos({
+        top: rect.bottom + window.scrollY + 8,
+        right: window.innerWidth - rect.right,
+      });
+    }
     setActiveDropdown("user");
   };
 
@@ -89,6 +99,13 @@ export function NavbarClient({
     if (activeDropdown === "user" && lockedDropdown === "user") {
       closeDropdowns();
     } else {
+      if (userToggleRef.current) {
+        const rect = userToggleRef.current.getBoundingClientRect();
+        setUserDropdownPos({
+          top: rect.bottom + window.scrollY + 8,
+          right: window.innerWidth - rect.right,
+        });
+      }
       setActiveDropdown("user");
       setLockedDropdown("user");
     }
@@ -155,7 +172,9 @@ export function NavbarClient({
       const isInsideHelpToggle = helpToggleRef.current?.contains(target);
       const isInsideDropdown = userDropdownRef.current?.contains(target);
 
-      if (!isInsideUserToggle && !isInsideHelpToggle && !isInsideDropdown) {
+      const isInsideUserBar = userBarRef.current?.contains(target);
+
+      if (!isInsideUserToggle && !isInsideHelpToggle && !isInsideDropdown && !isInsideUserBar) {
         closeDropdowns();
       }
     }
@@ -191,15 +210,15 @@ export function NavbarClient({
   const navLinkClass = (href: string) =>
     `text-sm lg:text-[15px] transition-colors duration-150 ${
       isActive(href)
-        ? "text-white font-semibold"
-        : "text-zinc-300 hover:text-white font-medium"
+        ? "text-zinc-900 font-semibold"
+        : "text-zinc-500 hover:text-zinc-900 font-medium"
     }`;
 
   const mobileNavLinkClass = (href: string) =>
     `block px-3 py-2.5 rounded-xl text-[15px] font-medium transition-colors ${
       isActive(href)
-        ? "bg-zinc-800 text-white font-semibold"
-        : "text-zinc-300 hover:bg-zinc-800/60 hover:text-white"
+        ? "bg-zinc-100 text-zinc-900 font-semibold"
+        : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
     }`;
 
   // Admin routes and auth pages use their own clean layout without main navbar
@@ -208,7 +227,7 @@ export function NavbarClient({
   }
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-[#111111] border-b border-zinc-800/80 shadow-md">
+    <header className="sticky top-0 z-40 w-full bg-white border-b border-zinc-200 shadow-sm">
       <div className="container mx-auto relative flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* ========================================================================= */}
         {/* KIRI: Logo baranginaja (tulisan kecil semua)                              */}
@@ -219,8 +238,8 @@ export function NavbarClient({
             className="flex items-center group transition-opacity hover:opacity-90"
             aria-label="baranginaja"
           >
-            <span className="text-xl sm:text-[22px] font-bold tracking-tight text-white select-none">
-              barangin<span className="text-amber-700">aja</span>
+            <span className="text-xl sm:text-[22px] font-bold tracking-tight text-zinc-900 select-none">
+              barangin<span className="text-amber-600">aja</span>
             </span>
           </Link>
         </div>
@@ -246,15 +265,15 @@ export function NavbarClient({
             onClick={handleHelpClick}
             className={`inline-flex items-center gap-2 text-sm lg:text-[15px] font-medium transition-colors duration-150 cursor-pointer ${
               activeDropdown === "help" || isActive("/bantuan")
-                ? "text-white"
-                : "text-zinc-300 hover:text-white"
+                ? "text-zinc-900"
+                : "text-zinc-500 hover:text-zinc-900"
             }`}
             aria-label="Menu Bantuan"
           >
             <span>Bantuan</span>
             <svg
               className={`h-3.5 w-3.5 transition-colors duration-150 ${
-                activeDropdown === "help" ? "text-white" : "text-zinc-400"
+                activeDropdown === "help" ? "text-zinc-900" : "text-zinc-400"
               }`}
               fill="none"
               viewBox="0 0 24 24"
@@ -272,12 +291,12 @@ export function NavbarClient({
         {/* ========================================================================= */}
         {/* KANAN: Ikon Toko (Kelola Toko), Masuk / Profil, Tombol Jual Barang        */}
         {/* ========================================================================= */}
-        <div className="flex items-center gap-4 sm:gap-5 shrink-0 z-10">
+        <div className="flex items-center gap-4 lg:gap-6 shrink-0 z-10">
           {/* Ikon Toko / Kelola Toko */}
           <button
             type="button"
             onClick={handleStoreClick}
-            className="text-zinc-300 hover:text-white transition-colors p-1 cursor-pointer flex items-center justify-center"
+            className="text-zinc-400 hover:text-zinc-900 transition-colors p-1 cursor-pointer flex items-center justify-center"
             title="Kelola Toko"
             aria-label="Kelola Toko"
           >
@@ -290,11 +309,7 @@ export function NavbarClient({
               strokeLinecap="round"
               strokeLinejoin="round"
             >
-              <path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7" />
-              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
-              <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4" />
-              <path d="M2 7h20" />
-              <path d="M22 7v3a2 2 0 0 1-2 2v0a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12v0a2 2 0 0 1-2-2V7" />
+              <path d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016 2.993 2.993 0 0 0 2.25-1.016 3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z" />
             </svg>
           </button>
 
@@ -308,17 +323,17 @@ export function NavbarClient({
               onClick={handleUserClick}
               className={`inline-flex items-center justify-center gap-2 text-sm font-medium transition-colors duration-150 cursor-pointer py-1.5 ${
                 activeDropdown === "user"
-                  ? "text-white"
-                  : "text-zinc-300 hover:text-white"
+                  ? "text-zinc-900"
+                  : "text-zinc-500 hover:text-zinc-900"
               }`}
               aria-label="Menu Pengguna"
             >
               <span className="truncate max-w-[100px] sm:max-w-[130px]">
-                {user.name ? user.name.split(" ")[0] : "Akun"}
+                {user.name ? user.name.split(" ").slice(0, 2).join(" ") : "Akun"}
               </span>
               <svg
                 className={`h-3.5 w-3.5 transition-colors duration-150 ${
-                  activeDropdown === "user" ? "text-white" : "text-zinc-400"
+                  activeDropdown === "user" ? "text-zinc-900" : "text-zinc-400"
                 }`}
                 fill="none"
                 viewBox="0 0 24 24"
@@ -334,7 +349,7 @@ export function NavbarClient({
           ) : (
             <Link
               href="/login"
-              className="text-zinc-300 hover:text-white text-sm font-medium transition-colors px-3 py-2 cursor-pointer"
+              className="text-zinc-500 hover:text-zinc-900 text-sm font-medium transition-colors px-3 py-2 cursor-pointer"
             >
               Masuk
             </Link>
@@ -354,7 +369,7 @@ export function NavbarClient({
               }
               router.push("/jual/tambah");
             }}
-            className="inline-flex items-center justify-center bg-white text-zinc-950 hover:bg-zinc-200 active:scale-95 transition-all duration-150 text-sm font-semibold px-4 py-2 rounded-lg shadow-sm cursor-pointer"
+            className="inline-flex items-center justify-center bg-zinc-900 text-white hover:bg-zinc-700 active:scale-95 transition-all duration-150 text-sm font-semibold px-4 py-2 rounded-lg shadow-sm cursor-pointer"
           >
             Jual Barang
           </button>
@@ -363,7 +378,7 @@ export function NavbarClient({
           <button
             type="button"
             onClick={() => setMobileMenuOpen((prev) => !prev)}
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-700 text-zinc-300 hover:text-white md:hidden cursor-pointer"
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-300 text-zinc-500 hover:text-zinc-900 md:hidden cursor-pointer"
             aria-label="Buka menu navigasi"
           >
             {mobileMenuOpen ? (
@@ -380,204 +395,32 @@ export function NavbarClient({
       </div>
 
       {/* ========================================================================= */}
-      {/* DROPDOWN BAR: PROFIL SAYA & KELUAR / BANTUAN                              */}
+      {/* DROPDOWN BAR: BANTUAN (full-width bar)                                    */}
       {/* ========================================================================= */}
       <div
         ref={userDropdownRef}
         onMouseEnter={handleDropdownBarMouseEnter}
         onMouseLeave={handleDropdownBarMouseLeave}
-        className={`w-full overflow-hidden transition-all duration-300 ease-in-out bg-[#111111] ${
-          (activeDropdown === "help") || (activeDropdown === "user" && user)
+        className={`w-full overflow-hidden transition-all duration-300 ease-in-out bg-white border-t border-zinc-100 ${
+          activeDropdown === "help"
             ? "max-h-64 opacity-100 pt-6 pb-5 sm:pt-7 sm:pb-6"
             : "max-h-0 opacity-0 pt-0 pb-0 pointer-events-none"
         }`}
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          {/* 1. Dropdown Pengguna: Akun Saya, Fitur Penjual, Panel Admin (jika admin) & Sesi Akun */}
-          {user && activeDropdown === "user" && (
-            <div className={`grid grid-cols-2 ${isAdmin ? "lg:grid-cols-4" : "lg:grid-cols-3"} divide-x divide-zinc-800/80 w-full animate-in fade-in duration-150`}>
-              {/* Kolom 1: Akun Saya */}
-              <div className="py-2 pr-4 sm:pr-6 flex flex-col items-start gap-2.5">
-                <span className="text-[15px] font-semibold text-white">
-                  Akun Saya
-                </span>
-                <div className="flex flex-col items-start gap-2 w-full">
-                  <Link
-                    href="/profil"
-                    onClick={closeDropdowns}
-                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer"
-                  >
-                    <svg
-                      className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1.8}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                      <circle cx="12" cy="7" r="4" />
-                    </svg>
-                    <span>Profil Saya</span>
-                  </Link>
-
-                  <Link
-                    href="/pesanan-saya"
-                    onClick={closeDropdowns}
-                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer"
-                  >
-                    <svg
-                      className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1.8}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
-                      <path d="M3 6h18" />
-                      <path d="M16 10a4 4 0 0 1-8 0" />
-                    </svg>
-                    <span>Pesanan Saya</span>
-                  </Link>
-                </div>
-              </div>
-
-              {/* Kolom 2: Fitur Penjual */}
-              <div className="py-2 px-4 sm:px-6 flex flex-col items-start gap-2.5">
-                <span className="text-[15px] font-semibold text-white">
-                  Fitur Penjual
-                </span>
-                <div className="flex flex-col items-start gap-2 w-full">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      handleStoreClick();
-                      closeDropdowns();
-                    }}
-                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
-                  >
-                    <svg
-                      className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1.8}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7" />
-                      <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
-                      <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4" />
-                      <path d="M2 7h20" />
-                    </svg>
-                    <span>Kelola Toko</span>
-                  </button>
-
-                  <Link
-                    href="/jual/tambah"
-                    onClick={closeDropdowns}
-                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer"
-                  >
-                    <svg
-                      className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1.8}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <circle cx="12" cy="12" r="10" />
-                      <line x1="12" y1="8" x2="12" y2="16" />
-                      <line x1="8" y1="12" x2="16" y2="12" />
-                    </svg>
-                    <span>Jual Barang Baru</span>
-                  </Link>
-                </div>
-              </div>
-
-              {/* Kolom 3: Panel Admin (Khusus Role Admin) */}
-              {isAdmin && (
-                <div className="py-2 px-4 sm:px-6 flex flex-col items-start gap-2.5">
-                  <span className="text-[15px] font-semibold text-white">
-                    Panel Admin
-                  </span>
-                  <div className="flex flex-col items-start gap-2 w-full">
-                    <Link
-                      href="/admin"
-                      onClick={closeDropdowns}
-                      className="group inline-flex items-center gap-2.5 py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer"
-                    >
-                      <svg
-                        className="h-4 w-4 text-zinc-400 group-hover:text-white transition-colors shrink-0"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth={1.8}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <rect width="18" height="18" x="3" y="3" rx="2" />
-                        <path d="M9 3v18" />
-                        <path d="m14 9 3 3-3 3" />
-                      </svg>
-                      <span>Buka Panel Admin</span>
-                      <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 border border-zinc-700">
-                        Admin
-                      </span>
-                    </Link>
-                  </div>
-                </div>
-              )}
-
-              {/* Kolom Terakhir: Sesi Akun */}
-              <div className="py-2 pl-4 sm:pl-6 flex flex-col items-start gap-2.5">
-                <span className="text-[15px] font-semibold text-white">
-                  Sesi Akun
-                </span>
-                <div className="flex flex-col items-start gap-2 w-full">
-                  <button
-                    type="button"
-                    onClick={handleDirectLogout}
-                    disabled={logoutLoading}
-                    className="group inline-flex items-center gap-2.5 py-1 text-[14px] font-medium text-zinc-300 hover:text-red-400 transition-colors duration-150 cursor-pointer text-left"
-                  >
-                    <svg
-                      className="h-4 w-4 text-zinc-400 group-hover:text-red-400 transition-colors shrink-0"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1.8}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                      <polyline points="16 17 21 12 16 7" />
-                      <line x1="21" y1="12" x2="9" y2="12" />
-                    </svg>
-                    <span>{logoutLoading ? "Memproses Keluar..." : "Keluar dari Akun"}</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* 2. Dropdown Bantuan: 4 Kolom Tombol Navigasi ke Halaman Sendiri-Sendiri */}
+          {/* Dropdown Bantuan: 4 Kolom */}
           {activeDropdown === "help" && (
-            <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-zinc-800/80 w-full animate-in fade-in duration-150">
+            <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-zinc-200 w-full animate-in fade-in duration-150">
               {/* Kolom 1: Panduan Transaksi */}
               <div className="py-2 pr-4 sm:pr-6 flex flex-col items-start gap-2.5">
-                <span className="text-[15px] font-semibold text-white">
+                <span className="text-[15px] font-semibold text-zinc-900">
                   Panduan Transaksi
                 </span>
                 <div className="flex flex-col items-start gap-2 w-full">
                   <Link
                     href="/panduan/cara-membeli"
                     onClick={closeDropdowns}
-                    className="py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
+                    className="py-1 text-[14px] font-medium text-zinc-500 hover:text-zinc-900 transition-colors duration-150 cursor-pointer text-left"
                   >
                     Cara Membeli
                   </Link>
@@ -585,7 +428,7 @@ export function NavbarClient({
                   <Link
                     href="/panduan/cara-menjual"
                     onClick={closeDropdowns}
-                    className="py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
+                    className="py-1 text-[14px] font-medium text-zinc-500 hover:text-zinc-900 transition-colors duration-150 cursor-pointer text-left"
                   >
                     Cara Menjual
                   </Link>
@@ -593,7 +436,7 @@ export function NavbarClient({
                   <Link
                     href="/panduan/daftar-penjual"
                     onClick={closeDropdowns}
-                    className="py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
+                    className="py-1 text-[14px] font-medium text-zinc-500 hover:text-zinc-900 transition-colors duration-150 cursor-pointer text-left"
                   >
                     Daftar Jadi Penjual
                   </Link>
@@ -602,14 +445,14 @@ export function NavbarClient({
 
               {/* Kolom 2: Pengiriman & Keamanan */}
               <div className="py-2 px-4 sm:px-6 flex flex-col items-start gap-2.5">
-                <span className="text-[15px] font-semibold text-white">
+                <span className="text-[15px] font-semibold text-zinc-900">
                   Pengiriman & Keamanan
                 </span>
                 <div className="flex flex-col items-start gap-2 w-full">
                   <Link
                     href="/panduan/tarif-ongkir"
                     onClick={closeDropdowns}
-                    className="py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
+                    className="py-1 text-[14px] font-medium text-zinc-500 hover:text-zinc-900 transition-colors duration-150 cursor-pointer text-left"
                   >
                     Tarif & Ongkir
                   </Link>
@@ -617,7 +460,7 @@ export function NavbarClient({
                   <Link
                     href="/panduan/keamanan-cod"
                     onClick={closeDropdowns}
-                    className="py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
+                    className="py-1 text-[14px] font-medium text-zinc-500 hover:text-zinc-900 transition-colors duration-150 cursor-pointer text-left"
                   >
                     Keamanan & COD
                   </Link>
@@ -626,14 +469,14 @@ export function NavbarClient({
 
               {/* Kolom 3: Layanan Bantuan */}
               <div className="py-2 px-4 sm:px-6 flex flex-col items-start gap-2.5">
-                <span className="text-[15px] font-semibold text-white">
+                <span className="text-[15px] font-semibold text-zinc-900">
                   Layanan Bantuan
                 </span>
                 <div className="flex flex-col items-start gap-2 w-full">
                   <Link
                     href="/bantuan"
                     onClick={closeDropdowns}
-                    className="py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer"
+                    className="py-1 text-[14px] font-medium text-zinc-500 hover:text-zinc-900 transition-colors duration-150 cursor-pointer"
                   >
                     Pusat Bantuan
                   </Link>
@@ -641,7 +484,7 @@ export function NavbarClient({
                   <Link
                     href="/faq"
                     onClick={closeDropdowns}
-                    className="py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer"
+                    className="py-1 text-[14px] font-medium text-zinc-500 hover:text-zinc-900 transition-colors duration-150 cursor-pointer"
                   >
                     Pertanyaan Umum (FAQ)
                   </Link>
@@ -650,7 +493,7 @@ export function NavbarClient({
 
               {/* Kolom 4: Dukungan & Ulasan */}
               <div className="py-2 pl-4 sm:pl-6 flex flex-col items-start gap-2.5">
-                <span className="text-[15px] font-semibold text-white">
+                <span className="text-[15px] font-semibold text-zinc-900">
                   Dukungan & Ulasan
                 </span>
                 <div className="flex flex-col items-start gap-2 w-full">
@@ -659,7 +502,7 @@ export function NavbarClient({
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={closeDropdowns}
-                    className="py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer"
+                    className="py-1 text-[14px] font-medium text-zinc-500 hover:text-zinc-900 transition-colors duration-150 cursor-pointer"
                   >
                     Beri Kami Semangat
                   </a>
@@ -667,7 +510,7 @@ export function NavbarClient({
                   <Link
                     href="/ulasan"
                     onClick={closeDropdowns}
-                    className="py-1 text-[14px] font-medium text-zinc-300 hover:text-white transition-colors duration-150 cursor-pointer text-left"
+                    className="py-1 text-[14px] font-medium text-zinc-500 hover:text-zinc-900 transition-colors duration-150 cursor-pointer text-left"
                   >
                     Rating Kepuasan Website
                   </Link>
@@ -678,16 +521,123 @@ export function NavbarClient({
         </div>
       </div>
 
+
+      {/* ========================================================================= */}
+      {/* DROPDOWN USER: Full-width bar (seperti Bantuan)                           */}
+      {/* ========================================================================= */}
+      {user && (
+        <div
+          ref={userBarRef}
+          onMouseEnter={() => clearDropdownTimeout()}
+          onMouseLeave={handleUserMouseLeave}
+          className={`w-full overflow-hidden transition-all duration-300 ease-in-out bg-white border-t border-zinc-100 ${
+            activeDropdown === "user"
+              ? "max-h-72 opacity-100 pt-6 pb-5 sm:pt-7 sm:pb-6"
+              : "max-h-0 opacity-0 pt-0 pb-0 pointer-events-none"
+          }`}
+        >
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            {activeDropdown === "user" && (
+              <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-zinc-200 w-full animate-in fade-in duration-150">
+
+                {/* Kolom 1: Info Pengguna */}
+                <div className="py-2 pr-4 sm:pr-6 flex flex-col items-start gap-2">
+                  <span className="text-[15px] font-semibold text-zinc-900 truncate max-w-full">
+                    {user.name || "Pengguna"}
+                  </span>
+                  <p className="text-[12px] text-zinc-400 truncate max-w-full">{user.email}</p>
+                </div>
+
+                {/* Kolom 2: Akun Saya */}
+                <div className="py-2 px-4 sm:px-6 flex flex-col items-start gap-2.5">
+                  <span className="text-[15px] font-semibold text-zinc-900">
+                    Akun Saya
+                  </span>
+                  <div className="flex flex-col items-start gap-2 w-full">
+                    <Link
+                      href="/profil"
+                      onClick={closeDropdowns}
+                      className="py-1 text-[14px] font-medium text-zinc-500 hover:text-zinc-900 transition-colors duration-150 cursor-pointer text-left"
+                    >
+                      Profil Saya
+                    </Link>
+                    <Link
+                      href="/pesanan-saya"
+                      onClick={closeDropdowns}
+                      className="py-1 text-[14px] font-medium text-zinc-500 hover:text-zinc-900 transition-colors duration-150 cursor-pointer text-left"
+                    >
+                      Pesanan Saya
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Kolom 3: Toko */}
+                <div className="py-2 px-4 sm:px-6 flex flex-col items-start gap-2.5">
+                  <span className="text-[15px] font-semibold text-zinc-900">
+                    Toko
+                  </span>
+                  <div className="flex flex-col items-start gap-2 w-full">
+                    <button
+                      type="button"
+                      onClick={() => { handleStoreClick(); closeDropdowns(); }}
+                      className="py-1 text-[14px] font-medium text-zinc-500 hover:text-zinc-900 transition-colors duration-150 cursor-pointer text-left"
+                    >
+                      Kelola Toko
+                    </button>
+                    {isSeller && (
+                      <Link
+                        href="/jual/tambah"
+                        onClick={closeDropdowns}
+                        className="py-1 text-[14px] font-medium text-zinc-500 hover:text-zinc-900 transition-colors duration-150 cursor-pointer text-left"
+                      >
+                        Jual Barang Baru
+                      </Link>
+                    )}
+                  </div>
+                </div>
+
+                {/* Kolom 4: Lainnya */}
+                <div className="py-2 pl-4 sm:pl-6 flex flex-col items-start gap-2.5">
+                  <span className="text-[15px] font-semibold text-zinc-900">
+                    Lainnya
+                  </span>
+                  <div className="flex flex-col items-start gap-2 w-full">
+                    {isAdmin && (
+                      <Link
+                        href="/admin"
+                        onClick={closeDropdowns}
+                        className="py-1 text-[14px] font-medium text-zinc-500 hover:text-zinc-900 transition-colors duration-150 cursor-pointer text-left"
+                      >
+                        Panel Admin
+                      </Link>
+                    )}
+                    <button
+                      type="button"
+                      onClick={handleDirectLogout}
+                      disabled={logoutLoading}
+                      className="py-1 text-[14px] font-medium text-red-400 hover:text-red-600 transition-colors duration-150 cursor-pointer text-left"
+                    >
+                      {logoutLoading ? "Memproses Keluar..." : "Keluar dari Akun"}
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* ========================================================================= */}
       {/* MOBILE DRAWER MENU                                                        */}
       {/* ========================================================================= */}
       {mobileMenuOpen && (
-        <div className="border-t border-zinc-800 bg-[#141414] px-4 py-4 md:hidden animate-in slide-in-from-top-2 duration-150">
+        <div className="border-t border-zinc-200 bg-white px-4 py-4 md:hidden animate-in slide-in-from-top-2 duration-150">
           <div className="flex flex-col gap-1">
             {(districtName || campusName) && (
-              <div className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-zinc-400">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-zinc-500">
                 <svg
-                  className="h-3.5 w-3.5 shrink-0 text-zinc-400"
+                  className="h-3.5 w-3.5 shrink-0 text-zinc-500"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
@@ -710,7 +660,7 @@ export function NavbarClient({
               </div>
             )}
 
-            <p className="px-3 pt-1 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
+            <p className="px-3 pt-1 text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
               Menu Utama
             </p>
             <Link href="/" className={mobileNavLinkClass("/")}>
@@ -725,28 +675,28 @@ export function NavbarClient({
             <Link
               href="/bantuan"
               onClick={() => setMobileMenuOpen(false)}
-              className="text-left block w-full px-3 py-2.5 rounded-lg text-[15px] font-medium text-zinc-300 hover:bg-zinc-800 hover:text-white cursor-pointer"
+              className="text-left block w-full px-3 py-2.5 rounded-lg text-[15px] font-medium text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 cursor-pointer"
             >
               Pusat Bantuan
             </Link>
             <Link
               href="/panduan/tarif-ongkir"
               onClick={() => setMobileMenuOpen(false)}
-              className="text-left block w-full px-3 py-2.5 rounded-lg text-[15px] font-medium text-zinc-300 hover:bg-zinc-800 hover:text-white cursor-pointer"
+              className="text-left block w-full px-3 py-2.5 rounded-lg text-[15px] font-medium text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 cursor-pointer"
             >
               Tarif & Ongkir
             </Link>
             <Link
               href="/panduan/keamanan-cod"
               onClick={() => setMobileMenuOpen(false)}
-              className="text-left block w-full px-3 py-2.5 rounded-lg text-[15px] font-medium text-zinc-300 hover:bg-zinc-800 hover:text-white cursor-pointer"
+              className="text-left block w-full px-3 py-2.5 rounded-lg text-[15px] font-medium text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 cursor-pointer"
             >
               Keamanan & COD
             </Link>
             <Link
               href="/faq"
               onClick={() => setMobileMenuOpen(false)}
-              className="text-left block w-full px-3 py-2.5 rounded-lg text-[15px] font-medium text-zinc-300 hover:bg-zinc-800 hover:text-white cursor-pointer"
+              className="text-left block w-full px-3 py-2.5 rounded-lg text-[15px] font-medium text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 cursor-pointer"
             >
               Pertanyaan Umum (FAQ)
             </Link>
@@ -755,14 +705,14 @@ export function NavbarClient({
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setMobileMenuOpen(false)}
-              className="text-left block w-full px-3 py-2.5 rounded-lg text-[15px] font-medium text-zinc-300 hover:bg-zinc-800 hover:text-white cursor-pointer"
+              className="text-left block w-full px-3 py-2.5 rounded-lg text-[15px] font-medium text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 cursor-pointer"
             >
               Beri Kami Semangat
             </a>
             <Link
               href="/ulasan"
               onClick={() => setMobileMenuOpen(false)}
-              className="text-left block w-full px-3 py-2.5 rounded-lg text-[15px] font-medium text-zinc-300 hover:bg-zinc-800 hover:text-white cursor-pointer"
+              className="text-left block w-full px-3 py-2.5 rounded-lg text-[15px] font-medium text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 cursor-pointer"
             >
               Rating Kepuasan Website
             </Link>
@@ -772,14 +722,14 @@ export function NavbarClient({
                 setMobileMenuOpen(false);
                 handleStoreClick();
               }}
-              className="text-left block w-full px-3 py-2.5 rounded-lg text-[15px] font-medium text-zinc-300 hover:bg-zinc-800 hover:text-white cursor-pointer"
+              className="text-left block w-full px-3 py-2.5 rounded-lg text-[15px] font-medium text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 cursor-pointer"
             >
               Kelola Toko
             </button>
 
             {user && isSeller && (
               <>
-                <p className="px-3 pt-3 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
+                <p className="px-3 pt-3 text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
                   Fitur Penjual
                 </p>
                 <Link href="/jual/tambah" className={mobileNavLinkClass("/jual/tambah")}>
@@ -803,18 +753,18 @@ export function NavbarClient({
               </div>
             )}
 
-            <div className="mt-3 border-t border-zinc-800 pt-3">
+            <div className="mt-3 border-t border-zinc-200 pt-3">
               {user ? (
                 <div className="space-y-2">
                   <Link
                     href="/profil"
-                    className="block px-3 py-2 rounded-lg text-sm font-medium text-zinc-200 hover:bg-zinc-800"
+                    className="block px-3 py-2 rounded-lg text-sm font-medium text-zinc-700 hover:bg-zinc-100"
                   >
                     Profil Saya ({user.name || user.email})
                   </Link>
                   <Link
                     href="/pesanan-saya"
-                    className="block px-3 py-2 rounded-lg text-sm font-medium text-zinc-200 hover:bg-zinc-800"
+                    className="block px-3 py-2 rounded-lg text-sm font-medium text-zinc-700 hover:bg-zinc-100"
                   >
                     Pesanan Saya
                   </Link>
@@ -827,7 +777,7 @@ export function NavbarClient({
                   <Link
                     href="/login"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex-1 rounded-lg border border-zinc-700 py-2.5 text-center text-sm font-medium text-zinc-200 hover:bg-zinc-800 cursor-pointer"
+                    className="flex-1 rounded-lg border border-zinc-300 py-2.5 text-center text-sm font-medium text-zinc-700 hover:bg-zinc-100 cursor-pointer"
                   >
                     Masuk
                   </Link>
@@ -1053,11 +1003,11 @@ export function NavbarClient({
         </div>
       )}
       {sellerPromptOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-          <div className="w-full max-w-md rounded-2xl border border-zinc-800 bg-[#161616] p-6 shadow-2xl text-white">
-            <div className="flex items-center justify-between pb-4 border-b border-zinc-800">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
+          <div className="w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl">
+            <div className="flex items-center justify-between pb-4 border-b border-zinc-100">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-800 text-white">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-100 text-zinc-700">
                   <svg
                     className="h-5 w-5"
                     viewBox="0 0 24 24"
@@ -1074,10 +1024,10 @@ export function NavbarClient({
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-white">
+                  <h3 className="text-base font-bold text-zinc-950">
                     Kelola Toko
                   </h3>
-                  <p className="text-xs text-zinc-400">
+                  <p className="text-xs text-zinc-500">
                     Khusus Penjual Terverifikasi
                   </p>
                 </div>
@@ -1085,7 +1035,7 @@ export function NavbarClient({
               <button
                 type="button"
                 onClick={() => setSellerPromptOpen(false)}
-                className="rounded-lg p-1.5 text-zinc-400 hover:bg-zinc-800 hover:text-white cursor-pointer"
+                className="rounded-lg p-1.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 cursor-pointer"
                 aria-label="Tutup modal ajakan penjual"
               >
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -1094,12 +1044,12 @@ export function NavbarClient({
               </button>
             </div>
 
-            <div className="mt-4 space-y-3.5 text-sm text-zinc-300">
+            <div className="mt-4 space-y-3.5 text-sm text-zinc-600">
               <p className="leading-relaxed">
-                Anda belum terdaftar sebagai penjual di <strong className="text-white">BaranginAja</strong>.
+                Anda belum terdaftar sebagai penjual di <strong className="text-zinc-950">BaranginAja</strong>.
               </p>
-              <div className="rounded-xl border border-zinc-800 bg-zinc-900/80 p-3.5 space-y-2 text-xs text-zinc-400">
-                <p className="font-semibold text-zinc-200">
+              <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-3.5 space-y-2 text-xs text-zinc-500">
+                <p className="font-semibold text-zinc-700">
                   Keuntungan Menjadi Penjual:
                 </p>
                 <ul className="list-disc list-inside space-y-1">
@@ -1108,7 +1058,7 @@ export function NavbarClient({
                   <li>Tarik pendapatan jualan langsung ke rekening Anda</li>
                 </ul>
               </div>
-              <p className="text-xs text-zinc-400">
+              <p className="text-xs text-zinc-500">
                 Ayo aktifkan akun penjual Anda sekarang melalui halaman profil!
               </p>
             </div>
@@ -1117,7 +1067,7 @@ export function NavbarClient({
               <button
                 type="button"
                 onClick={() => setSellerPromptOpen(false)}
-                className="rounded-lg border border-zinc-800 px-4 py-2 text-xs font-medium text-zinc-400 hover:bg-zinc-800 hover:text-white cursor-pointer"
+                className="rounded-lg border border-zinc-200 px-4 py-2 text-xs font-medium text-zinc-600 hover:bg-zinc-50 cursor-pointer"
               >
                 Nanti Saja
               </button>
@@ -1127,7 +1077,7 @@ export function NavbarClient({
                   setSellerPromptOpen(false);
                   router.push("/profil");
                 }}
-                className="rounded-lg bg-white px-4 py-2 text-xs font-semibold text-zinc-950 hover:bg-zinc-200 cursor-pointer shadow-sm"
+                className="rounded-lg bg-zinc-950 px-4 py-2 text-xs font-semibold text-white hover:bg-zinc-800 cursor-pointer shadow-sm"
               >
                 Daftar Sebagai Penjual &rarr;
               </button>

@@ -37,11 +37,10 @@ export function ProductGallery({
               key={url}
               type="button"
               onClick={() => setActiveIndex(index)}
-              className={`aspect-square overflow-hidden rounded-lg border-2 ${
-                index === activeIndex
+              className={`aspect-square overflow-hidden rounded-lg border-2 ${index === activeIndex
                   ? "border-zinc-950 dark:border-zinc-50"
                   : "border-transparent"
-              }`}
+                }`}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={url} alt="" className="h-full w-full object-cover" />
