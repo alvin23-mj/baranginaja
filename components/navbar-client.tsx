@@ -221,8 +221,13 @@ export function NavbarClient({
         : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
     }`;
 
-  // Admin routes and auth pages use their own clean layout without main navbar
-  if (pathname.startsWith("/admin") || pathname === "/login" || pathname === "/register") {
+  // Admin routes, user dashboard, and auth pages use their own clean layout without main navbar
+  if (
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/jual") ||
+    pathname === "/login" ||
+    pathname === "/register"
+  ) {
     return null;
   }
 

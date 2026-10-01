@@ -9,6 +9,7 @@ export function Footer() {
   // Sembunyikan footer di halaman admin, login, atau register (selaras dengan navbar)
   if (
     pathname.startsWith("/admin") ||
+    pathname.startsWith("/jual") ||
     pathname === "/login" ||
     pathname === "/register"
   ) {

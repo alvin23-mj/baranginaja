@@ -7,7 +7,7 @@ export function AdminThemeGuard() {
   const pathname = usePathname();
 
   useEffect(() => {
-    if (pathname.startsWith("/admin")) {
+    if (pathname.startsWith("/admin") || pathname.startsWith("/jual")) {
       const saved = localStorage.getItem("theme");
       if (saved === "dark") {
         document.documentElement.classList.add("dark");

@@ -4,6 +4,7 @@ import { Footer } from "@/components/footer";
 import { AdminThemeGuard } from "@/components/admin-theme-guard";
 import { ExpirationTicker } from "@/components/expiration-ticker";
 import "./globals.css";
+import "./reckless-font.css";
 
 export const metadata: Metadata = {
   title: "BaranginAja - Marketplace Jual Beli 31 Kecamatan Surabaya",
@@ -33,7 +34,7 @@ export default function RootLayout({
             __html: `
               (function() {
                 try {
-                  if (window.location.pathname.startsWith('/admin')) {
+                  if (window.location.pathname.startsWith('/admin') || window.location.pathname.startsWith('/jual')) {
                     var theme = localStorage.getItem('theme');
                     if (theme === 'dark') {
                       document.documentElement.classList.add('dark');
@@ -55,7 +56,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Pathway+Extreme:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Pathway+Extreme:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
           rel="stylesheet"
         />
       </head>

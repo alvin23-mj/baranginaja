@@ -2,20 +2,16 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { PRODUCT_PHOTOS_BUCKET, getStoragePathFromPublicUrl } from "@/lib/supabase/storage";
 import { formatRupiah } from "@/lib/pricing";
 import { Toast } from "@/components/toast";
+import { Check, Clock, CheckCircle2, Eye, Lock, Pencil, Trash2 } from "lucide-react";
 import type { ProductStatus, ProductWithCategory } from "@/lib/types/database";
 
-const TABS: ProductStatus[] = ["Tersedia", "Dipesan", "Terjual"];
-
-const STATUS_CLASS: Record<ProductStatus, string> = {
-  Tersedia: "bg-emerald-50 text-emerald-700 border border-emerald-200",
-  Dipesan: "bg-amber-50 text-amber-700 border border-amber-200",
-  Terjual: "bg-zinc-100 text-zinc-700 border border-zinc-200",
-};
+const TABS = ["Semua", "Tersedia", "Dipesan", "Terjual"] as const;
+type TabType = (typeof TABS)[number];
 
 export function ProductList({
   products,
@@ -30,25 +26,30 @@ export function ProductList({
     if (searchParams.get("created") === "1") return "Produk berhasil ditambahkan.";
     if (searchParams.get("updated") === "1") return "Produk berhasil diperbarui.";
     if (searchParams.get("error") === "cannot-edit") {
-      return "Produk tidak bisa diedit karena statusnya sudah berubah.";
+      return "Produk tidak bisa diedit karena sudah dipesan atau terjual.";
     }
     return null;
   }, [searchParams]);
 
   const [items, setItems] = useState<ProductWithCategory[]>(products);
-  const [activeTab, setActiveTab] = useState<ProductStatus>(() => {
+  const [activeTab, setActiveTab] = useState<TabType>(() => {
     const hasTersedia = products.some((p) => p.status === "Tersedia");
     if (!hasTersedia) {
-      if (products.some((p) => p.status === "Dipesan")) return "Dipesan";
       if (products.some((p) => p.status === "Terjual")) return "Terjual";
+      if (products.some((p) => p.status === "Dipesan")) return "Dipesan";
     }
-    return "Tersedia";
+    return "Semua";
   });
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [confirmTarget, setConfirmTarget] = useState<ProductWithCategory | null>(null);
   const [toast, setToast] = useState<string | null>(initialToast);
 
-  const filtered = items.filter((product) => product.status === activeTab);
+  // Keep items synced if server props update
+  useEffect(() => {
+    setItems(products);
+  }, [products]);
+
+  const filtered = activeTab === "Semua" ? items : items.filter((product) => product.status === activeTab);
 
   async function handleDelete(product: ProductWithCategory) {
     setDeletingId(product.id);
@@ -82,19 +83,19 @@ export function ProductList({
   return (
     <div>
       {/* Tab Navigasi Bersih & Simpel */}
-      <div className="mb-6 flex gap-6 border-b border-zinc-200">
+      <div className="mb-6 flex gap-6 border-b border-zinc-200 dark:border-zinc-800">
         {TABS.map((tab) => {
-          const count = items.filter((p) => p.status === tab).length;
+          const count = tab === "Semua" ? items.length : items.filter((p) => p.status === tab).length;
           const isActive = activeTab === tab;
           return (
             <button
               key={tab}
               type="button"
               onClick={() => setActiveTab(tab)}
-              className={`-mb-px border-b-2 pb-3 text-sm font-medium transition-colors cursor-pointer ${
+              className={`-mb-px border-b-2 pb-3 text-sm font-normal transition-colors cursor-pointer ${
                 isActive
-                  ? "border-zinc-950 text-zinc-950 font-semibold"
-                  : "border-transparent text-zinc-500 hover:text-zinc-800"
+                  ? "border-zinc-950 text-zinc-950 dark:border-zinc-100 dark:text-zinc-100"
+                  : "border-transparent text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
               }`}
             >
               {tab} ({count})
@@ -104,152 +105,160 @@ export function ProductList({
       </div>
 
       {filtered.length === 0 ? (
-        <div className="py-14 text-center">
-          <p className="text-base text-zinc-500 font-normal">
-            {activeTab === "Tersedia"
-              ? "Belum ada barang yang tersedia saat ini."
-              : activeTab === "Dipesan"
-              ? "Belum ada barang yang sedang dipesan saat ini."
-              : "Belum ada barang yang terjual saat ini."}
+        <div className="py-14 text-center rounded-xl border border-dashed border-zinc-200 bg-white/60 p-8 dark:border-zinc-800 dark:bg-zinc-900/40">
+          <p className="text-sm text-zinc-500 font-normal dark:text-zinc-400">
+            {activeTab === "Semua"
+              ? "Belum ada produk yang kamu daftarkan."
+              : activeTab === "Tersedia"
+                ? "Belum ada barang yang tersedia saat ini."
+                : activeTab === "Dipesan"
+                  ? "Belum ada barang yang sedang dipesan saat ini."
+                  : "Belum ada barang yang terjual saat ini."}
           </p>
+          {activeTab === "Tersedia" && (
+            <Link
+              href="/jual/tambah"
+              className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-sm font-normal text-white hover:bg-blue-700 transition-colors shadow-xs"
+            >
+              + Tambah Produk Sekarang
+            </Link>
+          )}
         </div>
       ) : (
-        /* Grid Kartu Produk Persis Seperti di Katalog */
-        <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 lg:gap-6">
-          {filtered.map((product) => {
-            const canEdit = product.status === "Tersedia";
-
-            if (!canEdit) {
-              return (
-                <Link
-                  key={product.id}
-                  href={`/produk/${product.id}`}
-                  className="flex flex-col overflow-hidden rounded-xl bg-white shadow-md hover:shadow-lg transition-shadow duration-200"
-                >
-                  <div className="aspect-square w-full overflow-hidden bg-zinc-100">
-                    {product.foto_urls[0] ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={product.foto_urls[0]}
-                        alt={product.nama_barang}
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center text-xs text-zinc-400">
-                        Tanpa foto
+        /* Tabel Produk */
+        <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+          <table className="w-full text-left text-sm">
+            <thead className="border-b border-zinc-200 bg-zinc-50/75 text-sm font-normal text-zinc-500 dark:border-zinc-800 dark:bg-zinc-800/60 dark:text-zinc-400">
+              <tr>
+                <th className="px-5 py-3.5 font-normal">Produk</th>
+                <th className="px-4 py-3.5 font-normal">Kategori</th>
+                <th className="px-4 py-3.5 font-normal">Harga Jual</th>
+                <th className="px-4 py-3.5 font-normal">Status</th>
+                <th className="px-4 py-3.5 font-normal">Lokasi</th>
+                <th className="px-5 py-3.5 text-center font-normal">Aksi</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800/60">
+              {filtered.map((product) => {
+                const canEdit = product.status === "Tersedia";
+                return (
+                  <tr
+                    key={product.id}
+                    className="hover:bg-zinc-50/80 transition-colors dark:hover:bg-zinc-800/40"
+                  >
+                    {/* Produk: Foto + Nama */}
+                    <td className="px-5 py-3.5">
+                      <div className="flex items-center gap-3.5">
+                        <Link
+                          href={`/produk/${product.id}`}
+                          className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-800 border border-zinc-200/60 dark:border-zinc-700/60 block group"
+                        >
+                          {product.foto_urls[0] ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={product.foto_urls[0]}
+                              alt={product.nama_barang}
+                              className="h-full w-full object-cover transition-transform duration-200 group-hover:scale-105"
+                            />
+                          ) : (
+                            <div className="flex h-full w-full items-center justify-center text-sm text-zinc-400">
+                              No foto
+                            </div>
+                          )}
+                        </Link>
+                        <div className="min-w-0">
+                          <Link
+                            href={`/produk/${product.id}`}
+                            className="font-normal text-zinc-950 hover:text-blue-600 dark:text-zinc-100 dark:hover:text-blue-400 truncate block transition-colors max-w-xs text-sm"
+                            title={product.nama_barang}
+                          >
+                            {product.nama_barang}
+                          </Link>
+                          <span className="text-sm text-zinc-400 dark:text-zinc-500">
+                            ID: {product.id.slice(0, 8)}
+                          </span>
+                        </div>
                       </div>
-                    )}
-                  </div>
+                    </td>
 
-                  <div className="flex flex-col gap-1.5 p-3.5">
-                    <p className="truncate text-sm font-medium text-zinc-950">
-                      {product.nama_barang}
-                    </p>
-                    <p className="text-base font-bold text-zinc-950">
+                    {/* Kategori */}
+                    <td className="px-4 py-3.5 text-zinc-600 dark:text-zinc-400 text-sm font-normal whitespace-nowrap">
+                      {product.kategori?.nama_kategori || "-"}
+                    </td>
+
+                    {/* Harga Jual */}
+                    <td className="px-4 py-3.5 font-normal text-zinc-950 dark:text-zinc-50 text-sm whitespace-nowrap">
                       {formatRupiah(product.harga_jual)}
-                    </p>
-                    <div className="mt-1 flex items-center gap-1.5 text-xs text-zinc-500">
-                      <svg
-                        className="h-3.5 w-3.5 shrink-0 text-zinc-400"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
+                    </td>
+
+                    {/* Status */}
+                    <td className="px-4 py-3.5 whitespace-nowrap">
+                      <span
+                        className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-sm font-normal ${
+                          product.status === "Terjual"
+                            ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300"
+                            : product.status === "Dipesan"
+                            ? "bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300"
+                            : "bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300"
+                        }`}
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
-                        />
-                      </svg>
-                      <span className="truncate">
-                        {districtName ? `Kec. ${districtName}` : "Surabaya"}
+                        {product.status === "Terjual" ? (
+                          <Check className="h-3.5 w-3.5 shrink-0" strokeWidth={2.2} />
+                        ) : product.status === "Dipesan" ? (
+                          <Clock className="h-3.5 w-3.5 shrink-0" strokeWidth={2.2} />
+                        ) : (
+                          <CheckCircle2 className="h-3.5 w-3.5 shrink-0" strokeWidth={2.2} />
+                        )}
+                        {product.status}
                       </span>
-                    </div>
-                  </div>
-                </Link>
-              );
-            }
+                    </td>
 
-            return (
-              <div
-                key={product.id}
-                className="flex flex-col justify-between overflow-hidden rounded-xl bg-white shadow-md hover:shadow-lg transition-shadow duration-200"
-              >
-                <Link href={`/produk/${product.id}`} className="flex flex-col">
-                  <div className="aspect-square w-full overflow-hidden bg-zinc-100">
-                    {product.foto_urls[0] ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={product.foto_urls[0]}
-                        alt={product.nama_barang}
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center text-xs text-zinc-400">
-                        Tanpa foto
-                      </div>
-                    )}
-                  </div>
+                    {/* Lokasi */}
+                    <td className="px-4 py-3.5 text-zinc-600 dark:text-zinc-400 text-sm font-normal whitespace-nowrap">
+                      {districtName ? `Kec. ${districtName}` : "Surabaya"}
+                    </td>
 
-                  <div className="flex flex-col gap-1.5 p-3.5 pb-0">
-                    <p className="truncate text-sm font-medium text-zinc-950">
-                      {product.nama_barang}
-                    </p>
-                    <p className="text-base font-bold text-zinc-950">
-                      {formatRupiah(product.harga_jual)}
-                    </p>
-                    <div className="mt-1 flex items-center gap-1.5 text-xs text-zinc-500">
-                      <svg
-                        className="h-3.5 w-3.5 shrink-0 text-zinc-400"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
-                        />
-                      </svg>
-                      <span className="truncate">
-                        {districtName ? `Kec. ${districtName}` : "Surabaya"}
-                      </span>
-                    </div>
-                  </div>
-                </Link>
-
-                <div className="p-3.5 pt-2.5">
-                  <div className="flex items-center gap-2 pt-2.5 border-t border-zinc-100">
-                    <Link
-                      href={`/jual/edit/${product.id}`}
-                      className="flex-1 text-center rounded-md border border-zinc-300 py-1.5 text-xs font-medium text-zinc-700 hover:bg-zinc-50 transition-colors"
-                    >
-                      Edit
-                    </Link>
-                    <button
-                      type="button"
-                      onClick={() => setConfirmTarget(product)}
-                      className="flex-1 rounded-md border border-red-200 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
-                    >
-                      Hapus
-                    </button>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+                    {/* Aksi */}
+                    <td className="px-5 py-3.5 text-center whitespace-nowrap text-sm font-normal">
+                      {canEdit ? (
+                        <div className="flex items-center justify-center gap-2">
+                          <Link
+                            href={`/jual/edit/${product.id}`}
+                            className="inline-flex items-center gap-1.5 rounded-md bg-blue-600 px-2.5 py-1 text-sm font-normal text-white hover:bg-blue-700 transition-colors shadow-2xs"
+                          >
+                            <Pencil className="h-3.5 w-3.5 shrink-0" strokeWidth={2} />
+                            Edit
+                          </Link>
+                          <button
+                            type="button"
+                            onClick={() => setConfirmTarget(product)}
+                            className="inline-flex items-center gap-1.5 rounded-md bg-red-600 px-2.5 py-1 text-sm font-normal text-white hover:bg-red-700 transition-colors shadow-2xs cursor-pointer"
+                          >
+                            <Trash2 className="h-3.5 w-3.5 shrink-0" strokeWidth={2} />
+                            Hapus
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="flex items-center justify-center gap-2">
+                          <Link
+                            href={`/produk/${product.id}`}
+                            className="inline-flex items-center gap-1.5 rounded-md bg-blue-600 px-2.5 py-1 text-sm font-normal text-white hover:bg-blue-700 transition-colors shadow-2xs"
+                          >
+                            <Eye className="h-3.5 w-3.5 shrink-0" strokeWidth={2} />
+                            Lihat Detail
+                          </Link>
+                          <span className="inline-flex items-center gap-1.5 text-sm font-normal text-zinc-500 dark:text-zinc-400 py-1 px-2.5 rounded-md bg-zinc-100 dark:bg-zinc-800 select-none">
+                            <Lock className="h-3.5 w-3.5 shrink-0" strokeWidth={2} />
+                            Terkunci
+                          </span>
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       )}
 
@@ -288,4 +297,3 @@ export function ProductList({
     </div>
   );
 }
-

@@ -94,7 +94,7 @@ export function AdminSidebar({ adminName, adminEmail }: AdminSidebarProps) {
       icon: (active) => (
         <svg
           className={`h-5 w-5 transition-colors ${
-            active ? "text-white dark:text-zinc-950" : "text-zinc-500 group-hover:text-zinc-900 dark:text-zinc-400 dark:group-hover:text-zinc-100"
+            active ? "text-zinc-900 dark:text-zinc-100" : "text-zinc-500 group-hover:text-zinc-900 dark:text-zinc-400 dark:group-hover:text-zinc-100"
           }`}
           fill="none"
           viewBox="0 0 24 24"
@@ -115,7 +115,7 @@ export function AdminSidebar({ adminName, adminEmail }: AdminSidebarProps) {
       icon: (active) => (
         <svg
           className={`h-5 w-5 transition-colors ${
-            active ? "text-white dark:text-zinc-950" : "text-zinc-500 group-hover:text-zinc-900 dark:text-zinc-400 dark:group-hover:text-zinc-100"
+            active ? "text-zinc-900 dark:text-zinc-100" : "text-zinc-500 group-hover:text-zinc-900 dark:text-zinc-400 dark:group-hover:text-zinc-100"
           }`}
           fill="none"
           viewBox="0 0 24 24"
@@ -136,7 +136,7 @@ export function AdminSidebar({ adminName, adminEmail }: AdminSidebarProps) {
       icon: (active) => (
         <svg
           className={`h-5 w-5 transition-colors ${
-            active ? "text-white dark:text-zinc-950" : "text-zinc-500 group-hover:text-zinc-900 dark:text-zinc-400 dark:group-hover:text-zinc-100"
+            active ? "text-zinc-900 dark:text-zinc-100" : "text-zinc-500 group-hover:text-zinc-900 dark:text-zinc-400 dark:group-hover:text-zinc-100"
           }`}
           fill="none"
           viewBox="0 0 24 24"
@@ -157,7 +157,7 @@ export function AdminSidebar({ adminName, adminEmail }: AdminSidebarProps) {
       icon: (active) => (
         <svg
           className={`h-5 w-5 transition-colors ${
-            active ? "text-white dark:text-zinc-950" : "text-zinc-500 group-hover:text-zinc-900 dark:text-zinc-400 dark:group-hover:text-zinc-100"
+            active ? "text-zinc-900 dark:text-zinc-100" : "text-zinc-500 group-hover:text-zinc-900 dark:text-zinc-400 dark:group-hover:text-zinc-100"
           }`}
           fill="none"
           viewBox="0 0 24 24"
@@ -181,7 +181,7 @@ export function AdminSidebar({ adminName, adminEmail }: AdminSidebarProps) {
       icon: (active) => (
         <svg
           className={`h-5 w-5 transition-colors ${
-            active ? "text-white dark:text-zinc-950" : "text-zinc-500 group-hover:text-zinc-900 dark:text-zinc-400 dark:group-hover:text-zinc-100"
+            active ? "text-zinc-900 dark:text-zinc-100" : "text-zinc-500 group-hover:text-zinc-900 dark:text-zinc-400 dark:group-hover:text-zinc-100"
           }`}
           fill="none"
           viewBox="0 0 24 24"
@@ -202,7 +202,7 @@ export function AdminSidebar({ adminName, adminEmail }: AdminSidebarProps) {
       icon: (active) => (
         <svg
           className={`h-5 w-5 transition-colors ${
-            active ? "text-white dark:text-zinc-950" : "text-zinc-500 group-hover:text-zinc-900 dark:text-zinc-400 dark:group-hover:text-zinc-100"
+            active ? "text-zinc-900 dark:text-zinc-100" : "text-zinc-500 group-hover:text-zinc-900 dark:text-zinc-400 dark:group-hover:text-zinc-100"
           }`}
           fill="none"
           viewBox="0 0 24 24"
@@ -235,8 +235,8 @@ export function AdminSidebar({ adminName, adminEmail }: AdminSidebarProps) {
                 href={item.href}
                 className={`group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                   active
-                    ? "bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950 font-semibold shadow-xs"
-                    : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800/60 dark:hover:text-zinc-100"
+                    ? "bg-zinc-200/80 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100 font-medium"
+                    : "text-zinc-600 hover:bg-zinc-100/80 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800/60 dark:hover:text-zinc-100 font-normal"
                 }`}
               >
                 {item.icon(active)}
@@ -262,8 +262,8 @@ export function AdminSidebar({ adminName, adminEmail }: AdminSidebarProps) {
                 href={item.href}
                 className={`group flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                   active
-                    ? "bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950 font-semibold shadow-xs"
-                    : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800/60 dark:hover:text-zinc-100"
+                    ? "bg-zinc-200/80 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100 font-medium"
+                    : "text-zinc-600 hover:bg-zinc-100/80 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800/60 dark:hover:text-zinc-100 font-normal"
                 }`}
               >
                 <div className="flex items-center gap-3">

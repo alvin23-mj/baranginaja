@@ -49,7 +49,7 @@ export function OrderCountdownBadge({
 
   if (isExpired) {
     return (
-      <span className="inline-flex items-center gap-1 rounded-md border border-red-300 bg-red-50 px-2 py-0.5 text-[11px] font-bold text-red-700 dark:border-red-800 dark:bg-red-950/50 dark:text-red-400">
+      <span className="inline-flex items-center gap-1 rounded-md border border-red-300 bg-red-50 px-2.5 py-0.5 text-sm font-normal text-red-700 dark:border-red-800 dark:bg-red-950/50 dark:text-red-400">
         <span className="h-1.5 w-1.5 rounded-full bg-red-600" />
         Waktu Habis
       </span>
@@ -58,7 +58,7 @@ export function OrderCountdownBadge({
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-md border px-2 py-0.5 text-[11px] font-mono font-semibold transition-colors ${
+      className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 py-0.5 text-sm font-mono font-normal transition-colors ${
         isUrgent
           ? "border-rose-300 bg-rose-50 text-rose-700 dark:border-rose-900/60 dark:bg-rose-950/50 dark:text-rose-300 animate-pulse"
           : "border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-300"

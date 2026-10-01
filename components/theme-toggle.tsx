@@ -26,7 +26,13 @@ function MoonIcon({ className = "h-4 w-4 text-indigo-400" }: { className?: strin
   );
 }
 
-export function ThemeToggle({ className = "" }: { className?: string }) {
+export function ThemeToggle({
+  className = "",
+  buttonClassName,
+}: {
+  className?: string;
+  buttonClassName?: string;
+}) {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [mounted, setMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -87,18 +93,21 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
         suppressHydrationWarning
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-xs font-semibold text-zinc-800 shadow-2xs hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700/70 transition-colors"
+        className={
+          buttonClassName ??
+          "flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-xs font-semibold text-zinc-800 shadow-2xs hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700/70 transition-colors"
+        }
         aria-label="Pilih Mode Tema"
       >
         {theme === "dark" ? (
           <>
             <MoonIcon />
-            <span>Mode Malam</span>
+            <span>Mode Gelap</span>
           </>
         ) : (
           <>
             <SunIcon />
-            <span>Mode Siang</span>
+            <span>Mode Terang</span>
           </>
         )}
         <svg
@@ -113,30 +122,32 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-1.5 w-44 rounded-xl border border-zinc-200 bg-white p-1 shadow-lg dark:border-zinc-800 dark:bg-zinc-900 z-50 animate-in fade-in zoom-in-95 duration-100">
+        <div className="absolute right-0 mt-1.5 w-40 rounded-xl border border-zinc-200 bg-white p-1 shadow-lg dark:border-zinc-800 dark:bg-zinc-900 z-50 animate-in fade-in zoom-in-95 duration-100">
           <button
             suppressHydrationWarning
             type="button"
             onClick={() => handleThemeChange("light")}
-            className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium transition-colors ${theme === "light"
-                ? "bg-zinc-100 font-semibold text-zinc-950 dark:bg-zinc-800 dark:text-zinc-50"
-                : "text-zinc-600 hover:bg-zinc-50 dark:text-zinc-400 dark:hover:bg-zinc-800/60 dark:hover:text-zinc-200"
-              }`}
+            className={`flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm transition-colors ${
+              theme === "light"
+                ? "text-zinc-950 dark:text-zinc-100 font-medium"
+                : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-200 font-normal"
+            } hover:bg-zinc-50 dark:hover:bg-zinc-800/60`}
           >
             <SunIcon />
-            <span>Mode Siang (Terang)</span>
+            <span>Mode Terang</span>
           </button>
           <button
             suppressHydrationWarning
             type="button"
             onClick={() => handleThemeChange("dark")}
-            className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium transition-colors ${theme === "dark"
-                ? "bg-zinc-100 font-semibold text-zinc-950 dark:bg-zinc-800 dark:text-zinc-50"
-                : "text-zinc-600 hover:bg-zinc-50 dark:text-zinc-400 dark:hover:bg-zinc-800/60 dark:hover:text-zinc-200"
-              }`}
+            className={`flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm transition-colors ${
+              theme === "dark"
+                ? "text-zinc-950 dark:text-zinc-100 font-medium"
+                : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-200 font-normal"
+            } hover:bg-zinc-50 dark:hover:bg-zinc-800/60`}
           >
             <MoonIcon />
-            <span>Mode Malam (Gelap)</span>
+            <span>Mode Gelap</span>
           </button>
         </div>
       )}
