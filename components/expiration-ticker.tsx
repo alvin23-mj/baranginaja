@@ -13,9 +13,12 @@ export function ExpirationTicker() {
       try {
         const res = await fetch("/api/orders/check-expiration");
         if (res.ok) {
-          const data = await res.json();
-          if (isMounted && data.expiredCount > 0) {
-            router.refresh();
+          const contentType = res.headers.get("content-type");
+          if (contentType && contentType.includes("application/json")) {
+            const data = await res.json();
+            if (isMounted && data.expiredCount > 0) {
+              router.refresh();
+            }
           }
         }
       } catch (e) {

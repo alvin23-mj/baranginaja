@@ -17,7 +17,7 @@ export default function KeamananCodPage() {
       desc: "Pilih minimarket yang ramai, memiliki penerangan terang, dan dilengkapi CCTV di area parkir atau teras.",
     },
     {
-      title: "Taman Kota & Ruang Publik Surabaya",
+      title: "Taman Kota & Ruang Publik",
       desc: "Taman Bungkul, Taman Apsari, Balai Pemuda, atau ruang terbuka hijau yang ramai warga beraktivitas di siang atau sore hari.",
     },
     {
@@ -32,7 +32,7 @@ export default function KeamananCodPage() {
       desc: "Hindari janjian COD pada larut malam atau di tempat sepi, gang sempit, dan kos/rumah pribadi orang yang belum Anda kenal.",
     },
     {
-      title: "2. Jangan Pernah Bayar Uang Muka (DP) Mencurigakan",
+      title: "2. Jangan Bayar Uang Muka (DP) Mencurigakan",
       desc: "Untuk transaksi COD langsung, bayarlah secara utuh hanya setelah Anda memeriksa dan memegang langsung barang tersebut.",
     },
     {
@@ -46,99 +46,113 @@ export default function KeamananCodPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#f0f0f0] text-zinc-900 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto space-y-12">
-        {/* Header */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-2 text-xs text-zinc-500 font-medium">
-            <Link href="/" className="hover:text-zinc-900 transition-colors">
-              Beranda
-            </Link>
-            <span>/</span>
-            <Link href="/bantuan" className="hover:text-zinc-900 transition-colors">
-              Panduan
-            </Link>
-            <span>/</span>
-            <span className="text-zinc-900 font-semibold">Keamanan & COD</span>
-          </div>
+    <main className="flex-1 bg-[#f0f0f0] text-zinc-900">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-28 space-y-20 sm:space-y-28 lg:space-y-32">
+        {/* Header Editorial Title */}
+        <section className="text-center max-w-4xl lg:max-w-5xl mx-auto space-y-6 sm:space-y-8">
+          <h1
+            className="text-3xl sm:text-4xl lg:text-5xl tracking-normal text-[#1C1819] dark:text-zinc-50 leading-[1.25] text-balance"
+            style={{
+              fontFamily: '"Reckless Neue", Didot, "Bodoni MT", serif',
+              fontWeight: 300,
+            }}
+          >
+            Panduan Transaksi Aman & Titik Temu COD
+          </h1>
 
-          <div className="space-y-2">
-            <span className="inline-block px-3 py-1 rounded-full bg-white border border-zinc-200/80 text-xs font-semibold text-zinc-800 shadow-2xs">
-              Prioritas Utama Kami
-            </span>
-            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-950">
-              Panduan Transaksi Aman & Titik Temu COD
-            </h1>
-            <p className="text-zinc-600 text-base sm:text-lg max-w-2xl leading-relaxed">
-              Kenyamanan dan rasa aman adalah pondasi komunitas BaranginAja. Ikuti panduan praktis berikut sebelum melakukan serah terima barang di wilayah Surabaya.
+          <p className="text-zinc-600 text-base sm:text-lg leading-relaxed sm:leading-loose max-w-3xl mx-auto">
+            Kenyamanan dan rasa aman adalah pondasi komunitas BaranginAja. Ikuti panduan praktis berikut sebelum melakukan serah terima barang di wilayah Surabaya.
+          </p>
+        </section>
+
+        {/* 4 Aturan Utama Bertransaksi Aman */}
+        <section className="space-y-12 sm:space-y-16">
+          <div className="text-center space-y-4 sm:space-y-5 max-w-3xl mx-auto">
+            <h2
+              className="text-3xl sm:text-4xl lg:text-5xl tracking-normal text-[#1C1819] dark:text-zinc-50 leading-[1.25] text-balance"
+              style={{
+                fontFamily: '"Reckless Neue", Didot, "Bodoni MT", serif',
+                fontWeight: 300,
+              }}
+            >
+              Aturan Utama Bertransaksi Aman
+            </h2>
+            <p className="text-zinc-600 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto">
+              Langkah perlindungan dasar agar pembeli maupun penjual bertransaksi dengan penuh keyakinan.
             </p>
           </div>
-        </div>
 
-        {/* 4 Aturan Emas Keamanan */}
-        <div className="space-y-4">
-          <h2 className="text-xl font-bold text-zinc-950">
-            4 Aturan Utama Bertransaksi Aman
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 max-w-5xl mx-auto">
             {safetyRules.map((rule, idx) => (
               <div
                 key={idx}
-                className="bg-white p-6 rounded-2xl border border-zinc-200/80 shadow-xs space-y-2"
+                className="bg-white rounded-2xl sm:rounded-3xl shadow-md p-7 sm:p-8 flex flex-col space-y-3 sm:space-y-3.5"
               >
-                <h3 className="text-base font-bold text-zinc-950">{rule.title}</h3>
-                <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed">
+                <h3 className="text-xl sm:text-2xl font-normal text-zinc-900 leading-snug">
+                  {rule.title}
+                </h3>
+                <p className="text-sm sm:text-base text-zinc-600 leading-relaxed">
                   {rule.desc}
                 </p>
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
         {/* Rekomendasi Titik Temu di Surabaya */}
-        <div className="bg-white p-6 sm:p-8 rounded-3xl border border-zinc-200/80 shadow-xs space-y-6">
-          <div className="space-y-1">
-            <h2 className="text-xl font-bold text-zinc-950">
-              Rekomendasi Titik Temu (Safe Meeting Points) di Surabaya
+        <section className="space-y-12 sm:space-y-16">
+          <div className="text-center space-y-4 sm:space-y-5 max-w-3xl mx-auto">
+            <h2
+              className="text-3xl sm:text-4xl lg:text-5xl tracking-normal text-[#1C1819] dark:text-zinc-50 leading-[1.25] text-balance"
+              style={{
+                fontFamily: '"Reckless Neue", Didot, "Bodoni MT", serif',
+                fontWeight: 300,
+              }}
+            >
+              Rekomendasi Titik Temu (Safe Points)
             </h2>
-            <p className="text-sm text-zinc-600">
-              Titik temu publik yang netral, mudah dijangkau kendaraan umum, dan aman untuk serah terima barang.
+            <p className="text-zinc-600 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto">
+              Titik temu publik yang netral, mudah dijangkau transportasi, dan aman untuk serah terima barang di Surabaya.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 max-w-5xl mx-auto">
             {safeSpots.map((spot, idx) => (
               <div
                 key={idx}
-                className="bg-zinc-50 p-5 rounded-xl border border-zinc-200/60 space-y-2"
+                className="bg-white rounded-2xl sm:rounded-3xl shadow-md p-7 sm:p-8 flex flex-col space-y-3 sm:space-y-3.5"
               >
-                <h4 className="text-sm font-bold text-zinc-900">{spot.title}</h4>
-                <p className="text-xs text-zinc-600 leading-relaxed">
+                <h3 className="text-xl sm:text-2xl font-normal text-zinc-900 leading-snug">
+                  {spot.title}
+                </h3>
+                <p className="text-sm sm:text-base text-zinc-600 leading-relaxed">
                   {spot.desc}
                 </p>
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
         {/* Kotak Bantuan & Laporan */}
-        <div className="bg-zinc-950 text-white rounded-3xl p-8 sm:p-10 space-y-4">
-          <h3 className="text-xl sm:text-2xl font-bold">
-            Menemukan Indikasi Penipuan atau Akun Mencurigakan?
-          </h3>
-          <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed max-w-2xl">
-            Tim BaranginAja senantiasa menjaga kebersihan platform dari oknum nakal. Jika Anda menemukan iklan mencurigakan, harga tidak masuk akal, atau perilaku tidak menyenangkan dari pengguna lain, segera laporkan ke Pusat Bantuan kami.
-          </p>
-          <div className="pt-2">
+        <section className="max-w-4xl mx-auto">
+          <div className="bg-white rounded-2xl sm:rounded-3xl shadow-md p-8 sm:p-10 space-y-4 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div className="space-y-2 max-w-xl">
+              <h3 className="text-xl sm:text-2xl font-normal text-zinc-900 leading-snug">
+                Menemukan Indikasi Penipuan?
+              </h3>
+              <p className="text-sm sm:text-base text-zinc-600 leading-relaxed">
+                Tim BaranginAja senantiasa menjaga kebersihan platform dari oknum nakal. Laporkan segera ke Pusat Bantuan jika menemukan akun mencurigakan.
+              </p>
+            </div>
             <Link
               href="/bantuan"
-              className="inline-flex items-center justify-center px-5 py-2.5 rounded-xl bg-white text-zinc-950 text-xs font-semibold hover:bg-zinc-200 transition-colors"
+              className="shrink-0 px-6 py-3.5 rounded-xl bg-zinc-900 text-white text-sm font-semibold hover:bg-zinc-800 transition-colors shadow-sm"
             >
-              Laporkan Masalah ke Bantuan
+              Laporkan Masalah ke Bantuan &rarr;
             </Link>
           </div>
-        </div>
+        </section>
       </div>
-    </div>
+    </main>
   );
 }

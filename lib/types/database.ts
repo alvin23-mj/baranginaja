@@ -142,7 +142,7 @@ export interface OrderWithProduct extends OrderRow {
 }
 
 export interface OrderListItem extends OrderRow {
-  product: Pick<OrderProduct, "id" | "nama_barang" | "foto_urls"> | null;
+  product: (OrderProduct & { harga_jual?: number }) | null;
 }
 
 // Assumed schema — no migration/types existed for this table yet.

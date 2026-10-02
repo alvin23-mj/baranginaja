@@ -41,7 +41,6 @@ export function NavbarClient({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [helpModalOpen, setHelpModalOpen] = useState(false);
   const [shippingModalOpen, setShippingModalOpen] = useState(false);
-  const [sellerPromptOpen, setSellerPromptOpen] = useState(false);
   const [ratingModalOpen, setRatingModalOpen] = useState(false);
   const [ratingScore, setRatingScore] = useState(5);
   const [ratingHover, setRatingHover] = useState(0);
@@ -184,8 +183,6 @@ export function NavbarClient({
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     closeDropdowns();
-    setMobileMenuOpen(false);
-    setSellerPromptOpen(false);
     setShippingModalOpen(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
@@ -193,10 +190,6 @@ export function NavbarClient({
   const handleStoreClick = () => {
     if (!user) {
       router.push("/login?redirectTo=/jual");
-      return;
-    }
-    if (!isSeller) {
-      setSellerPromptOpen(true);
       return;
     }
     router.push("/jual");
@@ -373,7 +366,7 @@ export function NavbarClient({
                 return;
               }
               if (!isSeller) {
-                setSellerPromptOpen(true);
+                router.push("/jual?view=penjual");
                 return;
               }
               router.push("/jual/tambah");
@@ -548,14 +541,14 @@ export function NavbarClient({
         >
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             {activeDropdown === "user" && (
-              <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-zinc-200 w-full animate-in fade-in duration-150">
+              <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-zinc-200 w-full animate-in fade-in duration-150">
 
                 {/* Kolom 1: Info Pengguna */}
                 <div className="py-2 pr-4 sm:pr-6 flex flex-col items-start gap-2">
-                  <span className="text-[15px] font-semibold text-zinc-900 truncate max-w-full">
+                  <span className="text-[15px] font-semibold text-zinc-900">
                     {user.name || "Pengguna"}
                   </span>
-                  <p className="text-[12px] text-zinc-400 truncate max-w-full">{user.email}</p>
+                  <p className="text-[14px] text-zinc-400">{user.email}</p>
                 </div>
 
                 {/* Kolom 2: Akun Saya */}
@@ -571,42 +564,10 @@ export function NavbarClient({
                     >
                       Profil Saya
                     </Link>
-                    <Link
-                      href="/pesanan-saya"
-                      onClick={closeDropdowns}
-                      className="py-1 text-[14px] font-medium text-zinc-500 hover:text-zinc-900 transition-colors duration-150 cursor-pointer text-left"
-                    >
-                      Pesanan Saya
-                    </Link>
                   </div>
                 </div>
 
-                {/* Kolom 3: Toko */}
-                <div className="py-2 px-4 sm:px-6 flex flex-col items-start gap-2.5">
-                  <span className="text-[15px] font-semibold text-zinc-900">
-                    Toko
-                  </span>
-                  <div className="flex flex-col items-start gap-2 w-full">
-                    <button
-                      type="button"
-                      onClick={() => { handleStoreClick(); closeDropdowns(); }}
-                      className="py-1 text-[14px] font-medium text-zinc-500 hover:text-zinc-900 transition-colors duration-150 cursor-pointer text-left"
-                    >
-                      Kelola Toko
-                    </button>
-                    {isSeller && (
-                      <Link
-                        href="/jual/tambah"
-                        onClick={closeDropdowns}
-                        className="py-1 text-[14px] font-medium text-zinc-500 hover:text-zinc-900 transition-colors duration-150 cursor-pointer text-left"
-                      >
-                        Jual Barang Baru
-                      </Link>
-                    )}
-                  </div>
-                </div>
-
-                {/* Kolom 4: Lainnya */}
+                {/* Kolom 3: Lainnya */}
                 <div className="py-2 pl-4 sm:pl-6 flex flex-col items-start gap-2.5">
                   <span className="text-[15px] font-semibold text-zinc-900">
                     Lainnya
@@ -625,7 +586,7 @@ export function NavbarClient({
                       type="button"
                       onClick={handleDirectLogout}
                       disabled={logoutLoading}
-                      className="py-1 text-[14px] font-medium text-red-400 hover:text-red-600 transition-colors duration-150 cursor-pointer text-left"
+                      className="py-1 text-[14px] font-medium text-red-500 hover:text-red-700 transition-colors duration-150 cursor-pointer text-left"
                     >
                       {logoutLoading ? "Memproses Keluar..." : "Keluar dari Akun"}
                     </button>
@@ -771,12 +732,6 @@ export function NavbarClient({
                     className="block px-3 py-2 rounded-lg text-sm font-medium text-zinc-700 hover:bg-zinc-100"
                   >
                     Profil Saya ({user.name || user.email})
-                  </Link>
-                  <Link
-                    href="/pesanan-saya"
-                    className="block px-3 py-2 rounded-lg text-sm font-medium text-zinc-700 hover:bg-zinc-100"
-                  >
-                    Pesanan Saya
                   </Link>
                   <div className="px-1 pt-1">
                     <LogoutButton />
@@ -1018,89 +973,7 @@ export function NavbarClient({
           </div>
         </div>
       )}
-      {sellerPromptOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
-          <div className="w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl">
-            <div className="flex items-center justify-between pb-4 border-b border-zinc-100">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-100 text-zinc-700">
-                  <svg
-                    className="h-5 w-5"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={1.8}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7" />
-                    <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
-                    <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4" />
-                    <path d="M2 7h20" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-zinc-950">
-                    Kelola Toko
-                  </h3>
-                  <p className="text-xs text-zinc-500">
-                    Khusus Penjual Terverifikasi
-                  </p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => setSellerPromptOpen(false)}
-                className="rounded-lg p-1.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 cursor-pointer"
-                aria-label="Tutup modal ajakan penjual"
-              >
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
 
-            <div className="mt-4 space-y-3.5 text-sm text-zinc-600">
-              <p className="leading-relaxed">
-                Anda belum terdaftar sebagai penjual di <strong className="text-zinc-950">BaranginAja</strong>.
-              </p>
-              <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-3.5 space-y-2 text-xs text-zinc-500">
-                <p className="font-semibold text-zinc-700">
-                  Keuntungan Menjadi Penjual:
-                </p>
-                <ul className="list-disc list-inside space-y-1">
-                  <li>Unggah & kelola produk jualan mahasiswa</li>
-                  <li>Pantau pesanan masuk secara real-time</li>
-                  <li>Tarik pendapatan jualan langsung ke rekening Anda</li>
-                </ul>
-              </div>
-              <p className="text-xs text-zinc-500">
-                Ayo aktifkan akun penjual Anda sekarang melalui halaman profil!
-              </p>
-            </div>
-
-            <div className="mt-6 flex items-center justify-end gap-2.5">
-              <button
-                type="button"
-                onClick={() => setSellerPromptOpen(false)}
-                className="rounded-lg border border-zinc-200 px-4 py-2 text-xs font-medium text-zinc-600 hover:bg-zinc-50 cursor-pointer"
-              >
-                Nanti Saja
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setSellerPromptOpen(false);
-                  router.push("/profil");
-                }}
-                className="rounded-lg bg-zinc-950 px-4 py-2 text-xs font-semibold text-white hover:bg-zinc-800 cursor-pointer shadow-sm"
-              >
-                Daftar Sebagai Penjual &rarr;
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* ========================================================================= */}
       {/* MODAL RATING KEPUASAN WEBSITE                                             */}

@@ -27,102 +27,104 @@ export default function DaftarPenjualPage() {
   ];
 
   const requirements = [
-    "Memiliki akun terdaftar di BaranginAja (bisa daftar dengan email Google/kampus).",
+    "Memiliki akun terdaftar di BaranginAja (bisa daftar dengan email Google atau email kampus).",
     "Melengkapi informasi profil: Nama lengkap, nomor WhatsApp aktif untuk dihubungi pembeli, dan kecamatan domisili di Surabaya.",
     "Menyetujui kode etik komunitas: Menjual barang milik pribadi secara jujur dan tidak menjual barang terlarang/ilegal.",
   ];
 
   return (
-    <div className="min-h-screen bg-[#f0f0f0] text-zinc-900 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto space-y-12">
-        {/* Header */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-2 text-xs text-zinc-500 font-medium">
-            <Link href="/" className="hover:text-zinc-900 transition-colors">
-              Beranda
-            </Link>
-            <span>/</span>
-            <Link href="/bantuan" className="hover:text-zinc-900 transition-colors">
-              Panduan
-            </Link>
-            <span>/</span>
-            <span className="text-zinc-900 font-semibold">Daftar Jadi Penjual</span>
-          </div>
+    <main className="flex-1 bg-[#f0f0f0] text-zinc-900">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-28 space-y-20 sm:space-y-28 lg:space-y-32">
+        {/* Header Editorial Title */}
+        <section className="text-center max-w-4xl lg:max-w-5xl mx-auto space-y-6 sm:space-y-8">
+          <h1
+            className="text-3xl sm:text-4xl lg:text-5xl tracking-normal text-[#1C1819] dark:text-zinc-50 leading-[1.25] text-balance"
+            style={{
+              fontFamily: '"Reckless Neue", Didot, "Bodoni MT", serif',
+              fontWeight: 300,
+            }}
+          >
+            Bergabung Menjadi Penjual di BaranginAja
+          </h1>
 
-          <div className="space-y-2">
-            <span className="inline-block px-3 py-1 rounded-full bg-white border border-zinc-200/80 text-xs font-semibold text-zinc-800 shadow-2xs">
-              Pendaftaran Penjual
-            </span>
-            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-950">
-              Bergabung Menjadi Penjual di BaranginAja
-            </h1>
-            <p className="text-zinc-600 text-base sm:text-lg max-w-2xl leading-relaxed">
-              Mulai jualan barang kos, perlengkapan studi, atau perkakas bekas Anda sekarang. Cepat, aman, dan tanpa potongan perantara.
+          <p className="text-zinc-600 text-base sm:text-lg leading-relaxed sm:leading-loose max-w-3xl mx-auto">
+            Mulai jualan barang kos, perlengkapan studi, atau perkakas bekas Anda sekarang. Cepat, aman, dan tanpa potongan perantara di 31 kecamatan Surabaya.
+          </p>
+        </section>
+
+        {/* Keuntungan Penjual */}
+        <section className="space-y-12 sm:space-y-16">
+          <div className="text-center space-y-4 sm:space-y-5 max-w-3xl mx-auto">
+            <h2
+              className="text-3xl sm:text-4xl lg:text-5xl tracking-normal text-[#1C1819] dark:text-zinc-50 leading-[1.25] text-balance"
+              style={{
+                fontFamily: '"Reckless Neue", Didot, "Bodoni MT", serif',
+                fontWeight: 300,
+              }}
+            >
+              Keuntungan Penjual Terverifikasi
+            </h2>
+            <p className="text-zinc-600 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto">
+              Manfaat utama yang Anda dapatkan saat membuka lapak jual beli di BaranginAja.
             </p>
           </div>
-        </div>
 
-        {/* Card Keuntungan */}
-        <div className="space-y-4">
-          <h2 className="text-xl font-bold text-zinc-950">
-            Keuntungan Menjadi Penjual Terverifikasi
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 max-w-5xl mx-auto">
             {benefits.map((item, idx) => (
               <div
                 key={idx}
-                className="bg-white p-6 rounded-2xl border border-zinc-200/80 shadow-xs space-y-2"
+                className="bg-white rounded-2xl sm:rounded-3xl shadow-md p-7 sm:p-8 flex flex-col space-y-3 sm:space-y-3.5"
               >
-                <h3 className="text-base font-bold text-zinc-950">{item.title}</h3>
-                <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed">
+                <h3 className="text-xl sm:text-2xl font-normal text-zinc-900 leading-snug">
+                  {item.title}
+                </h3>
+                <p className="text-sm sm:text-base text-zinc-600 leading-relaxed">
                   {item.desc}
                 </p>
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
         {/* Syarat & Ketentuan */}
-        <div className="bg-white p-6 sm:p-8 rounded-3xl border border-zinc-200/80 shadow-xs space-y-4">
-          <h2 className="text-xl font-bold text-zinc-950">
-            Syarat Mudah Menjadi Penjual
-          </h2>
-          <div className="space-y-3">
-            {requirements.map((req, idx) => (
-              <div key={idx} className="flex items-start gap-3">
-                <span className="shrink-0 text-xs font-bold px-2 py-0.5 rounded-md bg-zinc-100 text-zinc-700 font-mono mt-0.5">
-                  {idx + 1}
-                </span>
-                <p className="text-sm text-zinc-700 leading-relaxed">{req}</p>
-              </div>
-            ))}
+        <section className="max-w-4xl mx-auto">
+          <div className="bg-white rounded-2xl sm:rounded-3xl shadow-md p-8 sm:p-10 space-y-6">
+            <h3 className="text-xl sm:text-2xl font-normal text-zinc-900 leading-snug">
+              Syarat Mudah Menjadi Penjual
+            </h3>
+            <div className="space-y-4">
+              {requirements.map((req, idx) => (
+                <div key={idx} className="flex items-start gap-3.5">
+                  <span className="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-md bg-zinc-100 text-zinc-800 font-mono mt-0.5">
+                    0{idx + 1}
+                  </span>
+                  <p className="text-sm sm:text-base text-zinc-700 leading-relaxed">
+                    {req}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        </section>
 
-        {/* Action Banner */}
-        <div className="bg-zinc-950 text-white rounded-3xl p-8 sm:p-10 text-center space-y-5">
-          <h3 className="text-2xl sm:text-3xl font-bold tracking-tight">
-            Sudah Siap Memasang Barang Pertama Anda?
-          </h3>
-          <p className="text-zinc-400 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
-            Hanya butuh 2 menit untuk melengkapi profil dan mulai memajang barang Anda di katalog mahasiswa &amp; warga Surabaya.
-          </p>
-          <div className="pt-2 flex flex-wrap justify-center gap-3">
+        {/* CTA Bawah */}
+        <section className="text-center pt-2">
+          <div className="flex flex-wrap items-center justify-center gap-4">
             <Link
-              href="/profil"
-              className="px-6 py-3 rounded-xl bg-white text-zinc-950 font-semibold text-sm hover:bg-zinc-200 transition-colors shadow-sm"
+              href="/jual"
+              className="px-6 py-3.5 rounded-xl bg-zinc-900 text-white text-sm font-semibold hover:bg-zinc-800 transition-colors shadow-sm"
             >
-              Lengkapi Profil Penjual
+              Mulai Pasang Iklan Sekarang &rarr;
             </Link>
             <Link
-              href="/jual/tambah"
-              className="px-6 py-3 rounded-xl bg-zinc-800 text-white border border-zinc-700 font-semibold text-sm hover:bg-zinc-700 transition-colors"
+              href="/panduan/cara-menjual"
+              className="px-6 py-3.5 rounded-xl bg-white text-zinc-800 text-sm font-semibold hover:bg-zinc-100 transition-colors shadow-sm"
             >
-              Pasang Iklan Sekarang
+              Baca Panduan Cara Menjual
             </Link>
           </div>
-        </div>
+        </section>
       </div>
-    </div>
+    </main>
   );
 }

@@ -12,16 +12,16 @@ export function OngkirCalculator() {
   const roundedTotal = Math.ceil(rawTotal / 5000) * 5000;
 
   return (
-    <div className="bg-white p-6 sm:p-8 rounded-3xl border border-zinc-200/80 shadow-xs space-y-6">
+    <div className="bg-white p-7 sm:p-9 rounded-2xl sm:rounded-3xl shadow-md space-y-6">
       <div>
-        <span className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">
+        <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
           Simulasi Mandiri
         </span>
-        <h3 className="text-xl font-bold text-zinc-950 mt-1">
+        <h3 className="text-xl sm:text-2xl font-normal text-zinc-900 leading-snug mt-1">
           Kalkulator Estimasi Ongkos Kirim
         </h3>
-        <p className="text-xs sm:text-sm text-zinc-600 mt-1">
-          Geser atau masukkan perkiraan jarak dan berat untuk melihat estimasi ongkir otomatis.
+        <p className="text-sm text-zinc-600 mt-1 leading-relaxed">
+          Geser perkiraan jarak dan berat untuk melihat estimasi ongkir otomatis di Surabaya.
         </p>
       </div>
 
@@ -72,7 +72,7 @@ export function OngkirCalculator() {
       </div>
 
       {/* Hasil Perhitungan */}
-      <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-5 space-y-3">
+      <div className="rounded-2xl bg-zinc-50 p-5 sm:p-6 space-y-3">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pb-3 border-b border-zinc-200/80 text-xs sm:text-sm">
           <div>
             <span className="text-zinc-500 block">Biaya Jarak:</span>

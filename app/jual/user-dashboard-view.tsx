@@ -11,6 +11,7 @@ import { UserPageHeader } from "./user-page-header";
 import { ProductList } from "./product-list";
 import { BuyerOrdersList } from "./buyer-orders-list";
 import { PendapatanView } from "./pendapatan-view";
+import { OrderDetailModal } from "@/components/order-detail-modal";
 import type {
   ProductWithCategory,
   OrderListItem,
@@ -141,6 +142,7 @@ export function UserDashboardView({
   const searchParams = useSearchParams();
   const currentView = searchParams.get("view") || "dashboard";
   const [dashboardTab, setDashboardTab] = useState<"semua" | "penjual" | "pembeli" | "pendapatan">("semua");
+  const [selectedBuyerOrder, setSelectedBuyerOrder] = useState<OrderListItem | null>(null);
 
   // Render Penjual View
   if (currentView === "penjual") {
@@ -201,7 +203,24 @@ export function UserDashboardView({
         />
 
         <div className="w-full px-4 sm:px-6 md:px-8 py-6 flex-1">
-          <PendapatanView payouts={payouts} bankInfo={bankInfo} />
+          {!isSeller ? (
+            <div className="py-14 text-center rounded-2xl border border-dashed border-zinc-200 bg-white p-8 dark:border-zinc-800 dark:bg-zinc-900/40">
+              <p className="text-base font-semibold text-zinc-950 dark:text-zinc-50">
+                Mode Penjual Belum Aktif
+              </p>
+              <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+                Fitur riwayat pendapatan dan pencairan dana hanya tersedia untuk akun penjual. Aktifkan akun penjual melalui profil Anda.
+              </p>
+              <Link
+                href="/profil"
+                className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors shadow-xs"
+              >
+                Buka Profil & Aktifkan Penjual
+              </Link>
+            </div>
+          ) : (
+            <PendapatanView payouts={payouts} bankInfo={bankInfo} />
+          )}
         </div>
       </div>
     );
@@ -583,9 +602,10 @@ export function UserDashboardView({
                     >
                       <td className="px-5 py-3.5">
                         <div className="flex items-center gap-3.5">
-                          <Link
-                            href={`/order/${order.id}`}
-                            className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-800 border border-zinc-200/60 dark:border-zinc-700/60 block group"
+                          <button
+                            type="button"
+                            onClick={() => setSelectedBuyerOrder(order)}
+                            className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-800 border border-zinc-200/60 dark:border-zinc-700/60 block group cursor-pointer text-left"
                           >
                             {order.product?.foto_urls?.[0] ? (
                               // eslint-disable-next-line @next/next/no-img-element
@@ -599,15 +619,16 @@ export function UserDashboardView({
                                 No foto
                               </div>
                             )}
-                          </Link>
+                          </button>
                           <div className="min-w-0">
-                            <Link
-                              href={`/order/${order.id}`}
-                              className="font-normal text-zinc-950 hover:text-blue-600 dark:text-zinc-100 dark:hover:text-blue-400 truncate block transition-colors max-w-xs text-sm"
+                            <button
+                              type="button"
+                              onClick={() => setSelectedBuyerOrder(order)}
+                              className="font-normal text-zinc-950 hover:text-blue-600 dark:text-zinc-100 dark:hover:text-blue-400 truncate block transition-colors max-w-xs text-sm text-left cursor-pointer"
                               title={order.product?.nama_barang ?? "Produk"}
                             >
                               {order.product?.nama_barang ?? "Produk telah dihapus"}
-                            </Link>
+                            </button>
                             <span className="text-sm text-zinc-400 dark:text-zinc-500">
                               Order #{order.id.slice(0, 8)}
                             </span>
@@ -652,13 +673,14 @@ export function UserDashboardView({
                         </span>
                       </td>
                       <td className="px-5 py-3.5 text-center whitespace-nowrap text-sm font-normal">
-                        <Link
-                          href={`/order/${order.id}`}
-                          className="inline-flex items-center gap-1.5 rounded-md bg-blue-600 px-2.5 py-1 text-sm font-normal text-white hover:bg-blue-700 transition-colors shadow-2xs"
+                        <button
+                          type="button"
+                          onClick={() => setSelectedBuyerOrder(order)}
+                          className="inline-flex items-center gap-1.5 rounded-md bg-blue-600 px-2.5 py-1 text-sm font-normal text-white hover:bg-blue-700 transition-colors shadow-2xs cursor-pointer"
                         >
                           <Eye className="h-3.5 w-3.5 shrink-0" strokeWidth={2} />
                           Lihat Detail
-                        </Link>
+                        </button>
                       </td>
                     </tr>
                   );
@@ -751,7 +773,13 @@ export function UserDashboardView({
           )}
         </div>
       )}
-    </div>
+      </div>
+
+      {/* Modal Detail Pesanan */}
+      <OrderDetailModal
+        order={selectedBuyerOrder}
+        onClose={() => setSelectedBuyerOrder(null)}
+      />
     </div>
   );
 }

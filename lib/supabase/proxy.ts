@@ -10,6 +10,7 @@ const PUBLIC_ROUTES = [
   "/bantuan",
   "/faq",
   "/tentang-kami",
+  "/api",
 ];
 
 function isPublicRoute(pathname: string) {
@@ -52,6 +53,9 @@ export async function updateSession(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (!user && !isPublicRoute(pathname)) {
+    if (pathname.startsWith("/api")) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
     const loginUrl = new URL("/login", request.url);
     loginUrl.searchParams.set("redirectTo", pathname);
     return NextResponse.redirect(loginUrl);

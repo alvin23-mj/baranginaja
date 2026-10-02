@@ -1,11 +1,12 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Check, Clock, XCircle, Package, Eye, CreditCard } from "lucide-react";
 import { formatRupiah } from "@/lib/pricing";
 import { ORDER_STATUS_LABEL } from "@/lib/orders";
 import { OrderCountdownBadge } from "@/components/order-countdown-badge";
+import { OrderDetailModal } from "@/components/order-detail-modal";
 import type { OrderListItem, OrderStatus } from "@/lib/types/database";
 
 const ONGOING_STATUSES: OrderStatus[] = [
@@ -19,6 +20,15 @@ const ONGOING_STATUSES: OrderStatus[] = [
 const COMPLETED_STATUSES: OrderStatus[] = ["Selesai", "Dibatalkan"];
 
 export function BuyerOrdersList({ orders }: { orders: OrderListItem[] }) {
+  const searchParams = useSearchParams();
+  const initialOrderId = searchParams.get("orderId");
+  const [selectedOrder, setSelectedOrder] = useState<OrderListItem | null>(() => {
+    if (initialOrderId) {
+      return orders.find((o) => o.id === initialOrderId) || null;
+    }
+    return null;
+  });
+
   const [filter, setFilter] = useState<"semua" | "berlangsung" | "riwayat">("semua");
 
   const ongoingOrders = orders.filter((o) => ONGOING_STATUSES.includes(o.status));
@@ -62,30 +72,16 @@ export function BuyerOrdersList({ orders }: { orders: OrderListItem[] }) {
 
       {displayedOrders.length === 0 ? (
         <div className="py-14 text-center rounded-xl border border-dashed border-zinc-200 bg-white/60 p-8 dark:border-zinc-800 dark:bg-zinc-900/40">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400 mb-3">
-            <Package className="h-6 w-6" strokeWidth={1.5} />
-          </div>
-          <p className="text-base font-normal text-zinc-950 dark:text-zinc-50">
-            {filter === "berlangsung"
-              ? "Tidak ada pembayaran atau pesanan yang sedang berlangsung."
-              : filter === "riwayat"
-              ? "Belum ada riwayat pesanan yang selesai."
-              : "Belum ada pesanan pembelian."}
+          <p className="text-sm text-zinc-500 font-normal dark:text-zinc-400">
+            {filter === "semua"
+              ? "Belum ada transaksi pesanan pembelian."
+              : filter === "berlangsung"
+              ? "Tidak ada pesanan yang sedang berlangsung."
+              : "Belum ada riwayat pesanan yang selesai."}
           </p>
-          <p className="mt-1 text-sm font-normal text-zinc-500 dark:text-zinc-400">
-            {filter === "berlangsung"
-              ? "Ketika kamu checkout barang, status pembayaran dan pengiriman akan muncul di sini."
-              : "Mulai jelajahi katalog untuk menemukan barang bekas berkualitas dari sesama mahasiswa."}
-          </p>
-          <Link
-            href="/katalog"
-            className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-sm font-normal text-white hover:bg-blue-700 transition-colors shadow-xs"
-          >
-            Mulai Belanja di Katalog
-          </Link>
         </div>
       ) : (
-        /* Tabel Pesanan Pembeli */
+        /* Tabel Pesanan Pembelian */
         <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
           <table className="w-full text-left text-sm font-normal">
             <thead className="border-b border-zinc-200 bg-zinc-50/75 text-sm font-normal text-zinc-500 dark:border-zinc-800 dark:bg-zinc-800/60 dark:text-zinc-400">
@@ -112,9 +108,10 @@ export function BuyerOrdersList({ orders }: { orders: OrderListItem[] }) {
                     {/* Produk: Foto + Nama + ID */}
                     <td className="px-5 py-3.5">
                       <div className="flex items-center gap-3.5">
-                        <Link
-                          href={`/order/${order.id}`}
-                          className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-800 border border-zinc-200/60 dark:border-zinc-700/60 block group"
+                        <button
+                          type="button"
+                          onClick={() => setSelectedOrder(order)}
+                          className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-800 border border-zinc-200/60 dark:border-zinc-700/60 block group cursor-pointer text-left"
                         >
                           {order.product?.foto_urls?.[0] ? (
                             // eslint-disable-next-line @next/next/no-img-element
@@ -128,15 +125,16 @@ export function BuyerOrdersList({ orders }: { orders: OrderListItem[] }) {
                               No foto
                             </div>
                           )}
-                        </Link>
+                        </button>
                         <div className="min-w-0">
-                          <Link
-                            href={`/order/${order.id}`}
-                            className="font-normal text-zinc-950 hover:text-blue-600 dark:text-zinc-100 dark:hover:text-blue-400 truncate block transition-colors max-w-xs text-sm"
+                          <button
+                            type="button"
+                            onClick={() => setSelectedOrder(order)}
+                            className="font-normal text-zinc-950 hover:text-blue-600 dark:text-zinc-100 dark:hover:text-blue-400 truncate block transition-colors max-w-xs text-sm text-left cursor-pointer"
                             title={order.product?.nama_barang ?? "Produk"}
                           >
                             {order.product?.nama_barang ?? "Produk telah dihapus"}
-                          </Link>
+                          </button>
                           <span className="text-sm text-zinc-400 dark:text-zinc-500">
                             Order #{order.id.slice(0, 8)}
                           </span>
@@ -198,21 +196,23 @@ export function BuyerOrdersList({ orders }: { orders: OrderListItem[] }) {
                     <td className="px-5 py-3.5 text-center whitespace-nowrap text-sm font-normal">
                       <div className="flex items-center justify-center gap-2">
                         {isPendingPayment ? (
-                          <Link
-                            href={`/order/${order.id}`}
-                            className="inline-flex items-center gap-1.5 rounded-md bg-blue-600 px-2.5 py-1 text-sm font-normal text-white hover:bg-blue-700 transition-colors shadow-2xs"
+                          <button
+                            type="button"
+                            onClick={() => setSelectedOrder(order)}
+                            className="inline-flex items-center gap-1.5 rounded-md bg-blue-600 px-2.5 py-1 text-sm font-normal text-white hover:bg-blue-700 transition-colors shadow-2xs cursor-pointer"
                           >
                             <CreditCard className="h-3.5 w-3.5 shrink-0" strokeWidth={2} />
                             Bayar Sekarang
-                          </Link>
+                          </button>
                         ) : (
-                          <Link
-                            href={`/order/${order.id}`}
-                            className="inline-flex items-center gap-1.5 rounded-md bg-blue-600 px-2.5 py-1 text-sm font-normal text-white hover:bg-blue-700 transition-colors shadow-2xs"
+                          <button
+                            type="button"
+                            onClick={() => setSelectedOrder(order)}
+                            className="inline-flex items-center gap-1.5 rounded-md bg-blue-600 px-2.5 py-1 text-sm font-normal text-white hover:bg-blue-700 transition-colors shadow-2xs cursor-pointer"
                           >
                             <Eye className="h-3.5 w-3.5 shrink-0" strokeWidth={2} />
                             Lihat Detail
-                          </Link>
+                          </button>
                         )}
                       </div>
                     </td>
@@ -223,6 +223,12 @@ export function BuyerOrdersList({ orders }: { orders: OrderListItem[] }) {
           </table>
         </div>
       )}
+
+      {/* Modal Detail Pesanan */}
+      <OrderDetailModal
+        order={selectedOrder}
+        onClose={() => setSelectedOrder(null)}
+      />
     </div>
   );
 }

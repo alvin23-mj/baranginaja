@@ -9,11 +9,6 @@ export default function FaqPage() {
   const faqCategories = [
     {
       category: "Jual & Beli",
-      icon: (
-        <svg className="h-5 w-5 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-        </svg>
-      ),
       items: [
         {
           q: "Bagaimana cara mulai menjual barang di BaranginAja?",
@@ -31,11 +26,6 @@ export default function FaqPage() {
     },
     {
       category: "Keamanan & COD",
-      icon: (
-        <svg className="h-5 w-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-        </svg>
-      ),
       items: [
         {
           q: "Di mana lokasi terbaik untuk COD di Surabaya?",
@@ -53,11 +43,6 @@ export default function FaqPage() {
     },
     {
       category: "Pengiriman & Ongkir",
-      icon: (
-        <svg className="h-5 w-5 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 102 0 1 1 0 00-2 0zm-7 0a1 1 0 102 0 1 1 0 00-2 0z" />
-        </svg>
-      ),
       items: [
         {
           q: "Berapa tarif ongkos kirim jika menggunakan kurir?",
@@ -71,11 +56,6 @@ export default function FaqPage() {
     },
     {
       category: "Dukungan & Komunitas",
-      icon: (
-        <svg className="h-5 w-5 text-rose-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-        </svg>
-      ),
       items: [
         {
           q: "Bagaimana cara mendukung kelangsungan website BaranginAja?",
@@ -90,52 +70,54 @@ export default function FaqPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0f0f11] text-zinc-100 py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto space-y-10">
-        {/* Header */}
-        <div className="text-center space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-800/80 border border-zinc-700 text-amber-400 text-xs font-semibold">
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            Pusat Pertanyaan &amp; Jawaban
-          </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
+    <main className="flex-1 bg-[#f0f0f0] text-zinc-900">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-28 space-y-20 sm:space-y-28 lg:space-y-32">
+        {/* Header Editorial Title */}
+        <section className="text-center max-w-4xl lg:max-w-5xl mx-auto space-y-6 sm:space-y-8">
+          <h1
+            className="text-3xl sm:text-4xl lg:text-5xl tracking-normal text-[#1C1819] dark:text-zinc-50 leading-[1.25] text-balance"
+            style={{
+              fontFamily: '"Reckless Neue", Didot, "Bodoni MT", serif',
+              fontWeight: 300,
+            }}
+          >
             Pertanyaan Umum (FAQ)
           </h1>
-          <p className="text-zinc-400 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+
+          <p className="text-zinc-600 text-base sm:text-lg leading-relaxed sm:leading-loose max-w-3xl mx-auto">
             Semua yang perlu Anda ketahui tentang jual beli barang bekas aman, hemat, dan tanpa potongan di Kota Surabaya.
           </p>
-        </div>
+        </section>
 
-        {/* Categories & FAQs Grid */}
-        <div className="space-y-8">
+        {/* Categories & FAQs Accordion List */}
+        <section className="space-y-12 sm:space-y-16 max-w-5xl mx-auto">
           {faqCategories.map((cat, catIdx) => (
-            <div key={catIdx} className="space-y-4">
-              <div className="flex items-center gap-2.5 pb-2 border-b border-zinc-800">
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-800 shrink-0">
-                  {cat.icon}
-                </span>
-                <h2 className="text-lg sm:text-xl font-bold text-white">
-                  {cat.category}
-                </h2>
-              </div>
+            <div key={catIdx} className="space-y-6">
+              <h2
+                className="text-2xl sm:text-3xl tracking-normal text-[#1C1819] dark:text-zinc-50 leading-snug"
+                style={{
+                  fontFamily: '"Reckless Neue", Didot, "Bodoni MT", serif',
+                  fontWeight: 300,
+                }}
+              >
+                {cat.category}
+              </h2>
 
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {cat.items.map((item, itemIdx) => (
                   <details
                     key={itemIdx}
-                    className="group bg-zinc-900/70 border border-zinc-800/90 rounded-xl p-4 sm:p-5 transition-all duration-150 open:border-zinc-700 open:bg-zinc-900"
+                    className="group bg-white rounded-2xl sm:rounded-3xl shadow-md p-6 sm:p-8 transition-shadow list-none"
                   >
-                    <summary className="font-semibold text-zinc-200 hover:text-white cursor-pointer list-none flex items-center justify-between gap-4 select-none">
-                      <span className="text-sm sm:text-base">{item.q}</span>
+                    <summary className="font-normal text-lg sm:text-xl text-zinc-900 cursor-pointer list-none flex items-center justify-between gap-4 select-none">
+                      <span>{item.q}</span>
                       <span className="text-zinc-400 transition-transform duration-200 group-open:rotate-180 shrink-0">
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                         </svg>
                       </span>
                     </summary>
-                    <p className="mt-3 text-sm text-zinc-400 leading-relaxed pt-2 border-t border-zinc-800/60">
+                    <p className="mt-4 text-sm sm:text-base text-zinc-600 leading-relaxed pt-3 border-t border-zinc-100">
                       {item.a}
                     </p>
                   </details>
@@ -143,52 +125,28 @@ export default function FaqPage() {
               </div>
             </div>
           ))}
-        </div>
+        </section>
 
-        {/* CTA Card: Saweria & Hubungi Kami */}
-        <div className="rounded-2xl border border-zinc-800 bg-linear-to-r from-zinc-900 to-zinc-900/60 p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="space-y-1.5 text-center sm:text-left">
-            <h3 className="text-lg font-bold text-white flex items-center justify-center sm:justify-start gap-2">
-              <svg className="h-5 w-5 text-rose-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
-              Suka dengan BaranginAja?
-            </h3>
-            <p className="text-xs sm:text-sm text-zinc-400 max-w-md">
-              Dukung tim mahasiswa pengembang kami lewat donasi seikhlasnya atau beri kami masukan.
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">
+        {/* CTA Bawah */}
+        <section className="text-center pt-2">
+          <div className="flex flex-wrap items-center justify-center gap-4">
             <a
               href="https://saweria.co"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-zinc-950 px-4 py-2.5 text-xs sm:text-sm font-bold transition-colors shadow-sm"
+              className="px-6 py-3.5 rounded-xl bg-zinc-900 text-white text-sm font-semibold hover:bg-zinc-800 transition-colors shadow-sm"
             >
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
-              Beri Kami Semangat
+              Beri Kami Semangat &rarr;
             </a>
             <Link
-              href="/#hubungi-kami"
-              className="inline-flex items-center gap-2 rounded-xl border border-zinc-700 bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 px-4 py-2.5 text-xs sm:text-sm font-medium transition-colors"
+              href="/"
+              className="px-6 py-3.5 rounded-xl bg-white text-zinc-800 text-sm font-semibold hover:bg-zinc-100 transition-colors shadow-sm"
             >
-              Hubungi Kami
+              Kembali ke Beranda
             </Link>
           </div>
-        </div>
-
-        {/* Back button */}
-        <div className="text-center pt-2">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-zinc-800 bg-zinc-900/80 text-zinc-300 font-medium hover:bg-zinc-800 hover:text-white transition-colors text-sm"
-          >
-            &larr; Kembali ke Beranda
-          </Link>
-        </div>
+        </section>
       </div>
-    </div>
+    </main>
   );
 }

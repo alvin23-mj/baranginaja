@@ -3,10 +3,11 @@
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Lock } from "lucide-react";
 
 interface UserSidebarProps {
   pendingBuyerOrdersCount?: number;
+  isSeller?: boolean;
 }
 
 interface NavItem {
@@ -14,11 +15,13 @@ interface NavItem {
   href: string;
   view?: string;
   badge?: number | string;
-  icon: (active: boolean) => React.ReactNode;
+  sellerOnly?: boolean;
+  icon: (active: boolean, muted?: boolean) => React.ReactNode;
 }
 
 export function UserSidebar({
   pendingBuyerOrdersCount = 0,
+  isSeller = true,
 }: UserSidebarProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -49,12 +52,15 @@ export function UserSidebar({
       label: "Dashboard",
       href: "/jual?view=dashboard",
       view: "dashboard",
-      icon: (active) => (
+      icon: (active, muted) => (
         <svg
-          className={`h-5 w-5 transition-colors ${active
+          className={`h-5 w-5 transition-colors ${
+            muted
+              ? "text-zinc-400 dark:text-zinc-600"
+              : active
               ? "text-zinc-900 dark:text-zinc-100"
               : "text-zinc-500 group-hover:text-zinc-900 dark:text-zinc-400 dark:group-hover:text-zinc-100"
-            }`}
+          }`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -72,12 +78,16 @@ export function UserSidebar({
       label: "Penjual",
       href: "/jual?view=penjual",
       view: "penjual",
-      icon: (active) => (
+      sellerOnly: true,
+      icon: (active, muted) => (
         <svg
-          className={`h-5 w-5 transition-colors ${active
+          className={`h-5 w-5 transition-colors ${
+            muted
+              ? "text-zinc-400 dark:text-zinc-600"
+              : active
               ? "text-zinc-900 dark:text-zinc-100"
               : "text-zinc-500 group-hover:text-zinc-900 dark:text-zinc-400 dark:group-hover:text-zinc-100"
-            }`}
+          }`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -96,12 +106,15 @@ export function UserSidebar({
       href: "/jual?view=pembeli",
       view: "pembeli",
       badge: pendingBuyerOrdersCount > 0 ? `${pendingBuyerOrdersCount} aktif` : undefined,
-      icon: (active) => (
+      icon: (active, muted) => (
         <svg
-          className={`h-5 w-5 transition-colors ${active
+          className={`h-5 w-5 transition-colors ${
+            muted
+              ? "text-zinc-400 dark:text-zinc-600"
+              : active
               ? "text-zinc-900 dark:text-zinc-100"
               : "text-zinc-500 group-hover:text-zinc-900 dark:text-zinc-400 dark:group-hover:text-zinc-100"
-            }`}
+          }`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -119,12 +132,16 @@ export function UserSidebar({
       label: "Pendapatan",
       href: "/jual?view=pendapatan",
       view: "pendapatan",
-      icon: (active) => (
+      sellerOnly: true,
+      icon: (active, muted) => (
         <svg
-          className={`h-5 w-5 transition-colors ${active
+          className={`h-5 w-5 transition-colors ${
+            muted
+              ? "text-zinc-400 dark:text-zinc-600"
+              : active
               ? "text-zinc-900 dark:text-zinc-100"
               : "text-zinc-500 group-hover:text-zinc-900 dark:text-zinc-400 dark:group-hover:text-zinc-100"
-            }`}
+          }`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -147,26 +164,41 @@ export function UserSidebar({
       </p>
       {navItems.map((item) => {
         const active = isActive(item);
+        const isMuted = Boolean(item.sellerOnly && !isSeller);
+
         return (
           <Link
             key={item.label}
             href={item.href}
-            className={`group flex items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors ${active
+            title={isMuted ? "Fitur khusus penjual. Aktifkan akun penjual di profil." : undefined}
+            className={`group flex items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors ${
+              isMuted
+                ? active
+                  ? "bg-zinc-100/70 text-zinc-400 dark:bg-zinc-800/40 dark:text-zinc-500 font-normal"
+                  : "text-zinc-400 hover:bg-zinc-100/50 hover:text-zinc-500 dark:text-zinc-500 dark:hover:bg-zinc-800/30 dark:hover:text-zinc-400 font-normal"
+                : active
                 ? "bg-zinc-200/80 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100 font-medium"
                 : "text-zinc-600 hover:bg-zinc-100/80 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800/60 dark:hover:text-zinc-100 font-normal"
-              }`}
+            }`}
           >
-            <div className="flex items-center gap-3">
-              {item.icon(active)}
-              <span>{item.label}</span>
+            <div className="flex items-center gap-3 min-w-0">
+              {item.icon(active, isMuted)}
+              <span className="truncate">{item.label}</span>
             </div>
-            {item.badge && (
-              <span
-                className="rounded-full px-2 py-0.5 text-sm font-normal bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300"
-              >
-                {item.badge}
-              </span>
-            )}
+            <div className="flex items-center gap-2 shrink-0">
+              {isMuted && (
+                <Lock
+                  className="h-4 w-4 text-zinc-400 dark:text-zinc-500 shrink-0"
+                  strokeWidth={1.8}
+                  aria-label="Khusus Penjual"
+                />
+              )}
+              {item.badge && !isMuted && (
+                <span className="rounded-full px-2 py-0.5 text-sm font-normal bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300">
+                  {item.badge}
+                </span>
+              )}
+            </div>
           </Link>
         );
       })}

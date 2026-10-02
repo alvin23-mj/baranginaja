@@ -16,7 +16,8 @@ export const metadata = {
     "Kelola produk jualanmu, pantau pesanan pembelian, dan cek saldo pendapatan di BaranginAja.",
 };
 
-const ORDER_SELECT = "*, product:products(id, nama_barang, foto_urls)";
+const ORDER_SELECT =
+  "*, product:products(id, nama_barang, foto_urls, harga_jual, berat_kg, seller:users(id, nama_lengkap, no_hp))";
 const PAYOUT_SELECT = "*, order:orders(product:products(nama_barang))";
 
 export default async function JualPage() {

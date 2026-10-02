@@ -51,93 +51,106 @@ export default function CaraMenjualPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#f0f0f0] text-zinc-900 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto space-y-12">
-        {/* Header */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-2 text-xs text-zinc-500 font-medium">
-            <Link href="/" className="hover:text-zinc-900 transition-colors">
-              Beranda
-            </Link>
-            <span>/</span>
-            <Link href="/bantuan" className="hover:text-zinc-900 transition-colors">
-              Panduan
-            </Link>
-            <span>/</span>
-            <span className="text-zinc-900 font-semibold">Cara Menjual</span>
-          </div>
+    <main className="flex-1 bg-[#f0f0f0] text-zinc-900">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-28 space-y-20 sm:space-y-28 lg:space-y-32">
+        {/* Header Editorial Title */}
+        <section className="text-center max-w-4xl lg:max-w-5xl mx-auto space-y-6 sm:space-y-8">
+          <h1
+            className="text-3xl sm:text-4xl lg:text-5xl tracking-normal text-[#1C1819] dark:text-zinc-50 leading-[1.25] text-balance"
+            style={{
+              fontFamily: '"Reckless Neue", Didot, "Bodoni MT", serif',
+              fontWeight: 300,
+            }}
+          >
+            Cara Menjual Barang di BaranginAja
+          </h1>
 
-          <div className="space-y-2">
-            <span className="inline-block px-3 py-1 rounded-full bg-white border border-zinc-200/80 text-xs font-semibold text-zinc-800 shadow-2xs">
-              Panduan Penjual
-            </span>
-            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-950">
-              Cara Menjual Barang Cepat Laku di BaranginAja
-            </h1>
-            <p className="text-zinc-600 text-base sm:text-lg max-w-2xl leading-relaxed">
-              Ubah perabot kos, buku kuliah, dan elektronik yang sudah tidak terpakai menjadi uang tunai dengan cepat dan tanpa potongan komisi.
-            </p>
-          </div>
-        </div>
+          <p className="text-zinc-600 text-base sm:text-lg leading-relaxed sm:leading-loose max-w-3xl mx-auto">
+            Ubah perabot kos, buku kuliah, dan elektronik yang sudah tidak terpakai menjadi uang tunai dengan cepat dan tanpa potongan komisi di 31 kecamatan Kota Surabaya.
+          </p>
+        </section>
 
-        {/* Keunggulan Penjual */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* 3 Kolom Keunggulan Penjual (Cards Bersih tanpa Outline dengan Shadow) */}
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
           {sellerAdvantages.map((adv, idx) => (
             <div
               key={idx}
-              className="bg-white p-6 rounded-2xl border border-zinc-200/80 shadow-xs space-y-2"
+              className="bg-white rounded-2xl sm:rounded-3xl shadow-md p-7 sm:p-8 flex flex-col space-y-3.5 sm:space-y-4"
             >
-              <h3 className="text-base font-bold text-zinc-950">{adv.title}</h3>
-              <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed">
+              <h3 className="text-xl sm:text-2xl font-normal text-zinc-900 leading-snug">
+                {adv.title}
+              </h3>
+              <p className="text-sm sm:text-base text-zinc-600 leading-relaxed">
                 {adv.desc}
               </p>
             </div>
           ))}
-        </div>
+        </section>
 
-        {/* Steps */}
-        <div className="space-y-4">
-          <h2 className="text-xl font-bold text-zinc-950">
-            5 Langkah Mudah Menjual
-          </h2>
-          {steps.map((step, idx) => (
-            <div
-              key={idx}
-              className="bg-white p-6 sm:p-7 rounded-2xl border border-zinc-200/80 shadow-xs flex flex-col sm:flex-row items-start gap-4 sm:gap-6"
+        {/* 5 Langkah Mudah Menjual */}
+        <section className="space-y-12 sm:space-y-16">
+          <div className="text-center space-y-4 sm:space-y-5 max-w-3xl mx-auto">
+            <h2
+              className="text-3xl sm:text-4xl lg:text-5xl tracking-normal text-[#1C1819] dark:text-zinc-50 leading-[1.25] text-balance"
+              style={{
+                fontFamily: '"Reckless Neue", Didot, "Bodoni MT", serif',
+                fontWeight: 300,
+              }}
             >
-              <span className="shrink-0 text-2xl sm:text-3xl font-black text-zinc-300 font-mono">
-                {step.number}
-              </span>
-              <div className="space-y-1.5 flex-1">
-                <h3 className="text-lg font-bold text-zinc-900">
-                  {step.title}
-                </h3>
-                <p className="text-sm text-zinc-600 leading-relaxed">
-                  {step.desc}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
+              Langkah Mudah Menjual
+            </h2>
+            <p className="text-zinc-600 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto">
+              Ikuti panduan berikut agar barang bekas Anda cepat laku dan bertransaksi dengan nyaman.
+            </p>
+          </div>
 
-        {/* CTA */}
-        <div className="text-center pt-2 pb-6 space-y-4">
-          <div className="flex flex-wrap items-center justify-center gap-3">
+          <div className="space-y-6 sm:space-y-8 max-w-5xl mx-auto">
+            {steps.map((step, idx) => (
+              <div
+                key={idx}
+                className="bg-white rounded-2xl sm:rounded-3xl shadow-md p-7 sm:p-9 flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-8"
+              >
+                <div
+                  className="shrink-0 text-3xl sm:text-4xl lg:text-5xl tracking-normal text-zinc-300 select-none leading-none font-light"
+                  style={{
+                    fontFamily: '"Reckless Neue", Didot, "Bodoni MT", serif',
+                    fontWeight: 300,
+                  }}
+                >
+                  {step.number}
+                </div>
+
+                <div className="space-y-2 flex-1">
+                  <h3 className="text-xl sm:text-2xl font-normal text-zinc-900 leading-snug">
+                    {step.title}
+                  </h3>
+                  <p className="text-sm sm:text-base text-zinc-600 leading-relaxed">
+                    {step.desc}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* CTA Bawah */}
+        <section className="text-center pt-2">
+          <div className="flex flex-wrap items-center justify-center gap-4">
             <Link
               href="/jual"
-              className="px-6 py-3 rounded-xl bg-zinc-900 text-white text-sm font-semibold hover:bg-zinc-800 transition-colors shadow-sm"
+              className="px-6 py-3.5 rounded-xl bg-zinc-900 text-white text-sm font-semibold hover:bg-zinc-800 transition-colors shadow-sm"
             >
-              Pasang Iklan Barang Sekarang
+              Pasang Iklan Barang Sekarang &rarr;
             </Link>
             <Link
               href="/panduan/daftar-penjual"
-              className="px-6 py-3 rounded-xl bg-white border border-zinc-300 text-zinc-800 text-sm font-semibold hover:bg-zinc-100 transition-colors"
+              className="px-6 py-3.5 rounded-xl bg-white text-zinc-800 text-sm font-semibold hover:bg-zinc-100 transition-colors shadow-sm"
             >
               Info Akun Penjual Terdaftar
             </Link>
           </div>
-        </div>
+        </section>
       </div>
-    </div>
+    </main>
   );
 }
