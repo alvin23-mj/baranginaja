@@ -28,6 +28,7 @@ export interface UserRow {
   no_rekening: string | null;
   nama_bank: string | null;
   nama_pemilik_rekening: string | null;
+  foto_ktm: string | null;
 }
 
 export interface UserWithDistrict extends UserRow {

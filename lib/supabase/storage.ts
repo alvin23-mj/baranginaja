@@ -25,3 +25,14 @@ export function isValidBuktiBayarFile(file: File): boolean {
     file.size <= MAX_BUKTI_BAYAR_SIZE_BYTES
   );
 }
+
+export const FOTO_KTM_BUCKET = "foto-ktm";
+export const MAX_FOTO_KTM_SIZE_BYTES = 5 * 1024 * 1024;
+export const ALLOWED_FOTO_KTM_TYPES = ["image/jpeg", "image/png", "image/webp"];
+
+export function isValidFotoKtmFile(file: File): boolean {
+  return (
+    ALLOWED_FOTO_KTM_TYPES.includes(file.type) && file.size <= MAX_FOTO_KTM_SIZE_BYTES
+  );
+}
+
