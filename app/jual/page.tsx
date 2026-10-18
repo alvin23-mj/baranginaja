@@ -11,7 +11,7 @@ import type {
 import { UserDashboardView } from "./user-dashboard-view";
 
 export const metadata = {
-  title: "Dashboard User - BaranginAja",
+  title: "Akun Saya - BaranginAja",
   description:
     "Kelola produk jualanmu, pantau pesanan pembelian, dan cek saldo pendapatan di BaranginAja.",
 };

@@ -214,10 +214,9 @@ export function NavbarClient({
         : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
     }`;
 
-  // Admin routes, user dashboard, and auth pages use their own clean layout without main navbar
+  // Admin routes and auth pages use their own clean layout without main navbar
   if (
     pathname.startsWith("/admin") ||
-    pathname.startsWith("/jual") ||
     pathname === "/login" ||
     pathname === "/register"
   ) {
@@ -366,7 +365,7 @@ export function NavbarClient({
                 return;
               }
               if (!isSeller) {
-                router.push("/jual?view=penjual");
+                router.push("/jual");
                 return;
               }
               router.push("/jual/tambah");

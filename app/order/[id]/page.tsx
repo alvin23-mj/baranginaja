@@ -17,7 +17,7 @@ export default async function OrderDetailPage({
   } = await supabase.auth.getUser();
 
   if (!authUser) {
-    redirect(`/login?redirectTo=/jual?view=pembeli&orderId=${id}`);
+    redirect(`/login?redirectTo=/jual`);
   }
 
   const { data: orderData } = await supabase
@@ -35,5 +35,5 @@ export default async function OrderDetailPage({
   }
 
   await expireHoldIfNeeded(supabase, orderData as OrderWithProduct);
-  redirect(`/jual?view=pembeli&orderId=${id}`);
+  redirect(`/jual`);
 }

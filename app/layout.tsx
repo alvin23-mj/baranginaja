@@ -34,7 +34,7 @@ export default function RootLayout({
             __html: `
               (function() {
                 try {
-                  if (window.location.pathname.startsWith('/admin') || window.location.pathname.startsWith('/jual')) {
+                  if (window.location.pathname.startsWith('/admin')) {
                     var theme = localStorage.getItem('theme');
                     if (theme === 'dark') {
                       document.documentElement.classList.add('dark');
