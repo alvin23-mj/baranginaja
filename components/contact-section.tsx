@@ -40,8 +40,7 @@ export function ContactSection() {
 
   const handleWhatsAppDirect = () => {
     const text = encodeURIComponent(
-      `Halo Tim BaranginAja,\n\nNama: ${formData.nama || "-"}\nKontak: ${
-        formData.kontak || "-"
+      `Halo Tim BaranginAja,\n\nNama: ${formData.nama || "-"}\nKontak: ${formData.kontak || "-"
       }\nKategori: ${formData.kategori}\nPesan: ${formData.pesan || "Halo, saya ingin bertanya seputar layanan BaranginAja."}`
     );
     window.open(`https://wa.me/6281234567890?text=${text}`, "_blank");
@@ -52,7 +51,7 @@ export function ContactSection() {
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="overflow-hidden rounded-3xl bg-white border border-zinc-200/80 shadow-sm">
           <div className="grid grid-cols-1 lg:grid-cols-12">
-            
+
             {/* Sisi Kiri: Gambar AI Layanan Bantuan dengan Balon Percakapan */}
             <div className="relative lg:col-span-5 min-h-[420px] sm:min-h-[480px] lg:min-h-full overflow-hidden bg-zinc-950 flex items-center justify-center">
               <Image
