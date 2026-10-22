@@ -24,7 +24,7 @@ Remove-Item '.\temp_build' -Recurse -Force
 # 3. Upload & Restart di Server
 Write-Host "📤 Mengunggah hasil build dan memperbarui server..." -ForegroundColor Yellow
 scp -o StrictHostKeyChecking=no -i C:\Users\ACER\.ssh\id_ed25519 .\build_next.zip kakasi23@103.150.226.176:/var/www/kakasi23/data/www/baranginaja.site/
-ssh -o StrictHostKeyChecking=no -i C:\Users\ACER\.ssh\id_ed25519 kakasi23@103.150.226.176 "cd /var/www/kakasi23/data/www/baranginaja.site && git pull && unzip -o build_next.zip && rm -f build_next.zip && npx pm2 restart baranginaja"
+ssh -o StrictHostKeyChecking=no -i C:\Users\ACER\.ssh\id_ed25519 kakasi23@103.150.226.176 "cd /var/www/kakasi23/data/www/baranginaja.site && git pull && unzip -o build_next.zip && rm -f build_next.zip && chmod -R a+rX .next && npx pm2 restart baranginaja"
 
 # 4. Hapus file zip sementara di laptop
 Remove-Item '.\build_next.zip' -Force
