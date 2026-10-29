@@ -27,11 +27,11 @@ export default function BantuanPage() {
 
   return (
     <main className="flex-1 bg-[#f0f0f0] text-zinc-900">
-      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-28 space-y-20 sm:space-y-28 lg:space-y-32">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-10 sm:py-20 lg:py-28 space-y-12 sm:space-y-24 lg:space-y-32">
         {/* Header Editorial Title */}
         <section className="text-center max-w-4xl lg:max-w-5xl mx-auto space-y-6 sm:space-y-8">
           <h1
-            className="text-3xl sm:text-4xl lg:text-5xl tracking-normal text-[#1C1819] dark:text-zinc-50 leading-[1.25] text-balance"
+            className="text-2xl sm:text-4xl lg:text-5xl tracking-normal text-[#1C1819] dark:text-zinc-50 leading-[1.25] text-balance"
             style={{
               fontFamily: '"Reckless Neue", Didot, "Bodoni MT", serif',
               fontWeight: 300,
@@ -50,7 +50,7 @@ export default function BantuanPage() {
           {faqs.map((item, idx) => (
             <div
               key={idx}
-              className="bg-white rounded-2xl sm:rounded-3xl shadow-md p-7 sm:p-9 space-y-3"
+              className="bg-white rounded-2xl sm:rounded-3xl shadow-md p-5 sm:p-9 space-y-3"
             >
               <h3 className="text-xl sm:text-2xl font-normal text-zinc-900 leading-snug">
                 {item.q}

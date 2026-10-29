@@ -46,12 +46,12 @@ export default async function DaftarPenjualPage() {
       </section>
 
       {/* 2. Konten Utama */}
-      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-28 space-y-16 sm:space-y-24">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-10 sm:py-20 lg:py-28 space-y-12 sm:space-y-24">
         
         {/* Header Editorial Title */}
         <section className="text-center max-w-4xl lg:max-w-5xl mx-auto space-y-6 sm:space-y-8">
           <h1
-            className="text-3xl sm:text-4xl lg:text-5xl tracking-normal text-[#1C1819] dark:text-zinc-50 leading-[1.25] text-balance"
+            className="text-2xl sm:text-4xl lg:text-5xl tracking-normal text-[#1C1819] dark:text-zinc-50 leading-[1.25] text-balance"
             style={{
               fontFamily: '"Reckless Neue", Didot, "Bodoni MT", serif',
               fontWeight: 300,

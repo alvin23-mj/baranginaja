@@ -1,10 +1,16 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { AdminThemeGuard } from "@/components/admin-theme-guard";
 import { ExpirationTicker } from "@/components/expiration-ticker";
 import "./globals.css";
 import "./reckless-font.css";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
 
 export const metadata: Metadata = {
   title: "BaranginAja - Marketplace Jual Beli 31 Kecamatan Surabaya",
@@ -60,7 +66,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-full flex flex-col font-sans">
+      <body className="min-h-full flex flex-col font-sans overflow-x-hidden w-full min-w-0">
         <AdminThemeGuard />
         <ExpirationTicker />
         <Navbar />

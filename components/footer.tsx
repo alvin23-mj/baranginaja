@@ -19,9 +19,9 @@ export function Footer() {
     <footer className="w-full bg-[#111111] text-zinc-300 mt-auto relative overflow-hidden">
       {/* Konten Utama Footer */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-6 pb-12 lg:pb-16 relative z-10">
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-5">
+        <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-2 lg:grid-cols-5 lg:gap-10">
           {/* Kolom 1: Branding & Info */}
-          <div className="lg:col-span-2 space-y-4">
+          <div className="col-span-2 sm:col-span-2 lg:col-span-2 space-y-4">
             <Link
               href="/"
               className="inline-flex items-center group transition-opacity hover:opacity-90"
@@ -170,7 +170,7 @@ export function Footer() {
           </div>
 
           {/* Kolom 4: Bantuan & Informasi */}
-          <div className="space-y-3">
+          <div className="col-span-2 sm:col-span-1 space-y-3">
             <h3 className="text-[14px] font-semibold text-white">
               Bantuan & Panduan
             </h3>
@@ -222,7 +222,7 @@ export function Footer() {
         </div>
 
         {/* Bagian Bawah Footer (Copyright) - Tanpa garis border/outline */}
-        <div className="pt-12 sm:pt-16 flex flex-col sm:flex-row items-center justify-between gap-4 text-[13px] text-zinc-500">
+        <div className="pt-8 sm:pt-16 flex flex-col sm:flex-row items-center justify-between gap-4 text-[13px] text-zinc-500 text-center sm:text-left">
           <p>
             &copy; {new Date().getFullYear()}{" "}
             <span className="text-zinc-400 font-medium">baranginaja</span>. Dibuat untuk warga & mahasiswa Surabaya.
@@ -236,7 +236,7 @@ export function Footer() {
         aria-hidden="true"
         className="absolute -bottom-3 right-0 sm:-bottom-5 sm:right-2 lg:-bottom-7 lg:right-4 select-none pointer-events-none z-0"
       >
-        <span className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[130px] font-black tracking-tighter leading-none text-zinc-500/25">
+        <span className="text-4xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[130px] font-black tracking-tighter leading-none text-zinc-500/25">
           barangin<span className="text-zinc-600/30">aja</span>
         </span>
       </div>

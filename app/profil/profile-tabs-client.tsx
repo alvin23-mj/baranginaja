@@ -38,20 +38,20 @@ export function ProfileTabsClient({
       {/* ========================================================================= */}
       {/* 1. HERO PROFILE BANNER CARD (BLACK BACKGROUND WITH CUT-OFF WATERMARK)    */}
       {/* ========================================================================= */}
-      <div className="relative overflow-hidden rounded-3xl border border-zinc-800 bg-[#141416] p-6 sm:p-8 text-white shadow-xl">
+      <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl border border-zinc-800 bg-[#141416] p-5 sm:p-8 text-white shadow-xl">
         {/* Watermark Logo BaranginAja (Diturunkan Kebawah & Digeser Kanan ke Pinggir Card) */}
         <div
           aria-hidden="true"
           className="absolute -bottom-3 right-1 sm:-bottom-4 sm:right-2 lg:-bottom-5 lg:right-3 select-none pointer-events-none z-0"
         >
-          <span className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[96px] font-black tracking-tighter leading-none text-zinc-700/20">
+          <span className="text-3xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[96px] font-black tracking-tighter leading-none text-zinc-700/20">
             barangin<span className="text-zinc-600/25">aja</span>
           </span>
         </div>
 
         <div className="relative z-10 space-y-6">
           {/* Subtitle Accent Tag */}
-          <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3">
             <span className="text-[11px] font-extrabold uppercase tracking-wider text-amber-500">
               AKUN RESMI KAMPUS &amp; WARGA SURABAYA
             </span>
@@ -104,17 +104,17 @@ export function ProfileTabsClient({
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+            <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto shrink-0">
               <Link
                 href="/pesanan-saya"
-                className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-xs font-bold text-zinc-950 hover:bg-zinc-200 transition-colors shadow-xs cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-4 py-2.5 text-xs font-bold text-zinc-950 hover:bg-zinc-200 transition-colors shadow-xs cursor-pointer flex-1 sm:flex-initial"
               >
                 Pesanan Saya
               </Link>
               {user.is_seller ? (
                 <Link
                   href="/jual"
-                  className="inline-flex items-center gap-2 rounded-xl border border-zinc-700 bg-zinc-800/80 hover:bg-zinc-700 text-white px-4 py-2.5 text-xs font-bold transition-colors cursor-pointer"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-zinc-700 bg-zinc-800/80 hover:bg-zinc-700 text-white px-4 py-2.5 text-xs font-bold transition-colors cursor-pointer flex-1 sm:flex-initial"
                 >
                   + Jual Barang
                 </Link>
@@ -122,7 +122,7 @@ export function ProfileTabsClient({
                 <button
                   type="button"
                   onClick={() => setActiveTab("penjual")}
-                  className="inline-flex items-center gap-2 rounded-xl border border-zinc-700 bg-zinc-800/80 hover:bg-zinc-700 text-white px-4 py-2.5 text-xs font-bold transition-colors cursor-pointer"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-zinc-700 bg-zinc-800/80 hover:bg-zinc-700 text-white px-4 py-2.5 text-xs font-bold transition-colors cursor-pointer flex-1 sm:flex-initial"
                 >
                   Daftar Akun Penjual
                 </button>
@@ -131,7 +131,7 @@ export function ProfileTabsClient({
           </div>
 
           {/* Quick Info Pills */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-4 border-t border-zinc-800/80 text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 pt-4 border-t border-zinc-800/80 text-xs">
             <div className="rounded-xl border border-zinc-800 bg-zinc-900/60 p-3">
               <span className="text-[11px] font-medium text-zinc-400 block">Kecamatan Domisili</span>
               <span className="font-semibold text-white truncate block mt-0.5">
@@ -146,7 +146,7 @@ export function ProfileTabsClient({
               </span>
             </div>
 
-            <div className="col-span-2 sm:col-span-1 rounded-xl border border-zinc-800 bg-zinc-900/60 p-3">
+            <div className="col-span-1 rounded-xl border border-zinc-800 bg-zinc-900/60 p-3">
               <span className="text-[11px] font-medium text-zinc-400 block">Nomor Kontak WhatsApp</span>
               <span className="font-mono font-semibold text-white mt-0.5 block">
                 {user.no_hp || "-"}

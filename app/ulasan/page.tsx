@@ -34,11 +34,11 @@ export default function RatingWebsitePage() {
 
   return (
     <main className="flex-1 bg-[#f0f0f0] text-zinc-900">
-      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-28 space-y-16 sm:space-y-20">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-10 sm:py-20 lg:py-28 space-y-12 sm:space-y-16">
         {/* Header Editorial Title */}
         <section className="text-center max-w-4xl lg:max-w-5xl mx-auto space-y-6 sm:space-y-8">
           <h1
-            className="text-3xl sm:text-4xl lg:text-5xl tracking-normal text-[#1C1819] dark:text-zinc-50 leading-[1.25] text-balance"
+            className="text-2xl sm:text-4xl lg:text-5xl tracking-normal text-[#1C1819] dark:text-zinc-50 leading-[1.25] text-balance"
             style={{
               fontFamily: '"Reckless Neue", Didot, "Bodoni MT", serif',
               fontWeight: 300,
@@ -54,7 +54,7 @@ export default function RatingWebsitePage() {
 
         {/* Card Form */}
         <div className="max-w-3xl mx-auto">
-          <div className="bg-white p-8 sm:p-12 rounded-2xl sm:rounded-3xl shadow-md">
+          <div className="bg-white p-5 sm:p-12 rounded-2xl sm:rounded-3xl shadow-md">
             {isSubmitted ? (
               <div className="py-8 text-center space-y-4 animate-in fade-in duration-200">
                 <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold uppercase tracking-wider">

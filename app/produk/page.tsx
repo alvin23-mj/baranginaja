@@ -91,7 +91,7 @@ export default async function ProdukPage({ searchParams }: PageProps<"/produk">)
       </section>
 
       {/* Filter diposisikan di tengah di bawah banner */}
-      <div className="relative z-10 -mt-6 sm:-mt-8 px-4">
+      <div className="relative z-10 -mt-6 sm:-mt-8 px-3 sm:px-4">
         <div className="mx-auto w-full max-w-4xl">
           <ProductFilters
             categories={(categories as Category[]) ?? []}
@@ -100,7 +100,7 @@ export default async function ProdukPage({ searchParams }: PageProps<"/produk">)
         </div>
       </div>
 
-      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 pt-6 pb-12 sm:pb-16">
+      <div className="mx-auto w-full max-w-7xl px-3 sm:px-6 lg:px-8 pt-4 sm:pt-6 pb-12 sm:pb-16">
         {items.length === 0 ? (
           <div className="py-16 text-center">
             <p className="text-base font-normal text-zinc-500 dark:text-zinc-400">
@@ -109,7 +109,7 @@ export default async function ProdukPage({ searchParams }: PageProps<"/produk">)
           </div>
         ) : (
         <>
-          <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 lg:gap-6">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 lg:gap-6">
             {items.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}

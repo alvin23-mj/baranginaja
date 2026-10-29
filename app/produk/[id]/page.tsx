@@ -101,23 +101,23 @@ export default async function ProdukDetailPage({
   }
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+    <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:py-10 sm:px-6 lg:px-8">
       {checkoutError && (
         <div className="mb-6 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-700 dark:bg-amber-950 dark:text-amber-400">
           {checkoutError}
         </div>
       )}
 
-      <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-14">
+      <div className="grid grid-cols-1 gap-6 sm:gap-10 lg:grid-cols-2 lg:gap-14">
         <ProductGallery photos={item.foto_urls} alt={item.nama_barang} />
 
         <div className="flex flex-col gap-5">
           {/* Nama & Harga */}
           <div>
-            <h1 className="text-2xl font-bold leading-snug text-zinc-900 dark:text-zinc-50">
+            <h1 className="text-xl sm:text-2xl font-bold leading-snug text-zinc-900 dark:text-zinc-50">
               {item.nama_barang}
             </h1>
-            <p className="mt-2 text-3xl font-bold text-zinc-900 dark:text-zinc-50">
+            <p className="mt-1.5 sm:mt-2 text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-50">
               {formatRupiah(item.harga_jual)}
             </p>
           </div>

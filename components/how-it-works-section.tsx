@@ -2,13 +2,13 @@ import Link from "next/link";
 
 export function HowItWorksSection() {
   return (
-    <section className="relative w-full bg-[#111111] text-white py-14 sm:py-18 lg:py-20 overflow-hidden">
+    <section className="relative w-full bg-[#111111] text-white py-10 sm:py-16 lg:py-20 overflow-hidden">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 relative z-10">
         <div className="max-w-2xl">
           <span className="text-xs uppercase tracking-widest text-amber-500 font-bold block mb-2">
             PINDAHAN KOS ATAU MAU WISUDA?
           </span>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-normal text-white tracking-tight">
+          <h2 className="text-xl sm:text-3xl lg:text-4xl font-normal text-white tracking-tight">
             Ubah Barang Kos Bekas Jadi Uang Tunai
           </h2>
           <p className="mt-3 text-sm sm:text-base text-zinc-400 leading-relaxed max-w-xl">
@@ -37,7 +37,7 @@ export function HowItWorksSection() {
         aria-hidden="true"
         className="absolute -bottom-3 right-0 sm:-bottom-5 sm:right-2 lg:-bottom-7 lg:right-4 select-none pointer-events-none z-0"
       >
-        <span className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[130px] font-black tracking-tighter leading-none text-zinc-500/25">
+        <span className="text-4xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[130px] font-black tracking-tighter leading-none text-zinc-500/25">
           barangin<span className="text-zinc-600/30">aja</span>
         </span>
       </div>

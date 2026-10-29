@@ -83,7 +83,7 @@ export function ProductList({
   return (
     <div>
       {/* Tab Navigasi Bersih & Simpel */}
-      <div className="mb-6 flex gap-6 border-b border-zinc-200 dark:border-zinc-800">
+      <div className="mb-6 flex gap-4 sm:gap-6 border-b border-zinc-200 dark:border-zinc-800 overflow-x-auto scrollbar-hide">
         {TABS.map((tab) => {
           const count = tab === "Semua" ? items.length : items.filter((p) => p.status === tab).length;
           const isActive = activeTab === tab;
@@ -92,7 +92,7 @@ export function ProductList({
               key={tab}
               type="button"
               onClick={() => setActiveTab(tab)}
-              className={`-mb-px border-b-2 pb-3 text-sm font-normal transition-colors cursor-pointer ${
+              className={`-mb-px border-b-2 pb-3 text-xs sm:text-sm font-normal whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
                 isActive
                   ? "border-zinc-950 text-zinc-950 dark:border-zinc-100 dark:text-zinc-100"
                   : "border-transparent text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
@@ -127,7 +127,7 @@ export function ProductList({
       ) : (
         /* Tabel Produk */
         <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-          <table className="w-full text-left text-sm">
+          <table className="w-full text-left text-sm min-w-[580px]">
             <thead className="border-b border-zinc-200 bg-zinc-50/75 text-sm font-normal text-zinc-500 dark:border-zinc-800 dark:bg-zinc-800/60 dark:text-zinc-400">
               <tr>
                 <th className="px-5 py-3.5 font-normal">Produk</th>

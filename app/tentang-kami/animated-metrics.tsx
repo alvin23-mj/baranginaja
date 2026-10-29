@@ -80,7 +80,7 @@ function MetricCard({
   return (
     <div className="flex flex-col items-center text-center space-y-3 sm:space-y-4">
       <div
-        className="text-3xl sm:text-4xl lg:text-[44px] tracking-normal text-[#1C1819] dark:text-zinc-50 leading-[1.2] tabular-nums"
+        className="text-2xl sm:text-4xl lg:text-[44px] tracking-normal text-[#1C1819] dark:text-zinc-50 leading-[1.2] tabular-nums"
         style={{
           fontFamily: '"Reckless Neue", Didot, "Bodoni MT", serif',
           fontWeight: 300,
@@ -125,7 +125,7 @@ export function AnimatedMetrics() {
 
   return (
     <section ref={sectionRef} className="py-4 sm:py-8">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-10 lg:gap-16">
         {METRICS.map((item, idx) => (
           <MetricCard key={idx} item={item} shouldAnimate={isVisible} />
         ))}

@@ -235,7 +235,7 @@ export function NavbarClient({
             className="flex items-center group transition-opacity hover:opacity-90"
             aria-label="baranginaja"
           >
-            <span className="text-xl sm:text-[22px] font-bold tracking-tight text-zinc-900 select-none">
+            <span className="text-lg sm:text-[22px] font-bold tracking-tight text-zinc-900 select-none">
               barangin<span className="text-amber-600">aja</span>
             </span>
           </Link>
@@ -289,13 +289,13 @@ export function NavbarClient({
         {/* ========================================================================= */}
         {/* KANAN: Ikon Toko (Kelola Toko), Masuk / Profil, Tombol Jual Barang        */}
         {/* ========================================================================= */}
-        <div className="flex items-center gap-4 lg:gap-6 shrink-0 z-10">
+        <div className="flex items-center gap-2 sm:gap-3 lg:gap-6 shrink-0 z-10">
           {/* Ikon Toko / Kelola Toko */}
           <button
             suppressHydrationWarning
             type="button"
             onClick={handleStoreClick}
-            className="text-zinc-400 hover:text-zinc-900 transition-colors p-1 cursor-pointer flex items-center justify-center"
+            className="hidden sm:flex text-zinc-400 hover:text-zinc-900 transition-colors p-1 cursor-pointer items-center justify-center"
             title="Kelola Toko"
             aria-label="Kelola Toko"
           >
@@ -321,7 +321,7 @@ export function NavbarClient({
               onMouseEnter={handleUserMouseEnter}
               onMouseLeave={handleUserMouseLeave}
               onClick={handleUserClick}
-              className={`inline-flex items-center justify-center gap-2 text-sm font-medium transition-colors duration-150 cursor-pointer py-1.5 ${
+              className={`hidden sm:inline-flex items-center justify-center gap-2 text-sm font-medium transition-colors duration-150 cursor-pointer py-1.5 ${
                 activeDropdown === "user"
                   ? "text-zinc-900"
                   : "text-zinc-500 hover:text-zinc-900"
@@ -349,7 +349,7 @@ export function NavbarClient({
           ) : (
             <Link
               href="/login"
-              className="text-zinc-500 hover:text-zinc-900 text-sm font-medium transition-colors px-3 py-2 cursor-pointer"
+              className="hidden sm:inline-flex text-zinc-500 hover:text-zinc-900 text-sm font-medium transition-colors px-3 py-2 cursor-pointer"
             >
               Masuk
             </Link>
@@ -370,7 +370,7 @@ export function NavbarClient({
               }
               router.push("/jual/tambah");
             }}
-            className="inline-flex items-center justify-center bg-zinc-900 text-white hover:bg-zinc-700 active:scale-95 transition-all duration-150 text-sm font-semibold px-4 py-2 rounded-lg shadow-sm cursor-pointer"
+            className="inline-flex items-center justify-center bg-zinc-900 text-white hover:bg-zinc-700 active:scale-95 transition-all duration-150 text-xs sm:text-sm font-semibold px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg shadow-sm cursor-pointer shrink-0"
           >
             Jual Barang
           </button>
@@ -602,7 +602,7 @@ export function NavbarClient({
       {/* MOBILE DRAWER MENU                                                        */}
       {/* ========================================================================= */}
       {mobileMenuOpen && (
-        <div className="border-t border-zinc-200 bg-white px-4 py-4 md:hidden animate-in slide-in-from-top-2 duration-150">
+        <div className="border-t border-zinc-200 bg-white px-4 py-4 md:hidden animate-in slide-in-from-top-2 duration-150 max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain shadow-lg">
           <div className="flex flex-col gap-1">
             {(districtName || campusName) && (
               <div className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-zinc-500">

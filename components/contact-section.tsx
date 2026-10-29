@@ -47,13 +47,13 @@ export function ContactSection() {
   };
 
   return (
-    <section id="hubungi-kami" className="w-full bg-[#f0f0f0] py-16 sm:py-20 lg:py-24">
+    <section id="hubungi-kami" className="w-full bg-[#f0f0f0] py-10 sm:py-20 lg:py-24">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="overflow-hidden rounded-3xl bg-white border border-zinc-200/80 shadow-sm">
           <div className="grid grid-cols-1 lg:grid-cols-12">
 
             {/* Sisi Kiri: Gambar AI Layanan Bantuan dengan Balon Percakapan */}
-            <div className="relative lg:col-span-5 min-h-[420px] sm:min-h-[480px] lg:min-h-full overflow-hidden bg-zinc-950 flex items-center justify-center">
+            <div className="relative lg:col-span-5 min-h-[220px] sm:min-h-[360px] lg:min-h-full overflow-hidden bg-zinc-950 flex items-center justify-center">
               <Image
                 src="/images/contact-support.jpg"
                 alt="Layanan Bantuan BaranginAja"
@@ -96,7 +96,7 @@ export function ContactSection() {
             </div>
 
             {/* Sisi Kanan: Form Kontak Interaktif */}
-            <div className="lg:col-span-7 p-8 sm:p-10 lg:p-12 flex flex-col justify-center">
+            <div className="lg:col-span-7 p-5 sm:p-10 lg:p-12 flex flex-col justify-center">
               {status === "success" ? (
                 <div className="text-center py-10 px-4">
                   <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-4 animate-bounce">

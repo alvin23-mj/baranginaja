@@ -83,20 +83,20 @@ export function CategoryShowcase({ categories = [] }: CategoryShowcaseProps) {
   };
 
   return (
-    <section className="w-full bg-white py-12 sm:py-16 lg:py-20">
+    <section className="w-full bg-white py-10 sm:py-16 lg:py-20">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header Section */}
         <div className="mb-8 sm:mb-12">
           <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-amber-700">
             KATEGORI PILIHAN MAHASISWA
           </p>
-          <h2 className="mt-1 text-3xl sm:text-4xl lg:text-[40px] font-normal tracking-tight text-zinc-950">
+          <h2 className="mt-1 text-2xl sm:text-4xl lg:text-[40px] font-normal tracking-tight text-zinc-950">
             Jelajahi Berdasarkan Kebutuhan
           </h2>
         </div>
 
         {/* 4 Cards Grid with Alternating Stagger */}
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 items-start">
+        <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4 items-start">
           {SHOWCASE_ITEMS.map((item) => {
             const href = getCategoryHref(item);
 
@@ -116,22 +116,22 @@ export function CategoryShowcase({ categories = [] }: CategoryShowcaseProps) {
                   />
 
                   {/* Top-Left Number Tag */}
-                  <div className="absolute top-3 left-3 rounded bg-white/95 px-2 py-0.5 text-xs font-bold text-zinc-900 shadow-xs backdrop-blur-xs">
+                  <div className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 rounded bg-white/95 px-1.5 py-0.5 sm:px-2 text-[10px] sm:text-xs font-bold text-zinc-900 shadow-xs backdrop-blur-xs">
                     {item.number}
                   </div>
 
                   {/* Bottom-Right Count Badge */}
-                  <div className="absolute bottom-3 right-3 rounded bg-zinc-950/85 px-2.5 py-1 text-[11px] font-medium text-white shadow-xs backdrop-blur-xs tracking-wide">
+                  <div className="absolute bottom-2.5 right-2.5 sm:bottom-3 sm:right-3 rounded bg-zinc-950/85 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-[11px] font-medium text-white shadow-xs backdrop-blur-xs tracking-wide">
                     {item.objectsCount}
                   </div>
                 </div>
 
                 {/* Card Text Content */}
-                <div className="flex flex-col gap-1.5 p-3.5 sm:p-4">
-                  <h3 className="text-base sm:text-lg lg:text-xl font-medium text-zinc-950">
+                <div className="flex flex-col gap-1 p-2.5 sm:p-4">
+                  <h3 className="text-xs sm:text-base lg:text-xl font-medium text-zinc-950 line-clamp-1 sm:line-clamp-none">
                     {item.title}
                   </h3>
-                  <p className="text-xs leading-relaxed text-zinc-600 line-clamp-2 sm:line-clamp-3">
+                  <p className="text-[11px] sm:text-xs leading-relaxed text-zinc-600 line-clamp-2 sm:line-clamp-3">
                     {item.description}
                   </p>
                 </div>

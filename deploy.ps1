@@ -1,32 +1,25 @@
 # Script Otomatis Deploy ke FastPanel (baranginaja.site)
-Write-Host "🚀 Memulai proses deploy ke server FastPanel..." -ForegroundColor Cyan
-
-# 1. Build project di laptop
-Write-Host "📦 Mem-build Next.js di laptop..." -ForegroundColor Yellow
-npm run build
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "❌ Build gagal, silakan periksa error di atas." -ForegroundColor Red
-    exit 1
+Write-Host "[1/3] Mengemas hasil build..." -ForegroundColor Yellow
+$src = "D:\Capstone\baranginaja\baranginaja\.next"
+$temp = "D:\Capstone\baranginaja\baranginaja\temp_build\.next"
+if (Test-Path "D:\Capstone\baranginaja\baranginaja\temp_build") { 
+    Remove-Item "D:\Capstone\baranginaja\baranginaja\temp_build" -Recurse -Force 
 }
-
-# 2. Kemas folder .next untuk production
-Write-Host "🗜️  Mengompres hasil build..." -ForegroundColor Yellow
-$src = '.\.next'
-$temp = '.\temp_build\.next'
-if (Test-Path $temp) { Remove-Item $temp -Recurse -Force }
 New-Item -ItemType Directory -Force -Path $temp | Out-Null
 Copy-Item (Join-Path $src 'server') -Destination $temp -Recurse -Force
 Copy-Item (Join-Path $src 'static') -Destination $temp -Recurse -Force
 Get-ChildItem $src -File | Copy-Item -Destination $temp -Force
-Compress-Archive -Path $temp -DestinationPath '.\build_next.zip' -Force
-Remove-Item '.\temp_build' -Recurse -Force
+Compress-Archive -Path $temp -DestinationPath "D:\Capstone\baranginaja\baranginaja\build_next.zip" -Force
+Remove-Item "D:\Capstone\baranginaja\baranginaja\temp_build" -Recurse -Force
 
-# 3. Upload & Restart di Server
-Write-Host "📤 Mengunggah hasil build dan memperbarui server..." -ForegroundColor Yellow
-scp -o StrictHostKeyChecking=no -i C:\Users\ACER\.ssh\id_ed25519 .\build_next.zip kakasi23@103.150.226.176:/var/www/kakasi23/data/www/baranginaja.site/
-ssh -o StrictHostKeyChecking=no -i C:\Users\ACER\.ssh\id_ed25519 kakasi23@103.150.226.176 "cd /var/www/kakasi23/data/www/baranginaja.site && git pull && unzip -o build_next.zip && rm -f build_next.zip && chmod -R a+rX .next && npx pm2 restart baranginaja"
+Write-Host "[2/3] Mengunggah hasil build ke server..." -ForegroundColor Yellow
+scp -o StrictHostKeyChecking=no -i C:\Users\ACER\.ssh\id_ed25519 D:\Capstone\baranginaja\baranginaja\build_next.zip kakasi23@103.150.226.176:/var/www/kakasi23/data/www/baranginaja.site/
 
-# 4. Hapus file zip sementara di laptop
-Remove-Item '.\build_next.zip' -Force
+Write-Host "[3/3] Memperbarui dan restart PM2 di server..." -ForegroundColor Yellow
+ssh -o StrictHostKeyChecking=no -i C:\Users\ACER\.ssh\id_ed25519 kakasi23@103.150.226.176 'cd /var/www/kakasi23/data/www/baranginaja.site ; git pull ; unzip -o build_next.zip ; rm -f build_next.zip ; chmod -R a+rX .next ; npx pm2 restart baranginaja'
 
-Write-Host "✅ Selesai! Website https://baranginaja.site berhasil diperbarui!" -ForegroundColor Green
+if (Test-Path "D:\Capstone\baranginaja\baranginaja\build_next.zip") {
+    Remove-Item "D:\Capstone\baranginaja\baranginaja\build_next.zip" -Force
+}
+
+Write-Host "SUKSES: Website https://baranginaja.site berhasil diperbarui!" -ForegroundColor Green

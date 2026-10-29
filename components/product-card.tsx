@@ -30,14 +30,14 @@ export function ProductCard({ product }: { product: ProductWithSeller }) {
         )}
       </div>
 
-      <div className="flex flex-col gap-1.5 p-3.5">
-        <p className="truncate text-sm font-medium text-zinc-950 dark:text-zinc-50">
+      <div className="flex flex-col gap-1 sm:gap-1.5 p-2.5 sm:p-3.5">
+        <p className="truncate text-xs sm:text-sm font-medium text-zinc-950 dark:text-zinc-50">
           {product.nama_barang}
         </p>
-        <p className="text-base font-bold text-zinc-950 dark:text-zinc-50">
+        <p className="text-sm sm:text-base font-bold text-zinc-950 dark:text-zinc-50">
           {formatRupiah(product.harga_jual)}
         </p>
-        <div className="mt-1 flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
+        <div className="mt-0.5 sm:mt-1 flex items-center gap-1.5 text-[11px] sm:text-xs text-zinc-500 dark:text-zinc-400">
           <svg
             className="h-3.5 w-3.5 shrink-0 text-zinc-400 dark:text-zinc-500"
             fill="none"

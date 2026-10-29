@@ -163,7 +163,7 @@ export function UserDashboardView({
             Akun Saya
           </p>
           <h1
-            className="text-[36px] sm:text-[48px] lg:text-[56px] tracking-tight leading-[1.1] text-white"
+            className="text-[28px] sm:text-[48px] lg:text-[56px] tracking-tight leading-[1.1] text-white break-words"
             style={{
               fontFamily: '"Reckless Neue", Didot, "Bodoni MT", serif',
               fontWeight: 300,
@@ -192,7 +192,7 @@ export function UserDashboardView({
                   type="button"
                   onClick={() => !isMuted && setActiveTab(tab.key)}
                   title={isMuted ? "Fitur khusus penjual. Aktifkan akun penjual di profil." : undefined}
-                  className={`group relative flex items-center gap-2 whitespace-nowrap px-4 py-3.5 text-sm font-normal transition-colors border-b-2 cursor-pointer ${
+                  className={`group relative flex items-center gap-2 whitespace-nowrap px-3 sm:px-4 py-3 sm:py-3.5 text-xs sm:text-sm font-normal transition-colors border-b-2 cursor-pointer ${
                     isMuted
                       ? "border-transparent text-zinc-400 dark:text-zinc-600 cursor-not-allowed"
                       : isActive
@@ -219,22 +219,22 @@ export function UserDashboardView({
         {activeTab === "ringkasan" && (
           <div className="space-y-8">
             {/* Metric Stat Cards */}
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
               {/* Card 1: Produk Jualan */}
               <button
                 type="button"
                 onClick={() => setActiveTab("penjual")}
-                className="group relative overflow-hidden rounded-xl bg-white p-5 shadow-md hover:shadow-lg transition-all dark:bg-zinc-900 block text-left w-full cursor-pointer"
+                className="group relative overflow-hidden rounded-xl bg-white p-3.5 sm:p-5 shadow-md hover:shadow-lg transition-all dark:bg-zinc-900 block text-left w-full cursor-pointer"
               >
-                <div className="absolute -top-3 -right-3 text-zinc-400 opacity-50 dark:text-zinc-600 pointer-events-none">
-                  <Store className="h-20 w-20" strokeWidth={1} />
+                <div className="absolute -top-2 -right-2 text-zinc-400 opacity-40 dark:text-zinc-600 pointer-events-none">
+                  <Store className="h-14 w-14 sm:h-20 sm:w-20" strokeWidth={1} />
                 </div>
                 <div className="relative z-10">
-                  <span className="text-sm font-normal text-zinc-500 dark:text-zinc-400">
+                  <span className="text-xs sm:text-sm font-normal text-zinc-500 dark:text-zinc-400">
                     Produk Dijual
                   </span>
                 </div>
-                <p className="relative z-10 mt-2 text-2xl font-normal text-zinc-950 dark:text-zinc-50">
+                <p className="relative z-10 mt-1.5 sm:mt-2 text-base sm:text-2xl font-bold sm:font-normal text-zinc-950 dark:text-zinc-50">
                   {products.length} Barang
                 </p>
                 <div className="relative z-10 mt-3">
@@ -250,17 +250,17 @@ export function UserDashboardView({
               <button
                 type="button"
                 onClick={() => setActiveTab("pembeli")}
-                className="group relative overflow-hidden rounded-xl bg-white p-5 shadow-md hover:shadow-lg transition-all dark:bg-zinc-900 block text-left w-full cursor-pointer"
+                className="group relative overflow-hidden rounded-xl bg-white p-3.5 sm:p-5 shadow-md hover:shadow-lg transition-all dark:bg-zinc-900 block text-left w-full cursor-pointer"
               >
-                <div className="absolute -top-3 -right-3 text-zinc-400 opacity-50 dark:text-zinc-600 pointer-events-none">
-                  <ShoppingBag className="h-20 w-20" strokeWidth={1} />
+                <div className="absolute -top-2 -right-2 text-zinc-400 opacity-40 dark:text-zinc-600 pointer-events-none">
+                  <ShoppingBag className="h-14 w-14 sm:h-20 sm:w-20" strokeWidth={1} />
                 </div>
                 <div className="relative z-10">
-                  <span className="text-sm font-normal text-zinc-500 dark:text-zinc-400">
+                  <span className="text-xs sm:text-sm font-normal text-zinc-500 dark:text-zinc-400">
                     Pesanan Pembelian
                   </span>
                 </div>
-                <p className="relative z-10 mt-2 text-2xl font-normal text-zinc-950 dark:text-zinc-50">
+                <p className="relative z-10 mt-1.5 sm:mt-2 text-base sm:text-2xl font-bold sm:font-normal text-zinc-950 dark:text-zinc-50">
                   {buyerOrders.length} Pesanan
                 </p>
                 <div className="relative z-10 mt-3">
@@ -276,17 +276,17 @@ export function UserDashboardView({
               <button
                 type="button"
                 onClick={() => setActiveTab("pendapatan")}
-                className="group relative overflow-hidden rounded-xl bg-white p-5 shadow-md hover:shadow-lg transition-all dark:bg-zinc-900 block text-left w-full cursor-pointer"
+                className="group relative overflow-hidden rounded-xl bg-white p-3.5 sm:p-5 shadow-md hover:shadow-lg transition-all dark:bg-zinc-900 block text-left w-full cursor-pointer"
               >
-                <div className="absolute -top-3 -right-3 text-zinc-400 opacity-50 dark:text-zinc-600 pointer-events-none">
-                  <Wallet className="h-20 w-20" strokeWidth={1} />
+                <div className="absolute -top-2 -right-2 text-zinc-400 opacity-40 dark:text-zinc-600 pointer-events-none">
+                  <Wallet className="h-14 w-14 sm:h-20 sm:w-20" strokeWidth={1} />
                 </div>
                 <div className="relative z-10">
-                  <span className="text-sm font-normal text-zinc-500 dark:text-zinc-400">
+                  <span className="text-xs sm:text-sm font-normal text-zinc-500 dark:text-zinc-400">
                     Total Pendapatan
                   </span>
                 </div>
-                <p className="relative z-10 mt-2 text-2xl font-normal text-zinc-950 dark:text-zinc-50">
+                <p className="relative z-10 mt-1.5 sm:mt-2 text-base sm:text-2xl font-bold sm:font-normal text-zinc-950 dark:text-zinc-50 truncate">
                   {formatRupiah(totalDiterima)}
                 </p>
                 <div className="relative z-10 mt-3">
@@ -301,20 +301,20 @@ export function UserDashboardView({
               {/* Card 4: Wilayah / Status Akun */}
               <Link
                 href="/profil"
-                className="group relative overflow-hidden rounded-xl bg-white p-5 shadow-md hover:shadow-lg transition-all dark:bg-zinc-900 block"
+                className="group relative overflow-hidden rounded-xl bg-white p-3.5 sm:p-5 shadow-md hover:shadow-lg transition-all dark:bg-zinc-900 block"
               >
-                <div className="absolute -top-3 -right-3 text-zinc-400 opacity-50 dark:text-zinc-600 pointer-events-none">
-                  <svg className="h-20 w-20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.25}>
+                <div className="absolute -top-2 -right-2 text-zinc-400 opacity-40 dark:text-zinc-600 pointer-events-none">
+                  <svg className="h-14 w-14 sm:h-20 sm:w-20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.25}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
                   </svg>
                 </div>
                 <div className="relative z-10">
-                  <span className="text-sm font-normal text-zinc-500 dark:text-zinc-400">
-                    Domisili & Profil
+                  <span className="text-xs sm:text-sm font-normal text-zinc-500 dark:text-zinc-400">
+                    Domisili &amp; Profil
                   </span>
                 </div>
-                <p className="relative z-10 mt-2 text-xl font-normal text-zinc-950 dark:text-zinc-50 truncate">
+                <p className="relative z-10 mt-1.5 sm:mt-2 text-base sm:text-xl font-bold sm:font-normal text-zinc-950 dark:text-zinc-50 truncate">
                   {districtName ? `Kec. ${districtName}` : "Surabaya"}
                 </p>
                 <div className="relative z-10 mt-3">
@@ -328,11 +328,11 @@ export function UserDashboardView({
             </div>
 
             {/* Subtabs Filter Ringkasan */}
-            <div className="flex gap-6 border-b border-zinc-200 dark:border-zinc-800 pt-2">
+            <div className="flex gap-4 sm:gap-6 border-b border-zinc-200 dark:border-zinc-800 pt-2 overflow-x-auto scrollbar-hide">
               <button
                 type="button"
                 onClick={() => setDashboardTab("semua")}
-                className={`-mb-px border-b-2 pb-3 text-sm font-normal transition-colors cursor-pointer ${
+                className={`-mb-px border-b-2 pb-3 text-xs sm:text-sm font-normal whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
                   dashboardTab === "semua"
                     ? "border-zinc-950 text-zinc-950 dark:border-zinc-50 dark:text-zinc-50"
                     : "border-transparent text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
@@ -343,7 +343,7 @@ export function UserDashboardView({
               <button
                 type="button"
                 onClick={() => setDashboardTab("penjual")}
-                className={`-mb-px border-b-2 pb-3 text-sm font-normal transition-colors cursor-pointer ${
+                className={`-mb-px border-b-2 pb-3 text-xs sm:text-sm font-normal whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
                   dashboardTab === "penjual"
                     ? "border-zinc-950 text-zinc-950 dark:border-zinc-50 dark:text-zinc-50"
                     : "border-transparent text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
@@ -354,7 +354,7 @@ export function UserDashboardView({
               <button
                 type="button"
                 onClick={() => setDashboardTab("pembeli")}
-                className={`-mb-px border-b-2 pb-3 text-sm font-normal transition-colors cursor-pointer ${
+                className={`-mb-px border-b-2 pb-3 text-xs sm:text-sm font-normal whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
                   dashboardTab === "pembeli"
                     ? "border-zinc-950 text-zinc-950 dark:border-zinc-50 dark:text-zinc-50"
                     : "border-transparent text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
@@ -365,7 +365,7 @@ export function UserDashboardView({
               <button
                 type="button"
                 onClick={() => setDashboardTab("pendapatan")}
-                className={`-mb-px border-b-2 pb-3 text-sm font-normal transition-colors cursor-pointer ${
+                className={`-mb-px border-b-2 pb-3 text-xs sm:text-sm font-normal whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
                   dashboardTab === "pendapatan"
                     ? "border-zinc-950 text-zinc-950 dark:border-zinc-50 dark:text-zinc-50"
                     : "border-transparent text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
@@ -402,7 +402,7 @@ export function UserDashboardView({
                     Belum ada produk yang kamu daftarkan untuk dijual.
                   </div>
                 ) : (
-                  <table className="w-full text-left text-sm font-normal">
+                  <table className="w-full text-left text-sm font-normal min-w-[580px]">
                     <thead className="border-b border-zinc-200 bg-zinc-50/75 text-sm font-normal text-zinc-500 dark:border-zinc-800 dark:bg-zinc-800/60 dark:text-zinc-400">
                       <tr>
                         <th className="px-5 py-3.5 font-normal">Produk</th>
@@ -525,7 +525,7 @@ export function UserDashboardView({
                     Belum ada transaksi pesanan pembelian.
                   </div>
                 ) : (
-                  <table className="w-full text-left text-sm font-normal">
+                  <table className="w-full text-left text-sm font-normal min-w-[580px]">
                     <thead className="border-b border-zinc-200 bg-zinc-50/75 text-sm font-normal text-zinc-500 dark:border-zinc-800 dark:bg-zinc-800/60 dark:text-zinc-400">
                       <tr>
                         <th className="px-5 py-3.5 font-normal">Produk</th>
@@ -665,7 +665,7 @@ export function UserDashboardView({
                     Belum ada riwayat pencairan dana penjualan.
                   </div>
                 ) : (
-                  <table className="w-full text-left text-sm font-normal">
+                  <table className="w-full text-left text-sm font-normal min-w-[580px]">
                     <thead className="border-b border-zinc-200 bg-zinc-50/75 text-sm font-normal text-zinc-500 dark:border-zinc-800 dark:bg-zinc-800/60 dark:text-zinc-400">
                       <tr>
                         <th className="px-5 py-3.5 font-normal">ID Payout</th>

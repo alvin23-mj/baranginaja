@@ -28,9 +28,9 @@ export function PendapatanView({ payouts, bankInfo }: PendapatanViewProps) {
   return (
     <div className="space-y-6">
       {/* 3 Metric Stat Cards matching Dashboard design */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-3 sm:gap-4 sm:grid-cols-3">
         {/* Card 1: Pendapatan Diterima */}
-        <div className="group relative overflow-hidden rounded-xl bg-white p-5 shadow-md hover:shadow-lg transition-all dark:bg-zinc-900 block">
+        <div className="group relative overflow-hidden rounded-xl bg-white p-3.5 sm:p-5 shadow-md hover:shadow-lg transition-all dark:bg-zinc-900 block">
           {/* Large partially-visible watermark icon */}
           <div className="absolute -top-3 -right-3 text-zinc-400 opacity-50 dark:text-zinc-600 pointer-events-none">
             <svg className="h-20 w-20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.25}>
@@ -56,7 +56,7 @@ export function PendapatanView({ payouts, bankInfo }: PendapatanViewProps) {
         </div>
 
         {/* Card 2: Menunggu Pencairan */}
-        <div className="group relative overflow-hidden rounded-xl bg-white p-5 shadow-md hover:shadow-lg transition-all dark:bg-zinc-900 block">
+        <div className="group relative overflow-hidden rounded-xl bg-white p-3.5 sm:p-5 shadow-md hover:shadow-lg transition-all dark:bg-zinc-900 block">
           {/* Large partially-visible watermark icon */}
           <div className="absolute -top-3 -right-3 text-zinc-400 opacity-50 dark:text-zinc-600 pointer-events-none">
             <svg className="h-20 w-20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.25}>
@@ -84,7 +84,7 @@ export function PendapatanView({ payouts, bankInfo }: PendapatanViewProps) {
         {/* Card 3: Rekening Pencairan (Detail yang sebelumnya ada di bawah) */}
         <Link
           href="/profil"
-          className="group relative overflow-hidden rounded-xl bg-white p-5 shadow-md hover:shadow-lg transition-all dark:bg-zinc-900 block"
+          className="group relative overflow-hidden rounded-xl bg-white p-3.5 sm:p-5 shadow-md hover:shadow-lg transition-all dark:bg-zinc-900 block"
           title="Ubah rekening pencairan di profil"
         >
           {/* Large partially-visible watermark icon */}
@@ -144,7 +144,7 @@ export function PendapatanView({ payouts, bankInfo }: PendapatanViewProps) {
             Belum ada data pencairan. Pendapatan akan otomatis tercatat ketika barang jualanmu telah selesai dikonfirmasi pembeli.
           </div>
         ) : (
-          <table className="w-full text-left text-sm font-normal">
+          <table className="w-full text-left text-sm font-normal min-w-[500px]">
             <thead className="border-b border-zinc-200 bg-zinc-50/75 text-sm font-normal text-zinc-500 dark:border-zinc-800 dark:bg-zinc-800/60 dark:text-zinc-400">
               <tr>
                 <th className="px-5 py-3.5 font-normal">ID Payout</th>
